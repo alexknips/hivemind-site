@@ -1,0 +1,70 @@
+[38;2;215;119;87m ▐[48;2;0;0;0m▛███▛█[39m[49m   [1mClaude[0m [1mCode[0m [38;2;153;153;153mv2.1.281[39m
+[38;2;215;119;87m▝▜[48;2;0;0;0m█████[49m█▀[39m  [38;2;153;153;153mOpus[39m [38;2;153;153;153m5.5[39m [38;2;153;153;153m(1M[39m [38;2;153;153;153mcontext)[39m [38;2;153;153;153m·[39m [38;2;153;153;153mClaude[39m [38;2;153;153;153mMax[39m
+[38;2;215;119;87m [39m [38;2;215;119;87m▝▝[39m [38;2;215;119;87m▝▝[39m    [38;2;153;153;153m~/code/pantry[39m
+
+
+[38;2;80;80;80m[48;2;55;55;55m❯ [38;2;255;255;255mWhy is pantry on SQLite and not Postgres? What did we rule [39m
+  [38;2;255;255;255mout?[39m
+[49m
+  [38;2;153;153;153mSearched for [1m1[0m[38;2;153;153;153m pattern, called hivemind (ctrl+o to expand)[39m
+
+[38;2;255;255;255m●[39m There's one recorded decision on this in hivemind: [1m"Pantry [0m
+  [1mstorage: SQLite, single file next to the app"[0m
+  ([38;2;177;185;249mdecision-456d94e3…[39m).
+
+  [1mWhy SQLite:[0m
+  - The old JSON-file store lost writes when two requests
+    arrived at the same time. SQLite's transactional writes fix
+    that.
+  - It's still a single file next to the app ([38;2;177;185;249mpantry.db[39m), so
+    there's no server to run. [38;2;177;185;249mpantry/store.py:14[39m just calls
+    [38;2;177;185;249msqlite3.connect(PATH,[39m [38;2;177;185;249m…)[39m.
+
+  [1mOptions[0m [1mit[0m [1mruled[0m [1mout:[0m
+  1. [1mKeep[0m [1mthe[0m [1mJSON[0m [1mfile.[0m Rejected because of the lost writes.
+  2. [1mPostgres.[0m Called "overkill for a one-person app" because
+     it's a separate server you'd have to run and back up.
+
+  [1mCaveats:[0m
+  - The decision's status is still [1mproposed[0m, not accepted. A
+    Claude agent session recorded it, and no human ever reviewed
+    or accepted it. The code went ahead anyway in commit
+    [38;2;177;185;249m8443c86[39m.
+  - It has no evidence attached, such as a benchmark or a
+    reproduction of the lost writes. The rationale is the only
+    record.
+
+  If this reasoning still holds, you could mark the decision
+  accepted so the record matches what shipped. If you're
+  reconsidering Postgres, for example because more than one
+  person will use the app, the "one-person app" reasoning is
+  what would need to change.
+
+[38;2;153;153;153m✻[39m [38;2;153;153;153mChurned[39m [38;2;153;153;153mfor[39m [38;2;153;153;153m16s[39m [38;2;153;153;153m·[39m [38;2;153;153;153mdone[39m [38;2;153;153;153m7:12[39m [38;2;153;153;153mPM
+
+[38;2;136;136;136m────────────────────────────────────────────────────────────────
+[39m❯ [2mmark the SQLite decision as accepted[0m
+[38;2;136;136;136m────────────────────────────────────────────────────────────────
+[39m  [38;2;255;193;7m⏵⏵[39m [38;2;255;193;7mauto[39m [38;2;255;193;7mmode[39m [38;2;255;193;7mon[38;2;153;153;153m (shift+tab[39m [38;2;153;153;153mto[39m [38;2;153;153;153mcycle)[39m [38;2;153;153;153m·[39m [38;2;153;153;153m←[39m [38;2;153;153;153mfor[39m [38;2;153;153;153magents[39m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

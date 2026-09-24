@@ -8,7 +8,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'HiveMind',
-      description: 'Organizational decision memory for human + agent teams.',
+      description: 'Memory for decisions: what you and your coding agents decided, and why.',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/alexknips/hivemind' },
       ],

@@ -1,0 +1,52 @@
+name: Reference docs in sync
+
+# The docs live here; the code they describe lives in alexknips/hivemind.
+# This builds hivemind's own generator at master and runs its --check against
+# this repo's website/ (the generator reads website/... relative to its working
+# directory). It fails if reference/mcp-tools.md, reference/cli.md,
+# guides/mcp-setup.md or the homepage drift from the code. The daily run
+# catches a hivemind change that drifts the docs within a day.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reference-docs:
+    name: Reference docs match hivemind master
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the site
+        uses: actions/checkout@v4
+        with:
+          path: site
+
+      - name: Check out hivemind at master
+        uses: actions/checkout@v4
+        with:
+          repository: alexknips/hivemind
+          ref: master
+          path: hivemind
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: hivemind
+
+      - name: Record the hivemind commit checked against
+        working-directory: hivemind
+        run: git log -1 --format='hivemind master %H %s'
+
+      - name: Check the docs against the code
+        working-directory: site
+        run: cargo run --locked --manifest-path ../hivemind/Cargo.toml --bin generate-reference -- --check

@@ -1,9 +1,9 @@
 ---
 title: MCP Tools
-description: Reference for all 26 tools exposed by the HiveMind MCP server.
+description: Reference for all 27 tools exposed by the HiveMind MCP server.
 ---
 
-The HiveMind MCP server exposes 26 tools. Write tools append events to the
+The HiveMind MCP server exposes 27 tools. Write tools append events to the
 ledger and require an explicit `actor_id`. Read tools query the graph and never
 write. Layer-3 tools add ranked summaries or compact views.
 
@@ -19,12 +19,13 @@ See [MCP Setup](../../guides/mcp-setup/) to configure your client.
 
 ### `capture_decision`
 
-Record a decision with rationale, topic keys, and at least one option. Defaults actor_id to agent:<tool>:<name> and writes source=agent. A `chosen_option_label` means the decision was already made: it self-accepts from `actor_id` by default, or from `decided_by` when the decider differs (e.g. a human decided, an agent is scribing it). Pass `still_proposed` to keep a genuine open recommendation at `proposed` instead.
+Record a decision with rationale, topic keys, at least one option, and what it rests on (`grounding`, required). Defaults actor_id to agent:<tool>:<name> and writes source=agent. A `chosen_option_label` means the decision was already made: it self-accepts from `actor_id` by default, or from `decided_by` when the decider differs (e.g. a human decided, an agent is scribing it); pass `delegated_by` when an agent decided for itself within a scope a human delegated. Pass `still_proposed` to keep a genuine open recommendation at `proposed` instead. The reply lists `rests_on` (what was recorded) and `premise_stale` (named decisions already superseded or rejected).
 
 **Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
+| `grounding` | any[] | ✓ | What this decision rests on — required, at least one item. Four ways to answer: a decision we already made (`{kind:"decision", description}` — name it the way you would describe it — or `{kind:"decision", decision_id}` when you hold the id of a decision you consulted), something observed (`{kind:"evidence", content, source?}` — the observation and where: URL, file@commit, test run, measurement), something assumed (`{kind:"assumption", statement}`), or nothing yet (`{kind:"bet", statement?, would_change_if?, check_by?}` — a declared bet). An existing node can be named by id: `{kind:"evidence", evidence_id}` / `{kind:"assumption", hypothesis_id}`. The decider's own words are not a grounding; they go in `quote`. A `description` that matches more than one decision returns a successful result shaped `{outcome: "ambiguous", field: "grounding[i]", candidates: [...]}`, and one that matches none returns `{outcome: "not_found", field: "grounding[i]", description}`; in both cases NO event is appended — re-call with that item's `decision_id`. A capture that names nothing is refused. |
 | `options` | object[] | ✓ |  |
 | `rationale` | string | ✓ | Self-contained why, readable without the source conversation: at least 20 characters and 4 words, and not a bare reference into an external numbered list like "1a" or "2. a" — pair `quote` with `question` instead of embedding one. |
 | `title` | string | ✓ | A name, not a summary: one sentence, at most 120 characters. Longer reasoning goes in `rationale`. |
@@ -32,8 +33,10 @@ Record a decision with rationale, topic keys, and at least one option. Defaults 
 | `actor_id` | string | — | Optional capturing actor override. Defaults to `agent:<tool>:<name>`. |
 | `chosen_option_label` | string | — | Label of the option that was accepted; must match one of `options[].label`. Setting this means the decision was already made — see `still_proposed` to keep it open instead. |
 | `decided_by` | string | — | Actor who actually made the decision, when it differs from `actor_id` (the recording actor/scribe) — e.g. `human:alex@example.com` when an agent is writing down a decision a human made. Requires `chosen_option_label`. Mutually exclusive with `still_proposed`. |
-| `evidence_ids` | string[] | — |  |
-| `hypothesis_ids` | string[] | — |  |
+| `delegated_by` | string | — | The human (`human:<name>`) whose delegated scope this decision falls within, when `actor_id` (an agent) decided it for itself — the self-acceptance carries the marker, so an agent deciding under a delegation is distinguishable from one deciding alone (no marker). Requires `chosen_option_label`. Mutually exclusive with `still_proposed`; conflicts with a `decided_by` other than `actor_id`. A standing delegation is the same value repeated on each capture in that scope. |
+| `evidence_ids` | string[] | — | Deprecated alias: ids listed here count as `{kind:"evidence", evidence_id}` grounding items. |
+| `expressed_confidence` | string | — | Confidence in the decider's own words. Omit when they expressed none; never estimate it. |
+| `hypothesis_ids` | string[] | — | Deprecated alias: ids listed here count as `{kind:"assumption", hypothesis_id}` grounding items. |
 | `project` | string | — | Registered project handle to file the decision under. An unknown handle is refused with the register command. Omit it and the decision is saved to the actor's personal project — the reply says so (`project_notice`). HiveMind checks the handle and never works out the project itself, so pass it whenever you know it; an HTTP-served MCP cannot see the caller's working directory. |
 | `project_source` | string | — | How `project` was determined. Defaults to `stated`. Requires `project`. |
 | `question` | string | — | The question `quote` answers, spelled out in the capturer's own words. Requires `quote`. |
@@ -70,7 +73,7 @@ Record a hypothesis. Defaults actor_id to agent:<tool>:<name> and writes source=
 
 ### `disagree_decision`
 
-Record an actor disagreement with a decision and return the resulting derived status. Resolves by decision_id or a free-text description — exactly one is required. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error, and no event is appended; re-call with decision_id from that list. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}`, and no event is appended. Wraps `hivemind disagree`.
+Record an actor disagreement with a decision and return the resulting derived status. Resolves by decision_id or a free-text description — exactly one is required. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error, and no event is appended; re-call with decision_id from that list. The same shape is returned when no decision contains every word but some contain most of them: each such close candidate lists the words it lacks in `missing_terms`, and none is picked for you. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}`, and no event is appended. Wraps `hivemind disagree`.
 
 **Parameters:**
 
@@ -86,25 +89,44 @@ Record an actor disagreement with a decision and return the resulting derived st
 
 ### `supersede_decision`
 
-Propose a replacement decision and mark it as superseding an old decision. Wraps `hivemind supersede`. Resolves the old decision by `old_decision_id` or a free-text `description` (+ optional `topic`) — exactly one of `old_decision_id`/`description` is required, the same fluent resolution `get_decision_neighborhood` uses. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error, with no write; re-call with `old_decision_id` from that list. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}`, also with no write.
+Propose a replacement decision that says what it rests on (`grounding`, required) and mark it as superseding an old decision. Wraps `hivemind supersede`. Resolves the old decision by `old_decision_id` or a free-text `description` (+ optional `topic`) — exactly one of `old_decision_id`/`description` is required, the same fluent resolution `get_decision_neighborhood` uses. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error, with no write; re-call with `old_decision_id` from that list. The same shape is returned when no decision contains every word but some contain most of them: each such close candidate lists the words it lacks in `missing_terms`, and none is picked for you. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}`, also with no write.
 
 **Parameters:**
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
+| `grounding` | any[] | ✓ | What this decision rests on — required, at least one item. Four ways to answer: a decision we already made (`{kind:"decision", description}` — name it the way you would describe it — or `{kind:"decision", decision_id}` when you hold the id of a decision you consulted), something observed (`{kind:"evidence", content, source?}` — the observation and where: URL, file@commit, test run, measurement), something assumed (`{kind:"assumption", statement}`), or nothing yet (`{kind:"bet", statement?, would_change_if?, check_by?}` — a declared bet). An existing node can be named by id: `{kind:"evidence", evidence_id}` / `{kind:"assumption", hypothesis_id}`. The decider's own words are not a grounding; they go in `quote`. A `description` that matches more than one decision returns a successful result shaped `{outcome: "ambiguous", field: "grounding[i]", candidates: [...]}`, and one that matches none returns `{outcome: "not_found", field: "grounding[i]", description}`; in both cases NO event is appended — re-call with that item's `decision_id`. A capture that names nothing is refused. |
 | `rationale` | string | ✓ | Self-contained why, readable without the source conversation: at least 20 characters and 4 words, and not a bare reference into an external numbered list like "1a" or "2. a". |
 | `title` | string | ✓ | A name, not a summary: one sentence, at most 120 characters. Longer reasoning goes in `rationale`. |
 | `actor_id` | string | — | Superseding actor. Defaults to `agent:<tool>:<name>` when omitted. |
 | `chosen_option_label` | string | — |  |
 | `description` | string | — | Free-text match for the decision to supersede. Required when `old_decision_id` is omitted. |
-| `evidence_ids` | string[] | — |  |
-| `hypothesis_ids` | string[] | — |  |
+| `evidence_ids` | string[] | — | Deprecated alias: ids listed here count as `{kind:"evidence", evidence_id}` grounding items. |
+| `expressed_confidence` | string | — | Confidence in the decider's own words. Omit when they expressed none; never estimate it. |
+| `hypothesis_ids` | string[] | — | Deprecated alias: ids listed here count as `{kind:"assumption", hypothesis_id}` grounding items. |
 | `old_decision_id` | string | — |  |
 | `options` | any[] | — |  |
 | `project` | string | — | Registered project handle to file the superseding decision under. An unknown handle is refused with the register command. Omit it and the new decision inherits the old decision's project. HiveMind never works out the project itself; an HTTP-served MCP cannot see the caller's working directory. |
 | `project_source` | string | — | How `project` was determined. Defaults to `stated`. Requires `project`. |
 | `topic` | string | — | Optional topic_key filter narrowing the `description` match. |
 | `topic_keys` | string[] | — |  |
+
+---
+
+### `move_decision`
+
+Move a decision to another project, recorded with who, when, from, to and why. Reversible: moving it back is another recorded move; nothing is deleted or rewritten. Resolves by decision_id or a free-text description — exactly one is required. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error, and no event is appended; re-call with decision_id from that list. The same shape is returned when no decision contains every word but some contain most of them: each such close candidate lists the words it lacks in `missing_terms`, and none is picked for you. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}`, and no event is appended. On success the reply is `{decision_id, event_id, from, to, reason?}`, where `from` is the project the decision was in, read from the ledger. `to` must be a registered project handle or the acting actor's own personal address (`personal:<actor>`); an unknown handle is refused with the register command, and a decision already in `to` is refused. Wraps `hivemind move`.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `to` | string | ✓ | Project to move the decision to: a registered handle, or the acting actor's own personal address. Where the decision is now is read from the ledger, never passed. |
+| `actor_id` | string | — | Moving actor. Defaults to `agent:<tool>:<name>` when omitted. |
+| `decision_id` | string | — | The decision to move. Provide this or `description`, not both. |
+| `description` | string | — | Free-text description to resolve to a decision when the id is not known. |
+| `reason` | string | — | Why the decision belongs in `to`; kept with the move and shown in the decision's history. |
+| `topic` | string | — | Narrows description resolution to decisions carrying this topic key. |
 
 ---
 
@@ -146,6 +168,7 @@ List decisions whose topic_keys contain the given topic. Optional status filter.
 | `paths` | string[] | ✓ | Touched files/dirs and/or a branch name. All entries are tokenized the same way (split on path separators, lowercased, stopwords/extensions dropped). |
 | `cursor` | string | — |  |
 | `limit` | integer | — |  |
+| `project` | string | — | Ask from this project (a registered handle, or a personal address such as personal:human:alex). Matches come from that project first, then the project it is part of (inherited constraints, labelled `from Platform; Billing is part of it`), then one hop over the projects it depends on (`from Auth; Billing depends on it`); each match carries `scope`, and `data.scope` lists the projects looked in and how many linked projects and part_of levels were not followed. Staleness (superseded, refuted) shows across the hop unchanged. An unregistered handle is refused with a hint. Omit to search the whole tenant. |
 | `since_offset` | integer | — | Annotate results with whether they changed since this ledger offset (exclusive). |
 | `since_timestamp` | string | — | Annotate results with whether they changed since this RFC3339 timestamp. |
 
@@ -153,7 +176,7 @@ List decisions whose topic_keys contain the given topic. Optional status filter.
 
 ### `get_supersession_chain`
 
-Return the linear supersession chain a decision sits in, oldest first. Equivalent to `hivemind query chain`. Resolves by decision_id or a free-text description — exactly one is required. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error; re-call with decision_id from that list. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}` (there is no #N/--pick over MCP to retry against, so there is nothing further to disambiguate).
+Return the linear supersession chain a decision sits in, oldest first. Equivalent to `hivemind query chain`. Resolves by decision_id or a free-text description — exactly one is required. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error; re-call with decision_id from that list. The same shape is returned when no decision contains every word but some contain most of them: each such close candidate lists the words it lacks in `missing_terms`, and none is picked for you. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}` (there is no #N/--pick over MCP to retry against, so there is nothing further to disambiguate).
 
 **Parameters:**
 
@@ -167,7 +190,7 @@ Return the linear supersession chain a decision sits in, oldest first. Equivalen
 
 ### `get_decision_neighborhood`
 
-"Why does this decision look the way it does?" — the one-hop graph neighborhood around a decision: proposing/accepting/rejecting actors, options, the chosen option, evidence, premised hypotheses (with their supporting/refuting evidence one hop further), and supersession links in both directions. Equivalent to `hivemind query why`. Resolves by decision_id or a free-text description — exactly one is required. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error; re-call with decision_id from that list. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}` (there is no #N/--pick over MCP to retry against, so there is nothing further to disambiguate).
+"Why does this decision look the way it does?" — the decision's answer plus its one-hop graph. `data.root` carries the title, rationale, chosen and rejected option labels, who decided, whether it still holds, and status. `data.nodes` and `data.edges` are the neighborhood: proposing/accepting/rejecting actors, options, the chosen option, evidence, premised hypotheses (with their supporting/refuting evidence one hop further), and supersession links in both directions; every node except actors has a `label` (a decision's title, an option's label, a hypothesis' statement, an evidence item's content clipped to 200 characters). Every edge in `data.edges` is an arrow from the newer node to the older node: `from`/`to` are the arrow's ends, an edge's `label` reads the relation along it, and `reversed` marks an arrow that runs against the relation's stored direction. Equivalent to `hivemind query why`. Resolves by decision_id or a free-text description or question ("why did we move the demo cell to shared Postgres") — exactly one is required. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error; re-call with decision_id from that list. The same shape is returned when no decision contains every word but some contain most of them: each such close candidate lists the words it lacks in `missing_terms`, and none is picked for you. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}` (there is no #N/--pick over MCP to retry against, so there is nothing further to disambiguate).
 
 **Parameters:**
 
@@ -201,7 +224,7 @@ Full-text search over decisions. Equivalent to `hivemind query search`.
 
 ### `recall_decisions`
 
-Layer-3: search for decisions matching a query and return them ranked alongside a concise text digest — one call answers 'what was decided about X?'. The rank comes from FTS scoring (ordinal, not a confidence score). The digest is deterministic template rendering sourced from decision fields only; every contributing decision ID is listed in digest.cited_decision_ids. Returns: { query, ranked: { items, total_matches, truncated }, digest: { summary, cited_decision_ids } }.
+Layer-3: search for decisions matching a query and return them ranked alongside a concise text digest — one call answers 'what was decided about X?'. The rank comes from FTS scoring (ordinal, not a confidence score). The digest is deterministic template rendering sourced from decision fields only; every contributing decision ID is listed in digest.cited_decision_ids. Ask it as a question if you like ("what did we decide about projects"): question words are ignored and listed in `ignored_words`, and a question made only of question words adds no text filter. Returns: { query, ignored_words?, ranked: { items, total_matches, truncated }, digest: { summary, cited_decision_ids } }.
 
 **Parameters:**
 
@@ -246,7 +269,7 @@ Render the current decision graph as Graphviz DOT.
 
 ### `hivemind_compact_view`
 
-Layer-3 compact view of a decision subgraph. Applies signal/noise semantics: terminal decision is fully preserved; superseded predecessors, unchosen options, and resolved blockers are elided and counted. Contested decisions are never compacted. Resolves by decision_id or a free-text description — exactly one is required. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error; re-call with decision_id from that list. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}`. Returns data: null when a directly-supplied decision_id itself does not exist.
+Layer-3 compact view of a decision subgraph. Applies signal/noise semantics: terminal decision is fully preserved; superseded predecessors, unchosen options, and resolved blockers are elided and counted. Contested decisions are never compacted. Resolves by decision_id or a free-text description — exactly one is required. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error; re-call with decision_id from that list. The same shape is returned when no decision contains every word but some contain most of them: each such close candidate lists the words it lacks in `missing_terms`, and none is picked for you. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}`. Returns data: null when a directly-supplied decision_id itself does not exist.
 
 **Parameters:**
 
@@ -273,7 +296,7 @@ Layer-3: produce a concise text summary of one or more decisions. All content is
 
 ### `get_decision_outcome`
 
-"Did this decision hold up?" — leads with the decision, rationale, chosen and rejected options, and who decided it, then whether it still holds: superseded (and how fast), stale premises (premised on a refuted hypothesis), contested (unresolved disagreement), or thin structure (no options/evidence), each with its contributing reasons attached. No LLM involved; derived purely from graph edges. Equivalent to `hivemind query verify`. Resolves by decision_id or a free-text description — exactly one is required. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error; re-call with decision_id from that list. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}` (there is no #N/--pick over MCP to retry against, so there is nothing further to disambiguate).
+"Did this decision hold up?" — leads with the decision, rationale, chosen and rejected options, and who decided it, then whether it still holds: superseded (and how fast), stale premises (premised on a refuted hypothesis), contested (unresolved disagreement), or thin structure (no options/evidence), each with its contributing reasons attached. No LLM involved; derived purely from graph edges. Equivalent to `hivemind query verify`. Resolves by decision_id or a free-text description — exactly one is required. An ambiguous description returns a successful result shaped `{outcome: "ambiguous", candidates: [...]}`, not an error; re-call with decision_id from that list. The same shape is returned when no decision contains every word but some contain most of them: each such close candidate lists the words it lacks in `missing_terms`, and none is picked for you. A description matching nothing is also a successful result, shaped `{outcome: "not_found"}` (there is no #N/--pick over MCP to retry against, so there is nothing further to disambiguate).
 
 **Parameters:**
 
@@ -314,7 +337,7 @@ Derive the context record for a single decision: the conditions under which it w
 
 ### `decision_context_candidates`
 
-Bulk context-feature pull: returns context records for all decisions (or a filtered subset), each with authorship shape, source, review depth, evidence/hypothesis counts, and rationale richness proxies. Designed to complement decision_quality_candidates — context is the independent variable side of the causal pair. No LLM involved.
+Bulk context-feature pull: returns context records for all decisions (or a filtered subset), each with authorship shape, source, review depth, `delegated_by` (the human whose delegation an agent's self-acceptance fell within; absent when the agent decided alone), evidence/hypothesis counts, and rationale richness proxies. Designed to complement decision_quality_candidates — context is the independent variable side of the causal pair. No LLM involved.
 
 **Parameters:**
 
@@ -369,7 +392,7 @@ Flag decisions carrying a caller-named "foreign" topic key — a decision tagged
 
 ### `analyze_failure_modes`
 
-Failure-mode attribution: which conditions predict decisions that do not hold up? Joins outcome signals (superseded / stale-premises / contested) with context features (authorship shape, review depth, source, evidence/options richness) and computes AGGREGATE failure-rate patterns across each dimension. Reports effect sizes (failure-rate delta vs corpus baseline) and honest confidence flags based on sample size. Never returns per-person rankings — all findings are aggregate patterns. Use to answer: does agent-only authorship predict failure? Does peer review improve outcomes? Does thin context predict failure? Works on any deployment, no LLM.
+Failure-mode attribution: which conditions predict decisions that do not hold up? Joins outcome signals (superseded / stale-premises / contested) with context features (authorship shape, review depth, source, evidence/options richness, and — for decisions an agent made for itself — whether a human had delegated the scope) and computes AGGREGATE failure-rate patterns across each dimension. Reports effect sizes (failure-rate delta vs corpus baseline) and honest confidence flags based on sample size. Never returns per-person rankings — all findings are aggregate patterns. Use to answer: does agent-only authorship predict failure? Does peer review improve outcomes? Do agent decisions within a human's delegation hold up differently from ones an agent made alone? Does thin context predict failure? Works on any deployment, no LLM.
 
 **Parameters:**
 

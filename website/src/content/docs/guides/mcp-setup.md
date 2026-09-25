@@ -1,6 +1,6 @@
 ---
 title: MCP Setup
-description: Connect Claude Code, Cursor, or any MCP client to your self-hosted HiveMind.
+description: Connect Claude Code, Codex, Cursor, or any MCP client to your self-hosted HiveMind.
 ---
 
 HiveMind exposes its full decision-graph surface as an MCP server. Connect your agents
@@ -11,7 +11,7 @@ to your **self-hosted cell** over HTTP (a shared, team-wide decision graph), or 
 
 ## Self-hosted cell — HTTP
 
-Your [self-hosted cell](../../getting-started/install/) serves MCP at `/mcp`. Agents
+Your [self-hosted cell](../../getting-started/install/#run-a-cell-with-docker) serves MCP at `/mcp`. Agents
 connect to that endpoint and write to a shared, team-wide decision graph — no local
 binary required on the agent's machine. **Authentication is a bearer token:**
 [provision a tenant](../../getting-started/install/#connect-your-agent) and use the
@@ -66,16 +66,25 @@ Add to `~/.cursor/mcp.json` or the project-level `.cursor/mcp.json`:
 
 ```json
 {
-  "mcp": {
-    "servers": {
-      "hivemind": {
-        "url": "http://localhost:8080/mcp",
-        "headers": { "Authorization": "Bearer hm_tk_..." }
-      }
+  "mcpServers": {
+    "hivemind": {
+      "url": "http://localhost:8080/mcp",
+      "headers": { "Authorization": "Bearer hm_tk_..." }
     }
   }
 }
 ```
+
+### Codex
+
+Put the token in an environment variable and register the cell:
+
+```bash
+export HIVEMIND_TOKEN=hm_tk_...
+codex mcp add hivemind --url http://localhost:8080/mcp --bearer-token-env-var HIVEMIND_TOKEN
+```
+
+Codex writes the server to `~/.codex/config.toml` and reads the bearer token from that variable.
 
 ---
 
@@ -141,16 +150,28 @@ Or set `HIVEMIND_DIR` and omit `--hivemind-dir`:
 
 ```json
 {
-  "mcp": {
-    "servers": {
-      "hivemind": {
-        "command": "hivemind",
-        "args": ["mcp"],
-        "env": { "HIVEMIND_DIR": "/path/to/hivemind/" }
-      }
+  "mcpServers": {
+    "hivemind": {
+      "command": "hivemind",
+      "args": ["mcp"],
+      "env": { "HIVEMIND_DIR": "/path/to/hivemind/" }
     }
   }
 }
+```
+
+### Codex (local)
+
+```bash
+codex mcp add hivemind -- hivemind mcp
+```
+
+This writes the server to `~/.codex/config.toml`; `codex mcp list` shows it enabled.
+
+```toml
+[mcp_servers.hivemind]
+command = "hivemind"
+args = ["mcp"]
 ```
 
 ---
@@ -210,4 +231,4 @@ The server records `source=agent` and a per-session `source_ref` for every write
 
 - [MCP Tools reference](../../reference/mcp-tools/) — full parameter documentation for all 27 tools
 - [Agent Capture guide](../agent-capture/) — how agents capture decisions automatically
-- [Self-host install](../../getting-started/install/) — install the binary and run your own server
+- [Install](../../getting-started/install/) — install the binary and run your own server

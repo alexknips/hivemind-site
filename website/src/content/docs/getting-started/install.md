@@ -1,13 +1,74 @@
 ---
-title: Self-host
-description: Run your own HiveMind cell — three commands, your data, your infrastructure.
+title: Install
+description: Install the hivemind binary in under a minute, or run your own cell with Docker — your data, your infrastructure.
 ---
 
-Your instance, your data, nothing phones home. A self-hosted cell takes about five minutes on any machine with Docker.
+Your instance, your data, nothing phones home. For local use with a coding agent, install the
+`hivemind` binary. To share one decision graph across a team, run a self-hosted cell with Docker.
 
 ---
 
-## Start in three commands
+## Install the binary
+
+Linux (x86_64, ARM64) and Apple Silicon Macs. The script downloads the latest release, checks its
+SHA-256 and puts `hivemind` in `~/.local/bin`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/alexknips/hivemind/master/scripts/install.sh | sh
+```
+
+If the next command says `hivemind: not found`, your shell does not have `~/.local/bin` on its
+PATH yet. Add it, for this shell and in your shell's startup file (`~/.bashrc` or `~/.zshrc`):
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Then check:
+
+```bash
+hivemind --version
+```
+
+**Build from source** (other platforms):
+
+```bash
+cargo install --git https://github.com/alexknips/hivemind --locked hivemind
+```
+
+Run a local MCP server over stdio — no HTTP, no auth required:
+
+```bash
+hivemind --hivemind-dir ./hivemind/ mcp
+```
+
+Add to Claude Code via `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "hivemind": {
+      "command": "hivemind",
+      "args": ["mcp"],
+      "env": { "HIVEMIND_DIR": "./hivemind/" }
+    }
+  }
+}
+```
+
+Run the HTTP API server directly:
+
+```bash
+HIVEMIND_DIR=./hivemind hivemind serve --port 8080
+```
+
+Set `HIVEMIND_API_KEY` to require bearer-token authentication.
+
+---
+
+## Run a cell with Docker
+
+A self-hosted cell takes about five minutes on any machine with Docker.
 
 **Prerequisites:** Docker 24+ with Compose v2 (`docker compose version`). Port 8080 must be available.
 
@@ -76,52 +137,6 @@ Reload Claude Code. The HiveMind tools appear in your agent's tool list. Your in
 **Your data stays on your machine.** The self-hosted cell never phones home.
 Each deployment is separate, with its own data.
 :::
-
----
-
-## Local CLI / development
-
-For single-user local use or development without Docker.
-
-**Installer script** (places `hivemind` in `~/.local/bin`):
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/alexknips/hivemind/master/scripts/install.sh | sh
-```
-
-**Build from source:**
-
-```bash
-cargo install --git https://github.com/alexknips/hivemind --locked hivemind
-```
-
-Run a local MCP server over stdio — no HTTP, no auth required:
-
-```bash
-hivemind --hivemind-dir ./hivemind/ mcp
-```
-
-Add to Claude Code via `.mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "hivemind": {
-      "command": "hivemind",
-      "args": ["mcp"],
-      "env": { "HIVEMIND_DIR": "./hivemind/" }
-    }
-  }
-}
-```
-
-Run the HTTP API server directly:
-
-```bash
-HIVEMIND_DIR=./hivemind hivemind serve --port 8080
-```
-
-Set `HIVEMIND_API_KEY` to require bearer-token authentication.
 
 ---
 

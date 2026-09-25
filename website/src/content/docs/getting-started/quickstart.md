@@ -18,7 +18,8 @@ Choose your path:
 
 1. **Add HiveMind to your MCP client**
 
-   For Claude Code, add to `.mcp.json` in your project root (local stdio — no install if you have the binary):
+   For Claude Code, [install the binary](../install/#install-the-binary), then add to `.mcp.json`
+   in your project root (local stdio):
 
    ```json
    {
@@ -43,9 +44,14 @@ Choose your path:
 3. **Start capturing decisions**
 
    Ask your agent: *"Capture a decision: we chose SQLite for the MVP ledger because it
-   has zero infra overhead. We considered Postgres and rejected it as premature."*
+   has zero infra overhead. We considered Postgres and rejected it as premature. It rests
+   on the assumption that one node is enough for the MVP."*
 
-   The agent calls `capture_decision` and the decision lands in your shared ledger.
+   The agent calls `capture_decision`, passing that assumption as the decision's `grounding`,
+   and the decision lands in your ledger. Every capture must say what the decision rests on —
+   a decision already made, something observed, an assumption, or a declared bet when there is
+   nothing yet — and HiveMind refuses one that names nothing, so that it can tell you later
+   whether the decision still holds.
 
 4. **Query what's been decided**
 
@@ -60,7 +66,7 @@ Choose your path:
 
 ## CLI quickstart
 
-For self-hosted installs. First [set up your self-hosted cell](../install/).
+First [install the binary](../install/#install-the-binary) and check that `hivemind --version` answers.
 
 The fastest first run uses an isolated temporary ledger:
 
@@ -89,6 +95,12 @@ No files are left behind.
    Every write requires `--actor`. Use `human:<id>` for humans, `agent:<tool>:<name>` for agents.
    `--hivemind-dir` sets the ledger location; it is created on first write.
 
+   `decision.proposed` records the decision as stated. Its grounded form,
+   [`emit decision.capture`](../../reference/cli/#emit-decisioncapture), also asks what the
+   decision rests on (`--rests-on-decision`, `--rests-on-evidence`, `--rests-on-assumption`, or
+   `--bet` when there is nothing yet) and refuses a capture that names nothing — the same rule
+   your agent meets over MCP.
+
 2. **Query it back**
 
    ```bash
@@ -114,8 +126,11 @@ No files are left behind.
 5. **Review all recent decisions**
 
    ```bash
-   hivemind --hivemind-dir ./hivemind query recent --limit 10
+   hivemind --hivemind-dir ./hivemind query recent --since 24h --limit 10
    ```
+
+   `--since` is required: a duration like `24h`, or an RFC 3339 timestamp. Add `--summary` for
+   one line per decision instead of JSON.
 
 </Steps>
 

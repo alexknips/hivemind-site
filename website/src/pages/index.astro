@@ -93,6 +93,8 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
             <p class="text-gray-400 text-sm leading-relaxed">
               Linux (x86_64, ARM64) and Apple Silicon Macs. The script checks the release&rsquo;s SHA-256
               and puts <code class="text-indigo-300">hivemind</code> in <code class="text-indigo-300">~/.local/bin</code>.
+              If the next command says <code class="text-indigo-300">hivemind: not found</code>, run
+              <code class="text-indigo-300">export PATH="$HOME/.local/bin:$PATH"</code> first.
               Elsewhere, <a href="https://github.com/alexknips/hivemind#install" class="text-indigo-300 hover:text-indigo-200 underline">build it with cargo</a>.
             </p>
           </li>
@@ -127,7 +129,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
 
         <p class="text-sm text-gray-500 text-center mt-8">
           Prefer a server to a local file?
-          <a href={`${base}getting-started/install/`} class="text-indigo-300 hover:text-indigo-200 underline">Run a HiveMind cell with Docker Compose</a>.
+          <a href={`${base}getting-started/install/#run-a-cell-with-docker`} class="text-indigo-300 hover:text-indigo-200 underline">Run a HiveMind cell with Docker Compose</a>.
         </p>
       </div>
     </section>

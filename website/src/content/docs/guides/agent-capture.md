@@ -69,8 +69,13 @@ hivemind --hivemind-dir ./hivemind/ emit decision.capture \
   --rationale "The local command is deterministic and does not depend on hooks" \
   --topic-keys agents,capture \
   --options direct-cli,mcp \
-  --chose direct-cli
+  --chose direct-cli \
+  --rests-on-assumption "Not every agent runtime offers hooks"
 ```
+
+A capture must say what the decision rests on: `--rests-on-decision`, `--rests-on-evidence`
+(with `--evidence-source`), `--rests-on-assumption`, or `--bet` when there is nothing yet. One
+that names nothing is refused and nothing is written.
 
 Actor identity is derived automatically, stable name first: a Gas City
 agent's fixed slot name (`GC_AGENT`/`GC_ALIAS`) before any raw per-run

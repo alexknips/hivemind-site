@@ -17,7 +17,7 @@ export default defineConfig({
           label: 'Getting Started',
           items: [
             { label: 'Quickstart', slug: 'getting-started/quickstart' },
-            { label: 'Self-host', slug: 'getting-started/install' },
+            { label: 'Install', slug: 'getting-started/install' },
           ],
         },
         {

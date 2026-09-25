@@ -167,6 +167,7 @@ for full parameter documentation.
 | `capture_hypothesis` | write | Record a hypothesis still in flight |
 | `disagree_decision` | write | Contest a decision as an actor |
 | `supersede_decision` | write | Supersede a prior decision with a new one |
+| `move_decision` | write | Move a decision to another project, recorded with who, when, from, to and why |
 | `get_decision` | read | Retrieve a decision by ID with derived status |
 | `get_relevant_decisions` | read | Search by topic, status, actor, or time window |
 | `get_situational_decisions` | read | Decisions bearing on a situation — matches by topic or evidence overlap, no ID needed |

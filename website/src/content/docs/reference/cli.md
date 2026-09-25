@@ -127,6 +127,20 @@ Lists registered (shared) projects, paged (`truncated: true` with a
 `next_cursor` when the limit is hit). Personal projects never appear here —
 resolve one directly with `project show`.
 
+### `project decisions`
+
+```
+hivemind project decisions <handle> [--limit <n>] [--cursor <cursor>]
+```
+
+Lists the decisions in one project, oldest first, paged (default `--limit 25`;
+`truncated: true` with a `next_cursor` when the limit is hit). Give a shared
+handle, or a personal address (`personal:<actor>`) to see what is still in a
+personal project and not yet shared: every session of one agent tool lists
+together (`personal:agent:claude`), each decision showing its session. An
+unregistered handle is a successful envelope with `outcome: not_found`, never
+an empty list.
+
 ### `project show`
 
 ```
@@ -241,10 +255,41 @@ hivemind emit decision.capture
   [--question <text>]
   [--project <handle>]
   [--project-source <stated|folder_marker|rig|current_project|job>]
+  [--rests-on-decision <description|#N|decision-id>]...
+  [--rests-on-evidence <what was observed>]... [--evidence-source <where>]...
+  [--rests-on-assumption <statement>]...
+  [--bet [<statement>]] [--would-change-if <text>] [--check-by <date>]
+  [--confidence <low|medium|high>]
 ```
 
 Takes the same `--project` / `--project-source` flags and replies the same way
 as [`emit decision.proposed`](#emit-decisionproposed).
+
+**A capture must say what it rests on.** Name at least one of the following, or
+the capture is refused and nothing is written:
+
+- `--rests-on-decision <description|#N|decision-id>` — a decision we already
+  made, named the way you would describe it, as `#N` from the previous
+  ambiguous candidate list, or by `decision-...` id. Repeatable. A description
+  that is ambiguous or matches nothing refuses the capture.
+- `--rests-on-evidence <content>` — something observed, the observation itself
+  rather than the decider's opinion of it. Repeatable; creates the evidence in
+  the same call. Give each one an `--evidence-source <ref>` (URL, file@commit,
+  test run, measurement), matched by position, or none.
+- `--rests-on-assumption <statement>` — something assumed. Repeatable; creates
+  an assumption in the same call.
+- `--bet [<statement>]` — nothing yet: declare the decision a bet on the
+  statement, or on `Judgement call: <title>` when none is given.
+  `--would-change-if <text>` says what would change our mind and
+  `--check-by <date>` (RFC3339 or `YYYY-MM-DD`) when to check whether it paid
+  off; both require `--bet`.
+
+The ids of nodes that already exist also count (`--evidence`, `--hypotheses`).
+`--confidence <low|medium|high>` records the decider's own stated confidence;
+leave it off when they expressed none. The decider's own words are not a
+grounding: they go in `--quote` with `--question`. If a decision named under
+`--rests-on-decision` is already superseded or rejected, the capture succeeds,
+the link is recorded, and text mode adds a `premise_stale:` line for it.
 
 ### `emit decision.accepted`
 
@@ -454,6 +499,7 @@ hivemind query situational
   [--since-ts <timestamp>]
   [--since-branch-point]       # resolve --since to this branch's merge-base commit time
   [--base <ref>]               # base ref for --since-branch-point, default origin/master
+  [--project <handle>]         # ask from this project instead of the whole tenant
   [--limit <n>]
 ```
 
@@ -461,6 +507,12 @@ With no flags at all, defaults to the current git diff/staged set in the
 working directory — the "no question needed" mode. Requires a git repository
 when relying on that default, `--branch`, or `--cwd`; pass `--paths`/`--diff`
 explicitly otherwise.
+
+`--project <handle>` (a registered handle or a personal address) asks from that
+project: matches come from the project first, then the project it is part of
+(inherited constraints), then the projects it depends on, each labelled, and the
+answer says where it stopped. An unknown handle is refused. Without it the
+whole tenant is searched.
 
 ### `query get_active_decision_blockers`
 
@@ -565,7 +617,7 @@ the known-tenant check on later `--tenant <tenant-id>` opens. See
 [Tenants](#tenants) above for the full contract, including the Postgres
 provisioning route this command does not apply to.
 
-### `project register` / `link` / `unlink` / `anchor` / `list` / `show` / `use`
+### `project register` / `link` / `unlink` / `anchor` / `list` / `decisions` / `show` / `use`
 
 ```
 hivemind project register <handle> [--display-name <name>] [--purpose <text>]
@@ -573,6 +625,7 @@ hivemind project link --from <handle> --to <handle> --kind <part_of|depends_on>
 hivemind project unlink --from <handle> --to <handle> --kind <part_of|depends_on>
 hivemind project anchor --handle <handle> --kind <folder|rig|jira|linear|github|channel> --value <value>
 hivemind project list [--limit <n>] [--cursor <cursor>]
+hivemind project decisions <handle> [--limit <n>] [--cursor <cursor>]
 hivemind project show <handle>
 hivemind project show --current
 hivemind project use <handle>
@@ -724,6 +777,11 @@ hivemind --actor <id> supersede [<description>]
   [--evidence <id,id,...>]
   [--project <handle>]
   [--project-source <stated|folder_marker|rig|current_project|job>]
+  [--rests-on-decision <description|#N|decision-id>]...
+  [--rests-on-evidence <what was observed>]... [--evidence-source <where>]...
+  [--rests-on-assumption <statement>]...
+  [--bet [<statement>]] [--would-change-if <text>] [--check-by <date>]
+  [--confidence <low|medium|high>]
 ```
 
 Captures a new decision and marks it as superseding an existing one in a
@@ -745,6 +803,38 @@ it was determined; `--project <handle>` (a registered project, with an optional
 `--project-source`) files it elsewhere, exactly as on
 [`emit decision.proposed`](#emit-decisionproposed). In text mode the same
 `project: ...` line goes to stderr.
+
+The replacement must say what it rests on, with the same grounding flags and
+the same refusal as [`emit decision.capture`](#emit-decisioncapture); nothing is
+written, and the old decision is not resolved, when none is given. A premise
+that is already superseded or rejected adds ` premise_stale=<ids>` to the text
+output.
+
+### `move`
+
+```
+hivemind --actor <id> move [<description>]
+  [--decision <decision-id>]
+  [--pick <n>]
+  [--topic <topic-key>]
+  --to <handle|personal:<actor>>
+  [--reason <text>]
+```
+
+Moves a decision to another project. Name the decision with a free-text
+`<description>` or `--decision <decision-id>`; narrow candidates first with
+`--topic`. A description that matches more than one decision lists numbered
+candidates and writes nothing — choose one with `--pick <n>` (or `#N` as the
+description). One that matches nothing is a successful `not_found` answer.
+
+`--to` is a registered project handle, or your own personal address. Where the
+decision is now is read from the ledger, never typed. The move is recorded with
+who, when, from, to and `--reason`, and shows in the decision's history. It is
+reversible: moving the decision back is another recorded move, and nothing is
+deleted or rewritten.
+
+Prints `event_id=... decision_id=... from=... to=...`; `--json` gives the same
+fields as an object.
 
 ## Environment variables
 

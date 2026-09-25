@@ -19,8 +19,11 @@ website/                  Astro + Starlight site
   public/demo/            12 Angry Men demo (vendored hivemind-ui build)
 pitch-screens/            raw captures behind the deck's terminal screenshots, and how to re-render them
 .github/workflows/
-  deploy.yml              build and deploy to GitHub Pages on push to main
-  reference-docs.yml      fail if the docs drift from hivemind's code
+  deploy.yml                  build and deploy to GitHub Pages on push to main
+  reference-docs.yml          fail if the docs drift from the latest hivemind release
+  regenerate-reference.yml    regenerate the generated docs from that release, commit, deploy
+.github/scripts/
+  commit-generated-reference.sh   commits only what the generator owns
 ```
 
 The site stays under `website/` because hivemind's reference generator reads
@@ -35,16 +38,31 @@ npm run dev        # http://localhost:4321/hivemind-site/
 npm run build      # static output in website/dist/
 ```
 
-## Docs stay in sync with the code
+## The reference follows the latest hivemind release
 
-`reference-docs.yml` checks out `alexknips/hivemind` at `master`, builds its
-`generate-reference` binary and runs `--check` from this repo's root. It fails if
-`reference/mcp-tools.md` or `reference/cli.md`, the tool count and the "Available tools"
-table in `guides/mcp-setup.md`, or the tool count on the homepage drift from the code. It
-runs on every push and pull request, and daily, so a hivemind change that drifts the docs
-turns it red within a day.
+The site documents the latest hivemind **release**, not master: master's new flags and tools
+would advertise what nobody can install yet.
 
-To regenerate after a hivemind change, with hivemind checked out next to this repo:
+`reference-docs.yml` resolves the latest release tag
+(`gh api repos/alexknips/hivemind/releases/latest`), checks out `alexknips/hivemind` at it,
+builds its `generate-reference` binary and runs `--check` from this repo's root. It fails if
+`reference/mcp-tools.md`, the tool counts in `guides/mcp-setup.md` and on the homepage, the
+"Available tools" table in `guides/mcp-setup.md`, or the subcommand names in `reference/cli.md`
+drift from that release. It runs on every push and pull request, and daily.
+
+`regenerate-reference.yml` regenerates the generated parts from the same tag every six hours
+and on manual dispatch (Actions -> "Regenerate reference docs" -> Run workflow, which is the
+thing to do right after a release), commits the change to `main`, then runs the Pages deploy
+and the check. It only ever commits what the generator writes: `reference/mcp-tools.md` as a
+whole, and the digits of the "N tools" mentions in `guides/mcp-setup.md` and
+`src/pages/index.astro`. `.github/scripts/commit-generated-reference.sh` refuses anything else.
+
+Hand-written, and updated by hand at release time: `reference/cli.md` and the "Available
+tools" table in `guides/mcp-setup.md`. When a release adds a tool, the check stays red on
+`main` until that table row (and any `cli.md` section) is written. That red is the alarm, not
+a fault in the job.
+
+To regenerate locally, with hivemind checked out next to this repo at the release tag:
 
 ```sh
 cargo run --manifest-path ../hivemind/Cargo.toml --bin generate-reference

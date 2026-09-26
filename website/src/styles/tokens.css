@@ -1,0 +1,244 @@
+/*
+ * HiveMind design tokens, for the site.
+ *
+ * The colour blocks below are a copy of the app's token file
+ * (hivemind-ui, src/styles/tokens.css, hu-65k.2, main at bc5231a), so the
+ * site and the app are painted from the same values: shadcn-named neutrals,
+ * one link accent, one hue per signal, light by default and dark following
+ * the OS (or `<html data-theme="dark">`, which Starlight sets on the docs).
+ * When the app's palette changes, copy the colour section over again.
+ *
+ * The app exposes type, spacing, radii and shadows to Tailwind v4 through
+ * `@theme`. The site runs Tailwind v3, so the same steps are plain custom
+ * properties here and tailwind.config.mjs maps the utilities onto them
+ * (`text-sm`, `rounded-md`, `shadow-sm` are the same steps in both).
+ */
+
+/* ── Colour: light (default) ──────────────────────────────────────────────── */
+
+:root {
+  color-scheme: light;
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.21 0.006 285.9);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--foreground);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.21 0.006 285.9);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.967 0.001 286.4);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.967 0.001 286.4);
+  --muted-foreground: oklch(0.52 0.016 285.9);
+  --accent: oklch(0.955 0.003 286.3);
+  --accent-foreground: var(--foreground);
+  --border: oklch(0.92 0.004 286.3);
+  --input: oklch(0.87 0.006 286.3);
+  --ring: oklch(0.55 0.15 255);
+  --overlay: oklch(0.21 0.006 285.9 / 0.45);
+  --shadow-color: oklch(0.21 0.006 285.9);
+
+  --sidebar: oklch(0.985 0.001 286.4);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-accent: oklch(0.945 0.004 286.3);
+  --sidebar-border: var(--border);
+
+  /* Links, ids and the one accent the UI allows itself. */
+  --link: oklch(0.5 0.16 255);
+
+  /* Signals. `--x` is the hue; `--x-foreground` reads on the page and on
+     `--x-soft`, the tinted background for badges and notices. */
+  --success: oklch(0.6 0.13 155);
+  --success-foreground: oklch(0.44 0.1 155);
+  --warning: oklch(0.72 0.15 70);
+  --warning-foreground: oklch(0.47 0.11 60);
+  --destructive: oklch(0.577 0.215 27.3);
+  --destructive-foreground: oklch(0.47 0.17 27.3);
+  --info: oklch(0.55 0.15 255);
+  --info-foreground: oklch(0.45 0.14 255);
+  --neutral: oklch(0.6 0.02 270);
+  --neutral-foreground: oklch(0.45 0.02 270);
+
+  /* Node types: one hue each, as in the app's graph. */
+  --node-decision: oklch(0.575 0.123 246.5);
+  --node-evidence: oklch(0.627 0.17 149.2);
+  --node-hypothesis: oklch(0.541 0.247 293);
+  --node-question: oklch(0.592 0.218 0.6);
+  --node-option: oklch(0.609 0.111 221.7);
+  --node-blocker: oklch(0.577 0.215 27.3);
+  --node-request: oklch(0.666 0.157 58.3);
+  --node-source: oklch(0.681 0.142 75.8);
+  --node-actor: oklch(0.6 0.104 184.7);
+  --node-revision: oklch(0.554 0.041 257.4);
+  --node-default: oklch(0.711 0.035 256.8);
+
+  /* How strongly a hue tints its soft background / its text shade. */
+  --tint: 12%;
+  --shade: 72%;
+}
+
+/* ── Colour: dark ─────────────────────────────────────────────────────────── */
+/* Follows the OS setting; `data-theme` on <html> forces either one. */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --background: oklch(0.16 0.005 285.8);
+    --foreground: oklch(0.96 0.002 286);
+    --card: oklch(0.19 0.006 285.9);
+    --popover: oklch(0.21 0.006 285.9);
+    --primary: oklch(0.93 0.004 286.3);
+    --primary-foreground: oklch(0.21 0.006 285.9);
+    --secondary: oklch(0.27 0.006 286);
+    --muted: oklch(0.24 0.006 286);
+    --muted-foreground: oklch(0.72 0.015 286);
+    --accent: oklch(0.27 0.006 286);
+    --border: oklch(1 0 0 / 0.1);
+    --input: oklch(1 0 0 / 0.16);
+    --ring: oklch(0.68 0.13 255);
+    --overlay: oklch(0 0 0 / 0.6);
+    --shadow-color: oklch(0 0 0);
+
+    --sidebar: oklch(0.18 0.006 285.9);
+    --sidebar-accent: oklch(0.26 0.006 286);
+
+    --link: oklch(0.74 0.12 255);
+
+    --success-foreground: oklch(0.78 0.13 155);
+    --warning-foreground: oklch(0.83 0.13 75);
+    --destructive: oklch(0.65 0.2 22);
+    --destructive-foreground: oklch(0.78 0.14 22);
+    --info-foreground: oklch(0.76 0.12 255);
+    --neutral-foreground: oklch(0.75 0.02 270);
+
+    --tint: 20%;
+    --shade: 55%;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: oklch(0.16 0.005 285.8);
+  --foreground: oklch(0.96 0.002 286);
+  --card: oklch(0.19 0.006 285.9);
+  --popover: oklch(0.21 0.006 285.9);
+  --primary: oklch(0.93 0.004 286.3);
+  --primary-foreground: oklch(0.21 0.006 285.9);
+  --secondary: oklch(0.27 0.006 286);
+  --muted: oklch(0.24 0.006 286);
+  --muted-foreground: oklch(0.72 0.015 286);
+  --accent: oklch(0.27 0.006 286);
+  --border: oklch(1 0 0 / 0.1);
+  --input: oklch(1 0 0 / 0.16);
+  --ring: oklch(0.68 0.13 255);
+  --overlay: oklch(0 0 0 / 0.6);
+  --shadow-color: oklch(0 0 0);
+
+  --sidebar: oklch(0.18 0.006 285.9);
+  --sidebar-accent: oklch(0.26 0.006 286);
+
+  --link: oklch(0.74 0.12 255);
+
+  --success-foreground: oklch(0.78 0.13 155);
+  --warning-foreground: oklch(0.83 0.13 75);
+  --destructive: oklch(0.65 0.2 22);
+  --destructive-foreground: oklch(0.78 0.14 22);
+  --info-foreground: oklch(0.76 0.12 255);
+  --neutral-foreground: oklch(0.75 0.02 270);
+
+  --tint: 20%;
+  --shade: 55%;
+}
+
+/* ── Derived colours (theme-independent formulas) ─────────────────────────── */
+
+:root {
+  --success-soft: color-mix(in oklab, var(--success) var(--tint), var(--background));
+  --warning-soft: color-mix(in oklab, var(--warning) var(--tint), var(--background));
+  --destructive-soft: color-mix(in oklab, var(--destructive) var(--tint), var(--background));
+  --info-soft: color-mix(in oklab, var(--info) var(--tint), var(--background));
+  --neutral-soft: color-mix(in oklab, var(--neutral) var(--tint), var(--background));
+
+  /* Decision status. */
+  --status-active: var(--success);
+  --status-blocked: var(--warning);
+  --status-superseded: var(--neutral);
+
+  /* Node types: soft fill and label text readable on the fill. */
+  --node-decision-fill: color-mix(in oklab, var(--node-decision) var(--tint), var(--background));
+  --node-decision-text: color-mix(in oklab, var(--node-decision) var(--shade), var(--foreground));
+  --node-evidence-fill: color-mix(in oklab, var(--node-evidence) var(--tint), var(--background));
+  --node-evidence-text: color-mix(in oklab, var(--node-evidence) var(--shade), var(--foreground));
+  --node-hypothesis-fill: color-mix(in oklab, var(--node-hypothesis) var(--tint), var(--background));
+  --node-hypothesis-text: color-mix(in oklab, var(--node-hypothesis) var(--shade), var(--foreground));
+  --node-question-fill: color-mix(in oklab, var(--node-question) var(--tint), var(--background));
+  --node-question-text: color-mix(in oklab, var(--node-question) var(--shade), var(--foreground));
+  --node-option-fill: color-mix(in oklab, var(--node-option) var(--tint), var(--background));
+  --node-option-text: color-mix(in oklab, var(--node-option) var(--shade), var(--foreground));
+  --node-blocker-fill: color-mix(in oklab, var(--node-blocker) var(--tint), var(--background));
+  --node-blocker-text: color-mix(in oklab, var(--node-blocker) var(--shade), var(--foreground));
+  --node-request-fill: color-mix(in oklab, var(--node-request) var(--tint), var(--background));
+  --node-request-text: color-mix(in oklab, var(--node-request) var(--shade), var(--foreground));
+  --node-source-fill: color-mix(in oklab, var(--node-source) var(--tint), var(--background));
+  --node-source-text: color-mix(in oklab, var(--node-source) var(--shade), var(--foreground));
+  --node-actor-fill: color-mix(in oklab, var(--node-actor) var(--tint), var(--background));
+  --node-actor-text: color-mix(in oklab, var(--node-actor) var(--shade), var(--foreground));
+  --node-revision-fill: color-mix(in oklab, var(--node-revision) var(--tint), var(--background));
+  --node-revision-text: color-mix(in oklab, var(--node-revision) var(--shade), var(--foreground));
+  --node-default-fill: color-mix(in oklab, var(--node-default) var(--tint), var(--background));
+  --node-default-text: color-mix(in oklab, var(--node-default) var(--shade), var(--foreground));
+}
+
+/* ── Type, spacing, radii, shadows ────────────────────────────────────────── */
+/* The app's steps (its `@theme static` block), as plain variables. The seven
+   text steps are the app's; the three display steps (2xl, 3xl, 4xl) exist
+   only here, for the landing page's headings, and keep the same weights. */
+
+:root {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 0.875rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.8125rem;
+  --text-sm--line-height: 1.125rem;
+  --text-base: 0.875rem;
+  --text-base--line-height: 1.375rem;
+  --text-md: 1rem;
+  --text-md--line-height: 1.5rem;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.5rem;
+  --text-xl--line-height: 2rem;
+  --text-2xl: 2rem;
+  --text-2xl--line-height: 2.5rem;
+  --text-3xl: 2.5rem;
+  --text-3xl--line-height: 3rem;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 3.5rem;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --spacing: 0.25rem;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-full: 9999px;
+
+  --shadow-xs: 0 1px 2px 0 color-mix(in oklab, var(--shadow-color) 6%, transparent);
+  --shadow-sm: 0 1px 3px 0 color-mix(in oklab, var(--shadow-color) 8%, transparent),
+    0 1px 2px -1px color-mix(in oklab, var(--shadow-color) 8%, transparent);
+  --shadow-md: 0 4px 12px -2px color-mix(in oklab, var(--shadow-color) 10%, transparent),
+    0 2px 4px -2px color-mix(in oklab, var(--shadow-color) 6%, transparent);
+  --shadow-lg: 0 16px 40px -8px color-mix(in oklab, var(--shadow-color) 18%, transparent),
+    0 4px 12px -4px color-mix(in oklab, var(--shadow-color) 8%, transparent);
+}

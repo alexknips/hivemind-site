@@ -1,3 +1,82 @@
+/* Landing page: the app's tokens (tokens.css) under Tailwind, plus the few
+   shared controls the app builds from shadcn/ui (button, badge), written as
+   classes here so the Astro markup reads like the app's component names. */
+@import '@fontsource-variable/inter';
+@import './tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    min-width: 320px;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: var(--text-md);
+    line-height: var(--text-md--line-height);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "cv11";
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* The sticky header: the page background, slightly see-through. */
+  .site-header {
+    background: color-mix(in oklab, var(--background) 88%, transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  /* shadcn/ui Button (the app's src/components/ui/button.tsx). */
+  .btn {
+    @apply inline-flex h-9 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-md px-4 text-sm font-medium transition-colors;
+  }
+  .btn-lg {
+    @apply h-10 px-5 text-md;
+  }
+  .btn-primary {
+    @apply bg-primary text-primary-foreground shadow-xs;
+  }
+  .btn-primary:hover {
+    background: color-mix(in oklab, var(--primary) 90%, transparent);
+  }
+  .btn-outline {
+    @apply border border-border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground;
+  }
+
+  /* shadcn/ui Badge (the app's src/components/ui/badge.tsx), with the soft
+     variants the app uses for a decision's status. */
+  .badge {
+    @apply inline-flex w-fit shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-sm border border-transparent px-1.5 py-px text-xs font-medium;
+  }
+  .badge-outline {
+    @apply border-border text-muted-foreground;
+  }
+  .badge-warning {
+    @apply bg-warning-soft text-warning-foreground;
+  }
+  .badge-neutral {
+    @apply bg-neutral-soft text-neutral-foreground;
+  }
+
+  /* Prose links and code, as the app's link variant and kbd. */
+  .link {
+    @apply text-link underline underline-offset-4 hover:text-foreground;
+  }
+  .code {
+    @apply rounded-xs bg-muted px-1 py-px font-mono text-base text-foreground;
+  }
+  .code-block {
+    @apply whitespace-pre-wrap break-all rounded-md border border-border bg-muted p-4 font-mono text-sm text-foreground;
+  }
+}

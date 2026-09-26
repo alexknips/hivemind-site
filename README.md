@@ -13,6 +13,7 @@ repo holds only the site. It moves again when the product is renamed.
 ```
 website/                  Astro + Starlight site
   src/pages/index.astro   landing page
+  src/styles/tokens.css   design tokens: a copy of the app's (hivemind-ui src/styles/tokens.css), so site and app look the same
   src/content/docs/       the docs
   public/pitch/           pitch deck (static HTML)
   public/use-cases/       use cases (static HTML)

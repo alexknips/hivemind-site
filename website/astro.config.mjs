@@ -8,6 +8,8 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'HiveMind',
+      // The app's wordmark: the "blocks" mark in the link colour, then the name.
+      logo: { light: './src/assets/mark-light.svg', dark: './src/assets/mark-dark.svg', alt: '' },
       description: 'Memory for decisions: what you and your coding agents decided, and why.',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/alexknips/hivemind' },

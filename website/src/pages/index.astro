@@ -3,6 +3,9 @@ import '../styles/global.css';
 const base = import.meta.env.BASE_URL;
 const installCmd = 'curl -fsSL https://raw.githubusercontent.com/alexknips/hivemind/master/scripts/install.sh | sh';
 const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
+// Status words on this page: "works today" = in the current release (v0.7.0, 25 Sep 2026);
+// "coming next" = built and merged but not yet in a release, or under way; "planned" = decided, not built.
+// Every claim on this page is listed with its evidence in CLAIMS.md at the repo root.
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -28,6 +31,8 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
       </a>
       <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
         <a href={`${base}getting-started/quickstart/`} class="hidden sm:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Docs</a>
+        <a href="#where-it-is" class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Roadmap</a>
+        <a href={`${base}pitch/`} class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Why HiveMind</a>
         <a href={`${base}demo/`} class="hidden sm:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Demo</a>
         <a href="https://github.com/alexknips/hivemind" class="text-sm text-muted-foreground hover:text-foreground transition-colors">GitHub</a>
         <a href="#self-host" class="btn btn-primary">Self-host &rarr;</a>
@@ -67,9 +72,332 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
       <p class="text-sm text-muted-foreground">The demo is the jury room of <em>12 Angry Men</em> as a decision graph. No signup, no install.</p>
     </section>
 
-    <!-- Self-host: the first step -->
+    <!-- The problem: the three failures, in the words people use (vision/README.md; deck slide 1) -->
+    <section id="problem" class="border-t border-border bg-sidebar scroll-mt-20">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">The problem</p>
+        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Your agent forgets what you decided.</h2>
+        <p class="text-md text-muted-foreground text-center max-w-xl mx-auto mb-12 sm:mb-16">
+          Coding agents forget. These are the three ways it hurts, in the words people use, and what HiveMind keeps instead.
+        </p>
+        <div class="grid md:grid-cols-3 gap-8 sm:gap-10">
+          <div class="border-t border-border pt-5">
+            <h3 class="text-md font-semibold text-foreground mb-2">It undid what you decided</h3>
+            <p class="text-base text-muted-foreground leading-relaxed mb-3">
+              You dropped the ORM on purpose. A few weeks later the agent helpfully brings it back,
+              with confidence.
+            </p>
+            <p class="text-base text-foreground leading-relaxed">
+              HiveMind keeps the options that lost and why they lost, next to the one you chose.
+            </p>
+          </div>
+          <div class="border-t border-border pt-5">
+            <h3 class="text-md font-semibold text-foreground mb-2">Nobody knows why</h3>
+            <p class="text-base text-muted-foreground leading-relaxed mb-3">
+              <code class="code">git blame</code> says who changed a line, not why the agent did it
+              that way. The chat was the design meeting, and it is gone.
+            </p>
+            <p class="text-base text-foreground leading-relaxed">
+              HiveMind records the decision with its rationale, its evidence and who made it: you or the agent.
+            </p>
+          </div>
+          <div class="border-t border-border pt-5">
+            <h3 class="text-md font-semibold text-foreground mb-2">It forgot what you agreed</h3>
+            <p class="text-base text-muted-foreground leading-relaxed mb-3">
+              The hand-kept <code class="code">DECISIONS.md</code> goes stale after a reversal, and the
+              agent follows the dead entry.
+            </p>
+            <p class="text-base text-foreground leading-relaxed">
+              In HiveMind a replaced decision reads <span class="badge badge-neutral">superseded</span> and a disputed one
+              <span class="badge badge-warning">contested</span>. Nobody has to remember to update it.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What it is: memory, but for decisions (deck slides 2 and 3) -->
+    <section id="what-it-is" class="border-t border-border scroll-mt-20">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">What it is</p>
+        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Memory, but for decisions</h2>
+        <p class="text-md text-muted-foreground text-center max-w-xl mx-auto mb-12">
+          When an agent forgets, you look for the fix under memory. HiveMind is that, plus two things memory tools do not keep.
+        </p>
+        <div class="grid sm:grid-cols-2 gap-6">
+          <div class="rounded-lg bg-info-soft p-6">
+            <h3 class="text-md font-semibold text-foreground mb-2">The why</h3>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              The options that lost and the reasons, the evidence, and who decided: you or an agent.
+              Ask later, and the answer comes from the record, with your own words attached.
+            </p>
+          </div>
+          <div class="rounded-lg bg-success-soft p-6">
+            <h3 class="text-md font-semibold text-foreground mb-2">Whether it held up</h3>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              When a decision is contested or replaced, its status says so. Nobody has to remember to
+              update it, and the old entry is never edited or deleted; the history stays.
+            </p>
+          </div>
+        </div>
+        <p class="text-md text-foreground text-center mt-10 max-w-2xl mx-auto leading-relaxed">
+          It is yours: one binary and a SQLite ledger in your project. No account, no sign-up, and nothing phones home.
+        </p>
+        <p class="text-sm text-muted-foreground text-center mt-4 max-w-xl mx-auto">
+          HiveMind is early: self-hosted only, with no hosted version.
+          The code is on <a href="https://github.com/alexknips/hivemind" class="link">GitHub</a> under AGPL-3.0.
+        </p>
+      </div>
+    </section>
+
+    <!-- See it work: the deck's three real Claude Code sessions (deck slides 4 to 6, same screenshots) -->
+    <section id="see-it-work" class="border-t border-border bg-sidebar scroll-mt-20">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">In Claude Code</p>
+        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Three real sessions</h2>
+        <p class="text-md text-muted-foreground text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+          The same small project, three fresh Claude Code sessions with no chat history between them.
+          Only the record carries over.
+        </p>
+
+        <div class="space-y-12 sm:space-y-16">
+
+          <div class="grid md:grid-cols-5 gap-6 md:gap-10 items-start">
+            <div class="md:col-span-2">
+              <p class="text-xs font-mono text-muted-foreground mb-2">1 of 3</p>
+              <h3 class="text-lg font-semibold tracking-tight text-foreground mb-3">You make the call. The agent writes it down.</h3>
+              <p class="text-base text-muted-foreground leading-relaxed">
+                Say what you decided and why. The agent records the options that lost, the reasons,
+                and that you decided, not the agent.
+              </p>
+            </div>
+            <figure class="md:col-span-3 min-w-0">
+              <a href={`${base}pitch/`} class="block rounded-lg border border-border bg-card shadow-sm overflow-hidden hover:border-input transition-colors">
+                <img src={`${base}pitch/img/capture.png`} width="580" height="579" loading="lazy" class="w-full h-auto"
+                  alt="Claude Code session in ~/code/pantry. The user writes: We need real storage for pantry. My call: SQLite, one file next to the app. Postgres is overkill for a one-person app, it's a server to run and back up. The JSON file we have now loses writes when two requests land at once. Record the decision in HiveMind. The agent calls HiveMind once and replies: I saved the decision in HiveMind and marked it accepted. Chosen: SQLite, as a single file next to the app. Also listed: Postgres, turned down as overkill because it's a server to run and back up; keeping the JSON file, turned down because it loses writes when two requests arrive at once. Decided by: human:you@example.com. Your own words are attached as the quote. Topics: pantry, storage, database." />
+              </a>
+              <figcaption class="text-xs font-mono text-muted-foreground mt-2">~/code/pantry</figcaption>
+            </figure>
+          </div>
+
+          <div class="grid md:grid-cols-5 gap-6 md:gap-10 items-start">
+            <div class="md:col-span-2 md:order-2">
+              <p class="text-xs font-mono text-muted-foreground mb-2">2 of 3</p>
+              <h3 class="text-lg font-semibold tracking-tight text-foreground mb-3">A new session asks why.</h3>
+              <p class="text-base text-muted-foreground leading-relaxed">
+                No chat history, only the record. The answer has your own words, the options you ruled
+                out, and the fact that nothing has replaced the decision.
+              </p>
+            </div>
+            <figure class="md:col-span-3 md:order-1 min-w-0">
+              <a href={`${base}pitch/`} class="block rounded-lg border border-border bg-card shadow-sm overflow-hidden hover:border-input transition-colors">
+                <img src={`${base}pitch/img/why.png`} width="580" height="908" loading="lazy" class="w-full h-auto"
+                  alt="A fresh Claude Code session. The user asks: Why is pantry on SQLite and not Postgres? What did we rule out? The agent calls HiveMind and replies: It was your decision, recorded in HiveMind as Use SQLite (single file next to the app) for pantry storage. Its status is accepted and nothing has replaced it. It quotes the user's own words, lists the options ruled out (Postgres: too much for a one-person app, another server to run and back up; keeping the JSON file: it was losing writes), explains why SQLite, and notes that no evidence is attached to the decision." />
+              </a>
+              <figcaption class="text-xs font-mono text-muted-foreground mt-2">~/code/pantry, a fresh session, after the agent moved the code to SQLite</figcaption>
+            </figure>
+          </div>
+
+          <div class="grid md:grid-cols-5 gap-6 md:gap-10 items-start">
+            <div class="md:col-span-2">
+              <p class="text-xs font-mono text-muted-foreground mb-2">3 of 3</p>
+              <h3 class="text-lg font-semibold tracking-tight text-foreground mb-3">Did it hold up?</h3>
+              <p class="text-base text-muted-foreground leading-relaxed">
+                Then the plan changed. Pantry had to work from a phone as well, so Postgres replaced SQLite.
+                Nobody edited the old entry. It now reads <span class="badge badge-neutral">superseded</span>, and the
+                answer says what changed.
+              </p>
+            </div>
+            <figure class="md:col-span-3 min-w-0">
+              <a href={`${base}pitch/`} class="block rounded-lg border border-border bg-card shadow-sm overflow-hidden hover:border-input transition-colors">
+                <img src={`${base}pitch/img/held-up.png`} width="580" height="888" loading="lazy" class="w-full h-auto"
+                  alt="A fresh Claude Code session. The user asks: Did the SQLite storage decision hold up? The agent calls HiveMind four times and replies: No. According to HiveMind, the SQLite decision has been replaced, though the replacement isn't finished yet. It restates the original decision and why Postgres was rejected, then: Why it didn't hold: it's marked superseded by Use Postgres on the home server for pantry storage, because pantry must work from a phone and a laptop and one SQLite file can't be shared. The concurrency reasoning was sound; the one device, one user assumption is what changed. It adds that the Postgres decision is still proposed, that the code still uses SQLite, and that neither decision has evidence attached." />
+              </a>
+              <figcaption class="text-xs font-mono text-muted-foreground mt-2">~/code/pantry, another fresh session, after the agent recorded the Postgres decision as replacing the SQLite one</figcaption>
+            </figure>
+          </div>
+
+        </div>
+
+        <p class="text-sm text-muted-foreground text-center mt-12 max-w-2xl mx-auto leading-relaxed">
+          Real sessions in pantry, a small demo app, recorded on 24 September 2026 with a build from two days
+          before the v0.7.0 release. Everything they show is in v0.7.0. The raw terminal captures are in the
+          <a href="https://github.com/alexknips/hivemind-site/tree/main/pitch-screens" class="link">site repository</a>,
+          and the <a href={`${base}pitch/`} class="link">deck</a> shows them at full size.
+        </p>
+      </div>
+    </section>
+
+    <!-- Who it is for (vision/README.md, "Who it is for") -->
+    <section id="who-it-is-for" class="border-t border-border scroll-mt-20">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">Who it is for</p>
+        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-12">One engineer and their agents</h2>
+        <div class="grid sm:grid-cols-2 gap-8 sm:gap-10">
+          <div class="border-t border-border pt-5">
+            <h3 class="text-md font-semibold text-foreground mb-2">For</h3>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              One engineer who runs coding agents every day and has already paid the cost of an agent that forgets.
+              If you keep a <code class="code">DECISIONS.md</code>, ADRs or a <code class="code">rejected.md</code>
+              by hand and have watched it go stale after a reversal, this is for you.
+            </p>
+          </div>
+          <div class="border-t border-border pt-5">
+            <h3 class="text-md font-semibold text-foreground mb-2">Not for, yet</h3>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              Not a team lead who wants an audit of the agents, not a compliance buyer, not an organisation-wide
+              dashboard. Teams are a real aspiration, and not the current target.
+            </p>
+          </div>
+        </div>
+        <p class="text-sm text-muted-foreground text-center mt-10 max-w-2xl mx-auto leading-relaxed">
+          The demo is a jury room, not a codebase, on purpose: the same record fits any decision that people and
+          agents make together. Engineers first, though.
+        </p>
+      </div>
+    </section>
+
+    <!-- Where it is: works today / coming next / planned (deck slide 7, brought up to the current plan) -->
+    <section id="where-it-is" class="border-t border-border bg-sidebar scroll-mt-20">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">Where it is</p>
+        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Early, self-hosted, and moving</h2>
+        <p class="text-md text-muted-foreground text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+          <span class="text-success-foreground font-medium">Works today</span> means in the current release, v0.7.0 of 25 September 2026.
+          <span class="text-warning-foreground font-medium">Coming next</span> means built and merged but not yet released, or under way.
+          <span class="text-foreground font-medium">Planned</span> means decided and not built.
+        </p>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+
+          <div class="rounded-lg border border-border bg-card shadow-xs p-6">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="badge bg-success-soft text-success-foreground">Works today</span>
+              <span class="ml-auto text-xs font-mono text-muted-foreground">v0.7.0</span>
+            </div>
+            <ul class="space-y-3 text-base text-foreground leading-relaxed">
+              <li>Claude Code, Codex and Cursor connect over MCP. A CLI does the same from the terminal.</li>
+              <li>Your agent records a decision with the options that lost, the reasons, and who decided, you or the agent.</li>
+              <li>Ask why in a fresh session. The answer has the rationale, the options chosen and rejected, who decided, and whether it still holds.</li>
+              <li>Replace a decision and the old one reads <span class="badge badge-neutral">superseded</span>. Dispute one and it reads <span class="badge badge-warning">contested</span>. Nothing is edited or deleted.</li>
+              <li>Every decision says what it rests on: an earlier decision, something observed, an assumption, or a bet with a date to check. When that premise is later replaced, the decisions built on it read stale.</li>
+              <li>"What should I know before I touch this?" lists the decisions that bear on the files you are changing, read from your current diff.</li>
+              <li>Several projects: every decision carries its project. A question asked from one project also looks in the project it is part of and the ones it depends on, one hop, and says where it stopped.</li>
+              <li>Describe a decision instead of quoting an id. When the description fits more than one, HiveMind lists them instead of guessing.</li>
+              <li>Export the whole decision log as Markdown, grouped by project. Import decisions from your existing notes; they land as unreviewed until you look at them.</li>
+            </ul>
+            <p class="text-sm text-muted-foreground mt-5 leading-relaxed">
+              Runs on one binary for Linux (x86_64, ARM64) and Apple Silicon Macs with a SQLite ledger in your project, or as a server with Postgres in Docker Compose. AGPL-3.0. No hosted version, no account.
+            </p>
+            <p class="text-sm text-muted-foreground mt-3 leading-relaxed">
+              To be fair: "held up" today means contested or replaced; it is not an outcome score. And in v0.7.0 the capture plugin does not ask up front what a decision rests on; when the agent leaves it out, HiveMind refuses the capture and names the four ways to answer.
+            </p>
+          </div>
+
+          <div class="rounded-lg border border-border bg-card shadow-xs p-6">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="badge badge-warning">Coming next</span>
+            </div>
+            <ul class="space-y-3 text-base text-foreground leading-relaxed">
+              <li>A much simpler, decision-first UI: a list of decisions, newest first, as the front door; one decision's neighbourhood as the graph, with arrows that run from newer to older.</li>
+              <li>The capture plugin asks up front what a decision rests on, instead of your agent meeting the refusal first.</li>
+              <li>A quality profile for every decision on seven dimensions: framing, alternatives, information, reasoning, values and trade-offs, bias exposure, calibration. Each line names the recorded facts it was read from, and says "not assessed" where there is nothing to read. Not a grade, and never a mark against changing your mind.</li>
+              <li>Capture that runs all day inside your coding agent, so nobody has to say "record this". The pieces are in the current release; the setup that makes it one step is not.</li>
+            </ul>
+          </div>
+
+          <div class="rounded-lg border border-dashed border-input p-6">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="badge badge-outline">Planned</span>
+            </div>
+            <ul class="space-y-3 text-base text-foreground leading-relaxed">
+              <li>A disagreement travels. When a decision is replaced or disputed, every decision resting on it gets an open "re-examine" item, and the new decision shows how many of them are done.</li>
+              <li>Two tracks of your work that contradict each other with no recorded link between them, detected.</li>
+              <li>Across decisions: how fast you get from question to decision, how often a new decision stays in line with standing ones, and how often you change your mind when evidence arrives. Shown side by side, never as one number, never as a ranking.</li>
+              <li>The same agent work with and without HiveMind, side by side, to show whether it helps.</li>
+              <li>The demo on this site becomes the app itself, read-only, over example data, with <em>12 Angry Men</em> kept as one of the projects to explore.</li>
+            </ul>
+            <p class="text-sm text-muted-foreground mt-5 leading-relaxed">
+              The <a href={`${base}use-cases/`} class="link">use cases page</a> has one example per item, with the command or tool call behind each one that works today.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- How it compares (vision/README.md: the shelf, where it is different and where it is not, what we do not claim yet) -->
+    <section id="how-it-compares" class="border-t border-border scroll-mt-20">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">How it compares</p>
+        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Against what you do today</h2>
+        <p class="text-md text-muted-foreground text-center max-w-xl mx-auto mb-12 sm:mb-16">
+          Including where HiveMind is not different, and what it does not claim yet.
+        </p>
+        <div class="grid md:grid-cols-3 gap-8 sm:gap-10">
+          <div class="border-t border-border pt-5">
+            <h3 class="text-md font-semibold text-foreground mb-2">A hand-kept <code class="code">DECISIONS.md</code> or ADRs</h3>
+            <p class="text-base text-muted-foreground leading-relaxed mb-3">
+              You write the why by hand, and the file is only as true as its last edit. After a reversal the dead
+              entry stays, and the agent follows it.
+            </p>
+            <p class="text-base text-foreground leading-relaxed">
+              In HiveMind a replaced decision reads superseded on its own, because the status follows from later
+              decisions, not from a label somebody remembers to update. The old entry is never edited or deleted.
+            </p>
+          </div>
+          <div class="border-t border-border pt-5">
+            <h3 class="text-md font-semibold text-foreground mb-2">Agent memory tools</h3>
+            <p class="text-base text-muted-foreground leading-relaxed mb-3">
+              They remember facts and preferences for the agent's next prompt, and they do that well. HiveMind does
+              not claim to remember more than they do.
+            </p>
+            <p class="text-base text-foreground leading-relaxed">
+              HiveMind is memory for decisions: the options that lost and why, the evidence, who decided, you or the
+              agent, and whether the decision held up. Memory tools keep none of those.
+            </p>
+          </div>
+          <div class="border-t border-border pt-5">
+            <h3 class="text-md font-semibold text-foreground mb-2"><code class="code">git blame</code> and the chat</h3>
+            <p class="text-base text-muted-foreground leading-relaxed mb-3">
+              <code class="code">git blame</code> says who changed a line, not why the agent did it that way.
+              The chat where it was decided is gone by the next session.
+            </p>
+            <p class="text-base text-foreground leading-relaxed">
+              HiveMind keeps the decision with your own words attached, and a fresh session can ask.
+            </p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-6 mt-12">
+          <div class="rounded-lg bg-muted p-6">
+            <h3 class="text-md font-semibold text-foreground mb-2">Where it is not different</h3>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              Capturing decisions from an agent over MCP, marking a decision superseded, and running local-first under
+              an open licence: other tools have those too. What we have not found elsewhere is the combination: a typed
+              decision with its options, its evidence and a human-or-agent decider, whose status follows from later
+              contest and replacement, open source, local-first, and built for one engineer.
+            </p>
+          </div>
+          <div class="rounded-lg bg-muted p-6">
+            <h3 class="text-md font-semibold text-foreground mb-2">What it does not claim yet</h3>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              That it makes your decisions better: the same agent work with and without HiveMind, side by side, is
+              planned, and this page will say what that shows and no more. That anyone outside uses it yet.
+              That it wins on recall against memory tools; it is not trying to.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slot: the feature showcase (one everyday example per feature, each marked works today / coming next / planned)
+         lands here in a follow-up, once the order is agreed. Keep the anchor id. -->
+    <div id="showcase" class="scroll-mt-20"></div>
+
+    <!-- How to start: self-host (deck slide 8) -->
     <section id="self-host" class="border-t border-border bg-sidebar scroll-mt-20">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">How to start</p>
         <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Start on your own machine</h2>
         <p class="text-md text-muted-foreground text-center max-w-xl mx-auto mb-12">
           One binary and a local ledger in your project. No account, no API key, and nothing phones home.
@@ -107,11 +435,11 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
             <div class="min-w-0 flex-1">
               <h3 class="text-md font-semibold text-foreground mb-3">Record a decision, then ask why</h3>
               <div class="code-block font-sans text-base space-y-2 mb-3">
-                <p><span class="text-muted-foreground">You:</span> Record a decision: we use SQLite for the ledger. We considered Postgres and rejected it as premature.</p>
+                <p><span class="text-muted-foreground">You:</span> Record a decision: we use SQLite for the ledger. We considered Postgres and rejected it as premature. It rests on the assumption that one machine is enough.</p>
                 <p><span class="text-muted-foreground">Later:</span> Why did we pick SQLite, and what did we rule out?</p>
               </div>
               <p class="text-base text-muted-foreground leading-relaxed">
-                Your agent records it with the options and who decided, and answers from the record.
+                Your agent records it with the options, what it rests on and who decided, and answers from the record.
                 The <a href={`${base}getting-started/quickstart/`} class="link">quickstart</a>
                 walks through it.
               </p>
@@ -123,75 +451,10 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
           Prefer a server to a local file?
           <a href={`${base}getting-started/install/#run-a-cell-with-docker`} class="link">Run a HiveMind cell with Docker Compose</a>.
         </p>
-      </div>
-    </section>
-
-    <!-- The three failures, in the words people use (vision/README.md) -->
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-      <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Who decided what, why, and whether it held up</h2>
-      <p class="text-md text-muted-foreground text-center max-w-xl mx-auto mb-12 sm:mb-16">
-        Coding agents forget. These are the three ways it hurts, and what HiveMind keeps instead.
-      </p>
-      <div class="grid md:grid-cols-3 gap-8 sm:gap-10">
-        <div class="border-t border-border pt-5">
-          <h3 class="text-md font-semibold text-foreground mb-2">It undid what you decided</h3>
-          <p class="text-base text-muted-foreground leading-relaxed mb-3">
-            You dropped the ORM on purpose. A few weeks later the agent helpfully brings it back,
-            with confidence.
-          </p>
-          <p class="text-base text-foreground leading-relaxed">
-            HiveMind keeps the options that lost and why they lost, next to the one you chose.
-          </p>
-        </div>
-        <div class="border-t border-border pt-5">
-          <h3 class="text-md font-semibold text-foreground mb-2">Nobody knows why</h3>
-          <p class="text-base text-muted-foreground leading-relaxed mb-3">
-            <code class="code">git blame</code> says who changed a line, not why the agent did it
-            that way. The chat was the design meeting, and it is gone.
-          </p>
-          <p class="text-base text-foreground leading-relaxed">
-            HiveMind records the decision with its rationale, its evidence and who made it: you or the agent.
-          </p>
-        </div>
-        <div class="border-t border-border pt-5">
-          <h3 class="text-md font-semibold text-foreground mb-2">It forgot what you agreed</h3>
-          <p class="text-base text-muted-foreground leading-relaxed mb-3">
-            The hand-kept <code class="code">DECISIONS.md</code> goes stale after a reversal, and the
-            agent follows the dead entry.
-          </p>
-          <p class="text-base text-foreground leading-relaxed">
-            In HiveMind a replaced decision reads <span class="badge badge-neutral">superseded</span> and a disputed one
-            <span class="badge badge-warning">contested</span>. Nobody has to remember to update it.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- The shelf: memory, but for decisions -->
-    <section class="border-t border-border bg-sidebar">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Memory, but for decisions</h2>
-        <p class="text-md text-muted-foreground text-center max-w-xl mx-auto mb-12">
-          When an agent forgets, you look for the fix under memory. HiveMind is that, plus two things memory tools do not keep.
-        </p>
-        <div class="grid sm:grid-cols-2 gap-6">
-          <div class="rounded-lg bg-info-soft p-6">
-            <h3 class="text-md font-semibold text-foreground mb-2">The why</h3>
-            <p class="text-base text-muted-foreground leading-relaxed">
-              The options, the evidence, and who decided, a person or an agent.
-            </p>
-          </div>
-          <div class="rounded-lg bg-success-soft p-6">
-            <h3 class="text-md font-semibold text-foreground mb-2">Whether it held up</h3>
-            <p class="text-base text-muted-foreground leading-relaxed">
-              A status that follows from later contest and supersession, not a label somebody has to
-              remember to update. Old decisions are never edited or deleted; the history stays.
-            </p>
-          </div>
-        </div>
-        <p class="text-sm text-muted-foreground text-center mt-10 max-w-xl mx-auto">
-          HiveMind is early: self-hosted only, with no hosted version and no sign-up.
-          The code is on <a href="https://github.com/alexknips/hivemind" class="link">GitHub</a> under AGPL-3.0.
+        <p class="text-sm text-muted-foreground text-center mt-3 max-w-xl mx-auto">
+          Then record the next thing you and your agent decide, ask why a week later, and
+          <a href="https://github.com/alexknips/hivemind/issues" class="link">open an issue</a>
+          to say where it breaks, or how you do this today.
         </p>
       </div>
     </section>

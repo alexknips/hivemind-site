@@ -18,9 +18,12 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
 </head>
 <body class="bg-background text-foreground antialiased">
 
-  <!-- Nav: wraps instead of overflowing; the text links drop out below sm -->
+  <!-- Nav. From md up: the text links in a row, as before. Below md: the wordmark,
+       the Self-host button and a menu button; the menu (a <details>, so it works
+       without JavaScript) lists every top-level page. The script below closes it
+       after a tap on a link, on Escape and on a tap outside. -->
   <header class="site-header sticky top-0 z-50 border-b border-border">
-    <nav class="max-w-6xl mx-auto px-4 sm:px-6 min-h-16 py-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 min-h-16 py-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-2" aria-label="Site">
       <!-- The app's wordmark: the "blocks" mark in the link colour, then the name (App.tsx). -->
       <a href={base} class="flex items-center gap-2 text-md font-semibold tracking-tight text-foreground">
         <svg class="size-5 text-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -29,16 +32,51 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
         </svg>
         HiveMind
       </a>
-      <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
-        <a href={`${base}getting-started/quickstart/`} class="hidden sm:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Docs</a>
+      <div class="flex items-center gap-x-5">
+        <a href={`${base}getting-started/quickstart/`} class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Docs</a>
         <a href="#where-it-is" class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Roadmap</a>
         <a href={`${base}pitch/`} class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Why HiveMind</a>
-        <a href={`${base}demo/`} class="hidden sm:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Demo</a>
-        <a href="https://github.com/alexknips/hivemind" class="text-sm text-muted-foreground hover:text-foreground transition-colors">GitHub</a>
+        <a href={`${base}demo/`} class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Demo</a>
+        <a href="https://github.com/alexknips/hivemind" class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">GitHub</a>
         <a href="#self-host" class="btn btn-primary">Self-host &rarr;</a>
+        <details id="site-menu" class="group md:hidden -mr-2">
+          <summary class="site-menu-toggle" aria-label="Menu">
+            <!-- lucide "menu" when closed, lucide "x" when open -->
+            <svg class="size-5 group-open:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            <svg class="size-5 hidden group-open:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </summary>
+          <div class="site-menu-panel absolute inset-x-0 top-full border-b border-border bg-background shadow-md">
+            <ul class="max-w-6xl mx-auto px-4 sm:px-6 py-2 divide-y divide-border text-md">
+              <li><a href={`${base}getting-started/quickstart/`} class="block py-3 text-foreground hover:text-link">Docs</a></li>
+              <li><a href={`${base}demo/`} class="block py-3 text-foreground hover:text-link">Demo</a></li>
+              <li><a href={`${base}use-cases/`} class="block py-3 text-foreground hover:text-link">Use cases</a></li>
+              <li><a href="#where-it-is" class="block py-3 text-foreground hover:text-link">Roadmap</a></li>
+              <li><a href={`${base}pitch/`} class="block py-3 text-foreground hover:text-link">Why HiveMind</a></li>
+              <li><a href="https://github.com/alexknips/hivemind" class="block py-3 text-foreground hover:text-link">GitHub</a></li>
+            </ul>
+          </div>
+        </details>
       </div>
     </nav>
   </header>
+  <script>
+    // Progressive enhancement for the phone menu (a <details>): close it after
+    // a tap on one of its links (the in-page ones would otherwise leave it
+    // covering the section), on Escape, and on a tap anywhere outside it.
+    const menu = document.getElementById('site-menu') as HTMLDetailsElement | null;
+    if (menu) {
+      const close = () => menu.removeAttribute('open');
+      menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.open) close(); });
+      document.addEventListener('click', (e) => {
+        if (menu.open && e.target instanceof Node && !menu.contains(e.target)) close();
+      });
+    }
+  </script>
 
   <main>
 

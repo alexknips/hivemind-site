@@ -19,6 +19,7 @@ website/                  Astro + Starlight site
   public/use-cases/       use cases (static HTML)
   public/demo/            12 Angry Men demo (vendored hivemind-ui build)
 pitch-screens/            raw captures behind the deck's terminal screenshots, and how to re-render them
+CLAIMS.md                 every claim on the landing and use cases pages, with its evidence (release, changelog section, plan)
 .github/workflows/
   deploy.yml                  build and deploy to GitHub Pages on push to main
   reference-docs.yml          fail if the docs drift from the latest hivemind release

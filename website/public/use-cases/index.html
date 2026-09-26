@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HiveMind — How it's used</title>
-<meta name="description" content="Concrete ways teams use HiveMind — capture decisions in-flow, ask why later, keep disagreement, supersede without erasing, review agent work. What ships today, and what's on the roadmap.">
-<meta property="og:title" content="HiveMind — how it's used">
-<meta property="og:description" content="Real HiveMind use cases for coding agents and humans: what it does today, and where it's going.">
+<title>HiveMind — Use cases and roadmap</title>
+<meta name="description" content="Concrete ways one engineer and their coding agents use HiveMind: record a decision with the options that lost, ask why later, keep disagreement, replace without erasing, see what a decision rests on. What works today in the current release, what is coming next, and what is planned.">
+<meta property="og:title" content="HiveMind — use cases and roadmap">
+<meta property="og:description" content="What HiveMind does today for one engineer and their coding agents, what is coming next, and what is planned.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://alexknips.github.io/hivemind-site/use-cases/">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="HiveMind — how it's used">
-<meta name="twitter:description" content="Real HiveMind use cases: what it does today, and where it's going.">
+<meta name="twitter:title" content="HiveMind — use cases and roadmap">
+<meta name="twitter:description" content="What HiveMind does today, what is coming next, and what is planned.">
 <link rel="icon" type="image/svg+xml" href="/hivemind-site/favicon.svg">
 <style>*{margin:0}</style>
 </head>
@@ -62,27 +62,31 @@
   .legend span{display:inline-flex;align-items:center;gap:8px}
   .dot{width:8px;height:8px;border-radius:50%}
   .dot.ship{background:var(--emerald)}
+  .dot.next{background:var(--amber)}
   .dot.plan{background:transparent;border:1.5px solid var(--indigo)}
 
   /* section headers */
   .sec{padding:44px 0 8px}
-  .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+  .sec-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;margin-bottom:6px}
   .sec-h h2{font-size:1.35rem;margin:0;color:#fff;letter-spacing:-.01em}
   .sec-h .tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
     padding:3px 9px;border-radius:999px}
   .tag.ship{color:var(--emerald);background:#34d39916;border:1px solid #34d39933}
+  .tag.next{color:var(--amber);background:#fbbf2416;border:1px solid #fbbf2433}
   .tag.plan{color:var(--indigo);background:#818cf815;border:1px solid #818cf833}
-  .sec-note{color:var(--faint);font-size:.92rem;margin:0 0 26px}
+  .sec-note{color:var(--faint);font-size:.92rem;margin:0 0 26px;max-width:70ch}
 
-  /* grid + cards */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;padding-bottom:8px}
-  .card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);
+  /* grid + cards. min(320px,100%) and min-width:0 keep a long command from widening the page on a phone. */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:16px;padding-bottom:8px}
+  .card{min-width:0;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);
     border-radius:14px;padding:22px 22px 20px;display:flex;flex-direction:column;gap:12px;
     transition:border-color .2s, transform .2s}
   .card:hover{border-color:var(--line2);transform:translateY(-2px)}
+  .card.next{border-color:#fbbf2433}
   .card.plan{background:none;border-style:dashed;border-color:var(--line2)}
   .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
     background:#818cf814;border:1px solid #818cf826;color:var(--indigo)}
+  .card.next .ic{color:var(--amber);background:#fbbf2410;border-color:#fbbf2426}
   .card.plan .ic{background:#0e152400;color:var(--indigo)}
   .ic svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.7;fill:none;
     stroke-linecap:round;stroke-linejoin:round}
@@ -91,10 +95,12 @@
   .badge{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;
     padding:2px 8px;border-radius:999px;white-space:nowrap}
   .badge.ship{color:var(--emerald);background:#34d39914;border:1px solid #34d39930}
+  .badge.next{color:var(--amber);background:#fbbf2414;border:1px solid #fbbf2430}
   .badge.plan{color:var(--indigo);background:#818cf814;border:1px solid #818cf830}
   .card p{margin:0;color:var(--dim);font-size:.95rem;flex:1}
   .card p b{color:var(--fg);font-weight:600}
-  .cmd{font-family:var(--mono);font-size:.78rem;color:#c7d0ea;background:#060a14;
+  .card p code{font-family:var(--mono);font-size:.86em;color:#c7d0ea}
+  .cmd{min-width:0;font-family:var(--mono);font-size:.78rem;color:#c7d0ea;background:#060a14;
     border:1px solid var(--line);border-radius:8px;padding:9px 11px;overflow-x:auto;white-space:nowrap;
     scrollbar-width:none;
     -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 24px),transparent 100%);
@@ -118,10 +124,10 @@
   .btn.s:hover{color:#fff;border-color:var(--dim)}
 
   footer{border-top:1px solid var(--line);color:var(--faint);font-size:.85rem}
-  footer .wrap{height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  footer .wrap{min-height:64px;padding-top:14px;padding-bottom:14px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px}
   footer a:hover{color:var(--dim)}
 
-  @media (max-width:520px){ .grid{grid-template-columns:1fr} .navlinks{gap:14px} }
+  @media (max-width:520px){ .grid{grid-template-columns:minmax(0,1fr)} .navlinks{gap:14px} }
 </style>
 
 <header class="nav">
@@ -140,7 +146,7 @@
     </a>
     <nav class="navlinks">
       <a href="#next">Roadmap</a>
-      <a href="https://alexknips.github.io/hivemind-site/getting-started/install/">Docs</a>
+      <a href="https://alexknips.github.io/hivemind-site/getting-started/quickstart/">Docs</a>
       <a href="https://github.com/alexknips/hivemind">GitHub</a>
     </nav>
   </div>
@@ -149,19 +155,20 @@
 <main class="wrap" id="top">
 
   <section class="hero">
-    <p class="eyebrow">How it's used</p>
+    <p class="eyebrow">Use cases and roadmap</p>
     <h1>Point your coding agent at HiveMind,<br>and it records the <span class="g">why</span> as it works.</h1>
-    <p class="sub">Concrete ways teams put HiveMind to work — <b>what it does today</b>, and <b>where it's going</b>. Nothing here is a mockup; the shipped cards show the actual command or tool call.</p>
+    <p class="sub">Concrete ways one engineer and their agents put HiveMind to work: <b>what works today</b>, <b>what is coming next</b>, and <b>what is planned</b>. Nothing here is a mock-up; every card for today shows the actual command or tool call.</p>
     <div class="legend">
-      <span><span class="dot ship"></span> Shipped — works today</span>
-      <span><span class="dot plan"></span> Planned — on the roadmap</span>
+      <span><span class="dot ship"></span> Works today: in the current release, v0.7.0 (25 September 2026)</span>
+      <span><span class="dot next"></span> Coming next: built and merged, not yet released, or under way</span>
+      <span><span class="dot plan"></span> Planned: decided, not built</span>
     </div>
   </section>
 
   <!-- ===================== TODAY ===================== -->
   <section class="sec" id="today">
-    <div class="sec-h"><h2>What it does today</h2><span class="tag ship">Shipped</span></div>
-    <p class="sec-note">Every write is attributed and append-only. Status (proposed · accepted · contested · superseded) is derived from the graph, never hand-set.</p>
+    <div class="sec-h"><h2>What works today</h2><span class="tag ship">v0.7.0</span></div>
+    <p class="sec-note">Every write says who made it and is never edited or deleted. Status (proposed, accepted, contested, superseded) follows from the record, never from a label somebody sets by hand.</p>
 
     <div class="grid">
 
@@ -169,77 +176,132 @@
       <article class="card">
         <div class="ct">
           <div class="ic"><svg viewBox="0 0 24 24"><path d="M13 3 4 14h6l-1 7 9-11h-6z"/></svg></div>
-          <span class="badge ship">Shipped</span>
+          <span class="badge ship">Works today</span>
         </div>
-        <h3>Capture the decision in-flow</h3>
-        <p><span class="who">Agent</span><br>Mid-task, your agent records the choice, the options it weighed, and why — without leaving the session.</p>
-        <div class="cmd"><span class="k">capture_decision</span><span class="p">(title, rationale, options, chosen)</span></div>
+        <h3>Record the decision as you work</h3>
+        <p><span class="who">Agent</span><br>Mid-task, your agent records the choice, the options it weighed and why, and what the decision rests on, without leaving the session. It records who decided: you, or the agent.</p>
+        <div class="cmd"><span class="k">capture_decision</span><span class="p">(title, rationale, options, chosen_option_label, grounding, decided_by)</span></div>
       </article>
 
-      <!-- 2 recall -->
+      <!-- 2 why -->
       <article class="card">
         <div class="ct">
           <div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
-          <span class="badge ship">Shipped</span>
+          <span class="badge ship">Works today</span>
         </div>
         <h3>Ask "why did we choose this?"</h3>
-        <p><span class="who">Human · Agent</span><br>Reconstruct any past decision at query speed — cited to real records, not a summary of a chat log.</p>
-        <div class="cmd"><span class="p">hivemind query</span> <span class="k">recall</span> "why sqlite for local?"</div>
+        <p><span class="who">Human · Agent</span><br>In a fresh session, with no chat history: the rationale, the options chosen and rejected, who decided, and whether it still holds. Describe the decision; no id needed.</p>
+        <div class="cmd"><span class="p">hivemind query</span> <span class="k">why</span> "sqlite for local storage"</div>
       </article>
 
-      <!-- 3 contested -->
+      <!-- 3 held up -->
+      <article class="card">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <span class="badge ship">Works today</span>
+        </div>
+        <h3>Ask "did it hold up?"</h3>
+        <p><span class="who">Human · Agent</span><br>Whether the decision still stands, or was replaced, disputed, or rests on a premise that no longer holds. With the reasons, from the record.</p>
+        <div class="cmd"><span class="p">hivemind query</span> <span class="k">verify</span> "sqlite for local storage"</div>
+      </article>
+
+      <!-- 4 contested -->
       <article class="card">
         <div class="ct">
           <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3m3 3-3 3"/><path d="M20 16H7l3-3m-3 3 3 3"/></svg></div>
-          <span class="badge ship">Shipped</span>
+          <span class="badge ship">Works today</span>
         </div>
         <h3>Disagreement stays on the record</h3>
-        <p><span class="who">Human · Agent</span><br>Push back on a decision and both sides are kept. It becomes <b>contested</b> — a queryable state, not a lost thread.</p>
-        <div class="cmd"><span class="p">hivemind</span> <span class="k">disagree</span> --decision &lt;id&gt; --reason …</div>
+        <p><span class="who">Human · Agent</span><br>Push back on a decision and both sides are kept. It reads <b>contested</b>, a state you can ask about, not a lost thread.</p>
+        <div class="cmd"><span class="p">hivemind</span> <span class="k">disagree</span> "sqlite for local storage" --reason …</div>
       </article>
 
-      <!-- 4 supersede -->
+      <!-- 5 supersede -->
       <article class="card">
         <div class="ct">
           <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7h9a4 4 0 0 1 4 4v0"/><path d="m14 4 3 3-3 3"/><path d="M20 17h-9a4 4 0 0 1-4-4v0"/><path d="m10 20-3-3 3-3"/></svg></div>
-          <span class="badge ship">Shipped</span>
+          <span class="badge ship">Works today</span>
         </div>
-        <h3>Supersede without erasing</h3>
-        <p><span class="who">Human · Agent</span><br>Replace an old decision; the original and the full chain remain, walkable back to the first proposal.</p>
-        <div class="cmd"><span class="p">hivemind</span> <span class="k">supersede</span> --old &lt;id&gt; --title …</div>
+        <h3>Replace without erasing</h3>
+        <p><span class="who">Human · Agent</span><br>Record the new decision as replacing the old one. The old one reads <b>superseded</b> and says what replaced it; the whole chain stays, walkable back to the first proposal.</p>
+        <div class="cmd"><span class="p">hivemind</span> <span class="k">supersede</span> "sqlite for local storage" --title … --rationale …</div>
       </article>
 
-      <!-- 5 review -->
+      <!-- 6 rests on -->
+      <article class="card">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v6"/><path d="M6 9h12"/><path d="M6 9v4M12 9v4M18 9v4"/><path d="M4 13h4M10 13h4M16 13h4"/><path d="M4 13l-1 4h6l-1-4M10 13l-1 4h6l-1-4M16 13l-1 4h6l-1-4"/></svg></div>
+          <span class="badge ship">Works today</span>
+        </div>
+        <h3>Every decision says what it rests on</h3>
+        <p><span class="who">Human · Agent</span><br>An earlier decision, something observed, an assumption, or a bet with a date to check. When that premise is later replaced or refuted, the decisions built on it read <b>stale</b>. A capture that names nothing is refused.</p>
+        <div class="cmd"><span class="p">hivemind emit decision.capture</span> … <span class="k">--rests-on-decision</span> "ids never change"</div>
+      </article>
+
+      <!-- 7 situational -->
       <article class="card">
         <div class="ct">
           <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.5"/></svg></div>
-          <span class="badge ship">Shipped</span>
+          <span class="badge ship">Works today</span>
         </div>
-        <h3>Review a week of agent decisions</h3>
-        <p><span class="who">Human lead</span><br>Govern agent work after the fact — approve, dispute, or supersede — at query speed. No watching agents live.</p>
+        <h3>"What should I know before I touch this?"</h3>
+        <p><span class="who">Agent</span><br>The decisions that bear on the files your agent is changing, read from the current diff. No question to type, and each one says whether it still holds.</p>
+        <div class="cmd"><span class="p">hivemind query</span> <span class="k">situational</span></div>
+      </article>
+
+      <!-- 8 projects -->
+      <article class="card">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="7" rx="1.5"/><rect x="13" y="4" width="8" height="7" rx="1.5"/><rect x="8" y="14" width="8" height="7" rx="1.5"/><path d="M7 11v3M17 11v3"/></svg></div>
+          <span class="badge ship">Works today</span>
+        </div>
+        <h3>Several projects, one record</h3>
+        <p><span class="who">Human · Agent</span><br>Every decision carries its project. A question asked from one project also looks in the project it is part of and the ones it depends on, one hop, and says where it stopped looking.</p>
+        <div class="cmd"><span class="p">hivemind query situational</span> <span class="k">--project</span> mobile-client</div>
+      </article>
+
+      <!-- 9 review -->
+      <article class="card">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg></div>
+          <span class="badge ship">Works today</span>
+        </div>
+        <h3>Look over a week of agent decisions</h3>
+        <p><span class="who">Human</span><br>What your agents decided this week, one by one: accept, dispute or replace each, in the terminal, without watching them live.</p>
         <div class="cmd"><span class="p">hivemind</span> <span class="k">review</span> --actor 'agent:*' --since 7d</div>
       </article>
 
-      <!-- 6 import docs -->
+      <!-- 10 export -->
+      <article class="card">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6m-3-3 3 3 3-3"/></svg></div>
+          <span class="badge ship">Works today</span>
+        </div>
+        <h3>The decision log as Markdown</h3>
+        <p><span class="who">Human</span><br>Export every decision as a tree of Markdown files grouped by project, an index first. Readable without HiveMind, and it can live in your repo.</p>
+        <div class="cmd"><span class="p">hivemind</span> <span class="k">export</span> --format markdown --out ./decisions/</div>
+      </article>
+
+      <!-- 11 import notes -->
       <article class="card">
         <div class="ct">
           <div class="ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 16h4"/></svg></div>
-          <span class="badge ship">Shipped</span>
+          <span class="badge ship">Works today</span>
         </div>
         <h3>Turn existing notes into decisions</h3>
-        <p><span class="who">Human</span><br>Import the <code>Decision:</code> blocks from your docs — each becomes a durable decision carrying its source citation.</p>
+        <p><span class="who">Human</span><br>Import the <code>Decision:</code> blocks from your docs. Each becomes a decision carrying its source, and lands as unreviewed until you look at it.</p>
         <div class="cmd"><span class="p">hivemind</span> <span class="k">import documents</span> ./notes/</div>
       </article>
 
-      <!-- 7 import from living docs (experimental connector) -->
+      <!-- 12 import from living docs (experimental connector) -->
       <article class="card">
         <div class="ct">
           <div class="ic"><svg viewBox="0 0 24 24"><path d="M14 4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8z"/><path d="M14 4v4h4"/><path d="M9.5 14.5a2 2 0 0 1 2-2h1m1 4a2 2 0 0 1-2 2h-1"/><path d="M11 15h3"/></svg></div>
-          <span class="badge ship">Shipped · experimental</span>
+          <span class="badge ship">Works today · experimental</span>
         </div>
         <h3>Import decisions from living documents</h3>
-        <p><span class="who">Human</span><br>Pull decision candidates from Google Docs or git history — each import captures the source at the revision it was read, so the citation stays honest as the doc moves. Google Docs only; Confluence is not yet supported.</p>
-        <div class="cmd"><span class="p">hivemind</span> <span class="k">import connector run</span> --url &lt;gdocs-url&gt;</div>
+        <p><span class="who">Human</span><br>Pull decision candidates from a Google Doc or a file in git history. Each import records the source at the revision it read, so the citation stays honest as the document moves. Google Docs only; Confluence is not supported yet.</p>
+        <div class="cmd"><span class="p">hivemind</span> <span class="k">import connector</span> --url &lt;gdocs-url&gt;</div>
       </article>
 
     </div>
@@ -247,39 +309,100 @@
 
   <!-- ===================== NEXT ===================== -->
   <section class="sec" id="next">
-    <div class="sec-h"><h2>Where it's going</h2><span class="tag plan">Planned</span></div>
+    <div class="sec-h"><h2>Coming next</h2><span class="tag next">Built, not yet released, or under way</span></div>
+    <p class="sec-note">Merged and waiting for the next release, or being built now. Shown as intent until it is in a release you can install.</p>
+
+    <div class="grid">
+
+      <article class="card next">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/><path d="M7 13h4M7 15.5h7"/></svg></div>
+          <span class="badge next">Coming next</span>
+        </div>
+        <h3>A much simpler, decision-first UI</h3>
+        <p>A list of decisions, newest first, as the front door, scoped by project. One decision's neighbourhood as the graph, with every arrow running from newer to older. Less chrome.</p>
+      </article>
+
+      <article class="card next">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v6"/><path d="M6 9h12"/><path d="M6 9v4M12 9v4M18 9v4"/><path d="M4 13l-1 4h6l-1-4M10 13l-1 4h6l-1-4M16 13l-1 4h6l-1-4"/></svg></div>
+          <span class="badge next">Coming next</span>
+        </div>
+        <h3>The plugin asks what a decision rests on</h3>
+        <p>In v0.7.0 the capture plugin does not ask up front; when your agent leaves it out, HiveMind refuses the capture and names the four ways to answer. The updated plugin asks the question first.</p>
+      </article>
+
+      <article class="card next">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></div>
+          <span class="badge next">Coming next</span>
+        </div>
+        <h3>How well made was this decision?</h3>
+        <p>A profile on seven dimensions: framing, alternatives, information, reasoning, values and trade-offs, bias exposure, calibration. Each line names the recorded facts it was read from, and says "not assessed" where there is nothing to read. Not a grade, and never a mark against changing your mind.</p>
+      </article>
+
+      <article class="card next">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div>
+          <span class="badge next">Coming next</span>
+        </div>
+        <h3>Capture that runs all day</h3>
+        <p>Your sessions with your agents are read as they happen and the decisions in them are recorded, with their options, reasons and who decided, so nobody has to say "record this". The pieces are in the current release; the setup that makes it one step is not.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ===================== PLANNED ===================== -->
+  <section class="sec" id="planned">
+    <div class="sec-h"><h2>Planned</h2><span class="tag plan">Decided, not built</span></div>
     <p class="sec-note">On the roadmap, in the open. Shown here as intent, not as something that exists yet.</p>
 
     <div class="grid">
 
-      <!-- P2 projects diverging unintentionally (cross-track / multi-project, M5 + hmd-4tf) -->
+      <article class="card plan">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 4v16"/><path d="M12 8l-5 3M12 8l5 3"/><circle cx="7" cy="13" r="2"/><circle cx="17" cy="13" r="2"/><path d="M7 15v4M17 15v4"/></svg></div>
+          <span class="badge plan">Planned</span>
+        </div>
+        <h3>A disagreement travels</h3>
+        <p>When a decision is replaced or disputed, every decision resting on it gets an open <b>re-examine</b> item, closed only by an explicit "still holds" or by its own replacement. The new decision shows how many of them are done, so a half-finished reversal is visible instead of quietly forgotten.</p>
+      </article>
+
       <article class="card plan">
         <div class="ct">
           <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h6c4 0 4 6 10 6"/><path d="M4 18h6c4 0 4-6 10-6"/><path d="m17 9 3 3-3 3"/></svg></div>
-          <span class="badge plan">Planned · M5</span>
-        </div>
-        <h3>Two projects, quietly diverging</h3>
-        <p>Two teams each make a reasonable call in parallel — and one silently breaks an assumption the other is building on. Nobody notices for weeks. HiveMind derives the premises behind each decision so the <b>divergence surfaces early</b>, while it's still cheap to reconcile.</p>
-      </article>
-
-      <!-- P3 daily memory -->
-      <article class="card plan">
-        <div class="ct">
-          <div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/><path d="M9 15l2 2 4-4"/></svg></div>
-          <span class="badge plan">Planned · M6</span>
-        </div>
-        <h3>Daily memory that replaces the wiki</h3>
-        <p>A capture plugin that just runs inside your coding agent all day — decision memory becomes a habit, and the stale wiki fades away.</p>
-      </article>
-
-      <!-- P4 temporal viz -->
-      <article class="card plan">
-        <div class="ct">
-          <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 20h18"/><circle cx="7" cy="14" r="1.6"/><circle cx="12" cy="9" r="1.6"/><circle cx="17" cy="12" r="1.6"/><path d="M8.4 13 10.7 10.2M13.3 9.6 15.7 11.3"/></svg></div>
           <span class="badge plan">Planned</span>
         </div>
-        <h3>Fly through decisions over time</h3>
-        <p>A temporal view of the graph — watch options, evidence, and supersessions accrete along a real timeline, not a static diagram.</p>
+        <h3>Two tracks of your work, quietly diverging</h3>
+        <p>Your agents work the API and the mobile client in parallel, and one replaces a decision the other is building on. Today, a decision that rests on a replaced premise already reads stale, also across linked projects. Planned: catching two tracks that contradict each other with <b>no recorded link</b> between them.</p>
+      </article>
+
+      <article class="card plan">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M5 16l4-5 4 3 6-8"/></svg></div>
+          <span class="badge plan">Planned</span>
+        </div>
+        <h3>Speed, consistency and flexibility</h3>
+        <p>Across your decisions with your agents: how fast you get from question to decision, how often a new decision stays in line with standing ones, and how often you change your mind when evidence arrives. Shown side by side, never as one number, never as a ranking. A fast reversal on new evidence reads as a strength.</p>
+      </article>
+
+      <article class="card plan">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="8" height="14" rx="1.5"/><rect x="13" y="5" width="8" height="14" rx="1.5"/><path d="M5 9h4M5 12h4M15 9h4M15 12h4M15 15h2"/></svg></div>
+          <span class="badge plan">Planned</span>
+        </div>
+        <h3>With and without HiveMind, side by side</h3>
+        <p>The same engineering task run twice by a coding agent: once with a hand-kept decisions file, once with HiveMind. Recorded, reproducible, and the site will say what it shows and no more.</p>
+      </article>
+
+      <article class="card plan">
+        <div class="ct">
+          <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="M7 10h4M7 13h7"/></svg></div>
+          <span class="badge plan">Planned</span>
+        </div>
+        <h3>The demo becomes the app</h3>
+        <p>The demo on this site becomes the app itself, read-only, over example data built for it, labelled as such on screen. The jury room of <i>12 Angry Men</i> stays as one of the projects to explore.</p>
       </article>
 
     </div>
@@ -288,12 +411,12 @@
   <!-- closing -->
   <section class="close" id="start">
     <div>
-      <h3>Start capturing in one command</h3>
-      <p>Point Claude Code, Codex, or Cursor at your self-hosted HiveMind — in a container or as a local binary.</p>
+      <h3>Start with one decision</h3>
+      <p>Point Claude Code, Codex or Cursor at your self-hosted HiveMind, as a local binary or in a container.</p>
     </div>
     <div class="btns">
       <a class="btn p" href="https://alexknips.github.io/hivemind-site/guides/mcp-setup/">Connect your agent &rarr;</a>
-      <a class="btn s" href="https://alexknips.github.io/hivemind-site/getting-started/install/">Read the docs</a>
+      <a class="btn s" href="https://alexknips.github.io/hivemind-site/getting-started/quickstart/">Read the docs</a>
     </div>
   </section>
 
@@ -301,8 +424,8 @@
 
 <footer>
   <div class="wrap">
-    <span>HiveMind — honesty-backed decision memory</span>
-    <span><a href="https://alexknips.github.io/hivemind-site/getting-started/install/">Docs</a> · <a href="https://github.com/alexknips/hivemind">GitHub</a></span>
+    <span>HiveMind — memory for decisions</span>
+    <span><a href="https://alexknips.github.io/hivemind-site/">Home</a> · <a href="https://alexknips.github.io/hivemind-site/pitch/">Why HiveMind</a> · <a href="https://alexknips.github.io/hivemind-site/getting-started/quickstart/">Docs</a> · <a href="https://github.com/alexknips/hivemind">GitHub</a></span>
   </div>
 </footer>
 </body>

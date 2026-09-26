@@ -1,0 +1,70 @@
+[38;2;215;119;87m ▐[48;2;0;0;0m▛███▛█[39m[49m   [1mClaude[0m [1mCode[0m [38;2;153;153;153mv2.1.281[39m
+[38;2;215;119;87m▝▜[48;2;0;0;0m█████[49m█▀[39m  [38;2;153;153;153mOpus[39m [38;2;153;153;153m5.5[39m [38;2;153;153;153m(1M[39m [38;2;153;153;153mcontext)[39m [38;2;153;153;153m·[39m [38;2;153;153;153mClaude[39m [38;2;153;153;153mMax[39m
+[38;2;215;119;87m [39m [38;2;215;119;87m▝▝[39m [38;2;215;119;87m▝▝[39m    [38;2;153;153;153m~/code/pantry[39m
+
+
+[38;2;80;80;80m[48;2;55;55;55m❯ [38;2;255;255;255mChange of plan: I want pantry on my phone as well as my [39m
+  [38;2;255;255;255mlaptop, and one SQLite file can't be shared between them. [39m
+  [38;2;255;255;255mStorage moves to Postgres on my small home server. Record in [39m
+  [38;2;255;255;255mHiveMind that this replaces the SQLite decision.[39m
+[49m
+  [38;2;153;153;153mCalled hivemind [1m2[0m[38;2;153;153;153m times (ctrl+o to expand)[39m
+
+[38;2;255;255;255m●[39m I recorded it in HiveMind. The new decision is [1m"Pantry [0m
+  [1mstorage: Postgres on the home server"[0m ([38;2;177;185;249mdecision-370866d3-…[39m).
+  It's marked as replacing the old SQLite decision
+  ([38;2;177;185;249mdecision-456d94e3-…[39m), and the old one's status is now
+  [38;2;177;185;249msuperseded[39m.
+
+  The rationale I wrote says:
+  - Pantry now has to work from your phone and your laptop, and
+    one SQLite file can't be shared between them.
+  - Postgres on the home server can be reached from both
+    devices.
+  - This takes on the cost the SQLite decision avoided: a
+    separate database server to run and back up.
+  - Postgres still gives transactional writes, which was the
+    original reason for moving off the JSON file.
+
+  The new decision's status is [38;2;177;185;249mproposed[39m, the tool's default. I
+  didn't mark it accepted.
+
+  The code still uses SQLite ([38;2;177;185;249mpantry.db[39m, from commit [38;2;177;185;249m8443c86[39m). I
+  can move the storage layer to Postgres next if you want. For
+  that I'd need to know how to connect to your home server.
+
+[38;2;153;153;153m✻[39m [38;2;153;153;153mSautéed[39m [38;2;153;153;153mfor[39m [38;2;153;153;153m20s[39m [38;2;153;153;153m·[39m [38;2;153;153;153mdone[39m [38;2;153;153;153m7:19[39m [38;2;153;153;153mPM
+
+[38;2;136;136;136m────────────────────────────────────────────────────────────────
+[39m❯ [2myes, migrate the storage layer to Postgres[0m
+[38;2;136;136;136m────────────────────────────────────────────────────────────────
+[39m  [38;2;255;193;7m⏵⏵[39m [38;2;255;193;7mauto[39m [38;2;255;193;7mmode[39m [38;2;255;193;7mon[38;2;153;153;153m (shift+tab[39m [38;2;153;153;153mto[39m [38;2;153;153;153mcycle)[39m [38;2;153;153;153m·[39m [38;2;153;153;153m←[39m [38;2;153;153;153mfor[39m [38;2;153;153;153magents[39m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

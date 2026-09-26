@@ -1,0 +1,148 @@
+/* The docs (Starlight) on the app's design tokens (tokens.css): the same
+   neutrals, link accent, signal hues, Inter, text steps and shadows as the
+   app and the landing page. Starlight paints everything from its --sl-*
+   variables, so mapping those onto the tokens restyles it; the few rules
+   below the variables are where Starlight's defaults differ from the app
+   (a solid accent bar on the current sidebar item, bold strong text). */
+@import '@fontsource-variable/inter';
+@import './tokens.css';
+
+/* Tailwind utilities for Starlight pages: no base layer, to avoid conflicts. */
+@tailwind components;
+@tailwind utilities;
+
+/* Starlight sets data-theme="light" or "dark" on <html> itself (its own theme
+   switch, defaulting to the OS), which tokens.css already honours. The same
+   mapping serves both themes, because the tokens swap underneath it. */
+:root,
+:root[data-theme='light'],
+[data-theme='light'] ::backdrop {
+  --sl-font: 'Inter Variable';
+  --sl-font-mono: var(--font-mono);
+
+  /* Neutrals, by the role each Starlight step plays. */
+  --sl-color-white: var(--foreground);
+  --sl-color-gray-1: var(--foreground);
+  --sl-color-gray-2: var(--muted-foreground);
+  --sl-color-gray-3: var(--muted-foreground);
+  --sl-color-gray-4: var(--muted-foreground);
+  --sl-color-gray-5: var(--border);
+  --sl-color-gray-6: var(--muted);
+  --sl-color-gray-7: var(--sidebar);
+  --sl-color-black: var(--background);
+
+  /* The one accent: the app's link colour, with the info tint behind it. */
+  --sl-color-accent-low: var(--info-soft);
+  --sl-color-accent: var(--link);
+  --sl-color-accent-high: var(--info-foreground);
+
+  /* Signals: the app's hue, its soft background, its readable shade. */
+  --sl-color-orange-low: var(--warning-soft);
+  --sl-color-orange: var(--warning);
+  --sl-color-orange-high: var(--warning-foreground);
+  --sl-color-green-low: var(--success-soft);
+  --sl-color-green: var(--success);
+  --sl-color-green-high: var(--success-foreground);
+  --sl-color-blue-low: var(--info-soft);
+  --sl-color-blue: var(--info);
+  --sl-color-blue-high: var(--info-foreground);
+  --sl-color-purple-low: var(--node-hypothesis-fill);
+  --sl-color-purple: var(--node-hypothesis);
+  --sl-color-purple-high: var(--node-hypothesis-text);
+  --sl-color-red-low: var(--destructive-soft);
+  --sl-color-red: var(--destructive);
+  --sl-color-red-high: var(--destructive-foreground);
+
+  --sl-color-text: var(--foreground);
+  --sl-color-text-accent: var(--link);
+  --sl-color-text-invert: var(--primary-foreground);
+  --sl-color-bg: var(--background);
+  --sl-color-bg-nav: var(--background);
+  --sl-color-bg-sidebar: var(--sidebar);
+  --sl-color-bg-inline-code: var(--muted);
+  --sl-color-bg-accent: var(--primary);
+  --sl-color-hairline-light: var(--border);
+  --sl-color-hairline: var(--border);
+  --sl-color-hairline-shade: var(--border);
+  --sl-color-backdrop-overlay: var(--overlay);
+
+  --sl-shadow-sm: var(--shadow-sm);
+  --sl-shadow-md: var(--shadow-md);
+  --sl-shadow-lg: var(--shadow-lg);
+
+  /* Text steps: the app's scale (12, 13, 14, 16, 20, 24 px) plus the site's
+     display steps; the docs' body is the 16px step, headings are 600. */
+  --sl-text-2xs: var(--text-xs);
+  --sl-text-xs: var(--text-sm);
+  --sl-text-sm: var(--text-base);
+  --sl-text-base: var(--text-md);
+  --sl-text-lg: var(--text-md);
+  --sl-text-xl: var(--text-lg);
+  --sl-text-2xl: var(--text-xl);
+  --sl-text-3xl: var(--text-2xl);
+  --sl-text-4xl: var(--text-3xl);
+  --sl-text-5xl: var(--text-4xl);
+  --sl-text-6xl: var(--text-4xl);
+
+  --sl-text-body: var(--text-md);
+  --sl-text-body-sm: var(--text-base);
+  --sl-text-code: var(--text-base);
+  --sl-text-code-sm: var(--text-sm);
+  --sl-text-h1: var(--text-xl);
+  --sl-text-h2: var(--text-lg);
+  --sl-text-h3: var(--text-md);
+  --sl-text-h4: var(--text-md);
+  --sl-text-h5: var(--text-md);
+
+  --sl-line-height: 1.625;
+  --sl-line-height-headings: 1.25;
+
+  --sl-sidebar-width: 16rem;
+}
+
+@media (min-width: 50em) {
+  :root {
+    --sl-text-h1: var(--text-2xl);
+    --sl-text-h2: var(--text-xl);
+    --sl-text-h3: var(--text-lg);
+    --sl-text-h4: var(--text-md);
+  }
+}
+
+/* Code blocks (Expressive Code): the app's muted surface and radius instead
+   of the code theme's own background and square corners. */
+.expressive-code {
+  --ec-codeBg: var(--muted);
+  --ec-brdCol: var(--border);
+  --ec-brdRad: var(--radius-md);
+}
+
+/* The current page in the sidebar: the app's nav highlight (a quiet accent
+   surface, medium weight), not Starlight's solid accent bar. */
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover,
+.sidebar-content a[aria-current='page']:focus {
+  font-weight: var(--font-weight-medium);
+  color: var(--foreground);
+  background-color: var(--sidebar-accent);
+}
+
+/* Three weights only (400, 500, 600), as in the app. */
+.sl-markdown-content strong,
+.sl-markdown-content b {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* The header: the app's wordmark (mark in the link colour, name in the
+   foreground), not Starlight's accent-coloured title. */
+.site-title {
+  gap: 0.5rem;
+  color: var(--foreground);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
+}
+.site-title img {
+  width: 1.25rem;
+  height: 1.25rem;
+}

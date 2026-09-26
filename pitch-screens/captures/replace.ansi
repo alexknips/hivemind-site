@@ -1,0 +1,70 @@
+[38;2;215;119;87m ▐[48;2;0;0;0m▛███▛█[39m[49m   [1mClaude[0m [1mCode[0m [38;2;153;153;153mv2.1.281[39m
+[38;2;215;119;87m▝▜[48;2;0;0;0m█████[49m█▀[39m  [38;2;153;153;153mOpus[39m [38;2;153;153;153m5.5[39m [38;2;153;153;153m(1M[39m [38;2;153;153;153mcontext)[39m [38;2;153;153;153m·[39m [38;2;153;153;153mClaude[39m [38;2;153;153;153mMax[39m
+[38;2;215;119;87m [39m [38;2;215;119;87m▝▝[39m [38;2;215;119;87m▝▝[39m    [38;2;153;153;153m~/code/pantry[39m
+
+
+[38;2;80;80;80m[48;2;55;55;55m❯ [38;2;255;255;255mChange of plan: I want pantry on my phone as well as my [39m
+  [38;2;255;255;255mlaptop, and one SQLite file can't be shared between them. [39m
+  [38;2;255;255;255mStorage moves to Postgres on my small home server. Record in [39m
+  [38;2;255;255;255mHiveMind that this replaces the SQLite decision.[39m
+[49m
+[38;2;255;255;255m●[39m Let me find the existing SQLite decision.
+
+  [38;2;153;153;153mCalled hivemind [1m2[0m[38;2;153;153;153m times (ctrl+o to expand)[39m
+
+[38;2;255;255;255m●[39m I've recorded the decision in HiveMind under your identity
+  [38;2;177;185;249mhuman:you@example.com[39m.
+
+  - [1mNew decision:[0m "Use Postgres on the home server for pantry
+    storage" ([38;2;177;185;249mdecision-d15fa52a-…[39m). The rationale is that one
+    SQLite file can't be shared between your phone and laptop.
+    It also notes that you're now accepting the cost of running
+    and backing up a server, which is why you picked SQLite over
+    Postgres before.
+  - [1mOld[0m [1mSQLite[0m [1mdecision[0m ([38;2;177;185;249mdecision-44c8ffcb-…[39m) is now marked as
+    superseded and linked to the new one.
+
+  The new decision is marked "proposed" rather than "accepted",
+  because superseding a decision records the replacement as a
+  proposal. None of the HiveMind tools I have can mark it
+  accepted, so you'd need to do that on the HiveMind side if you
+  want it shown that way.
+
+  I haven't touched the code yet, so the app still uses
+  [38;2;177;185;249mpantry.db[39m. I can move the storage layer to Postgres next:
+  likely [38;2;177;185;249mpsycopg[39m with a connection string from an environment
+  variable. That needs the server's host, database name and
+  user.
+
+[38;2;153;153;153m✻[39m [38;2;153;153;153mWorked[39m [38;2;153;153;153mfor[39m [38;2;153;153;153m19s[39m [38;2;153;153;153m·[39m [38;2;153;153;153mdone[39m [38;2;153;153;153m7:32[39m [38;2;153;153;153mPM[39m
+
+[38;2;136;136;136m────────────────────────────────────────────────────────────────
+[39m❯ [2myes, switch the code to Postgres[0m
+[38;2;136;136;136m────────────────────────────────────────────────────────────────
+[39m  [38;2;255;193;7m⏵⏵[39m [38;2;255;193;7mauto[39m [38;2;255;193;7mmode[39m [38;2;255;193;7mon[38;2;153;153;153m (shift+tab[39m [38;2;153;153;153mto[39m [38;2;153;153;153mcycle)[39m [38;2;153;153;153m·[39m [38;2;153;153;153m←[39m [38;2;153;153;153mfor[39m [38;2;153;153;153magents[39m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

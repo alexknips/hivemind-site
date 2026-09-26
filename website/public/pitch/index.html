@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HiveMind — memory for decisions</title>
+<meta name="description" content="HiveMind is memory for decisions. Your coding agents record what was decided, which options lost and why, and who decided, you or the agent. Early, self-hosted, AGPL-3.0.">
+<meta property="og:title" content="HiveMind — memory for decisions">
+<meta property="og:description" content="Your coding agents record what was decided, which options lost and why, and who decided, you or the agent. Early, self-hosted, AGPL-3.0.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://alexknips.github.io/hivemind-site/pitch/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HiveMind — memory for decisions">
+<meta name="twitter:description" content="Your coding agents record what was decided, which options lost and why, and who decided. Early, self-hosted, AGPL-3.0.">
+<link rel="icon" type="image/svg+xml" href="/hivemind-site/favicon.svg">
+<style>
+  :root{
+    --bg:#EAEBEE; --card:#F4F5F7; --fg:#14161C; --fg-dim:#4F5461;
+    --rule:#CDD0D7; --accent:#2A47DF; --accent-soft:#2A47DF1a; --stale:#A2660F;
+    --term:#17181C; --term-edge:#2C2F38;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono","Cascadia Code",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --edge:1px solid var(--rule);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#101219; --card:#161922; --fg:#ECEDF0; --fg-dim:#A3A9B6;
+      --rule:#2A2F3B; --accent:#8C9EFF; --accent-soft:#7E93ff1f; --stale:#E0A64A;
+      --term-edge:#343846;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#101219; --card:#161922; --fg:#ECEDF0; --fg-dim:#A3A9B6;
+    --rule:#2A2F3B; --accent:#8C9EFF; --accent-soft:#7E93ff1f; --stale:#E0A64A;
+    --term-edge:#343846;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  ul{list-style:none;margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--fg); font-family:var(--sans);
+    -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+  a{color:var(--accent)}
+  code{font-family:var(--mono); font-size:.92em}
+
+  /* ---- top rail ---- */
+  .rail{
+    position:fixed; inset:0 0 auto 0; height:44px; z-index:30;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:0 clamp(16px,4vw,44px); font-family:var(--mono);
+    font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--fg-dim); background:linear-gradient(var(--bg),var(--bg) 60%,transparent);
+  }
+  .rail .mark{color:var(--fg); font-weight:700; letter-spacing:.22em; text-decoration:none}
+  .rail .mark b{color:var(--accent)}
+  .rail .prog{display:flex; align-items:center; gap:10px}
+  .rail .bar{width:120px; height:2px; background:var(--rule); position:relative}
+  .rail .bar i{position:absolute; inset:0 auto 0 0; width:0; background:var(--accent); transition:width .4s ease}
+
+  /* ---- deck: one slide per screen, left to right ---- */
+  .deck{
+    display:flex; height:100%; overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x mandatory; scroll-behavior:smooth; scrollbar-width:none;
+  }
+  .deck::-webkit-scrollbar{display:none}
+  .deck:focus{outline:none}
+  .slide{
+    flex:0 0 100vw; height:100svh; min-height:100%;
+    scroll-snap-align:start; scroll-snap-stop:always;
+    display:flex; align-items:center;
+    padding:60px clamp(20px,6vw,110px) 76px;
+    position:relative;
+  }
+  .wrap{width:min(1080px,100%); margin:0 auto}
+
+  .eyebrow{
+    font-family:var(--mono); font-size:clamp(.7rem,1.4vw,.8rem);
+    letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
+    display:flex; align-items:center; gap:12px; margin:0 0 20px;
+  }
+  .eyebrow::before{content:""; width:26px; height:0; border-top:2px solid var(--accent); flex:none}
+  .eyebrow .dim{color:var(--fg-dim)}
+
+  h1,h2{margin:0}
+  .claim{
+    font-family:var(--mono); font-weight:700; letter-spacing:-.02em;
+    line-height:1.08; text-wrap:balance;
+    font-size:clamp(1.8rem,4.6vw,3.6rem);
+  }
+  .claim .hl{color:var(--accent)}
+  .lede{
+    font-size:clamp(1.02rem,1.9vw,1.3rem); line-height:1.55; color:var(--fg-dim);
+    max-width:62ch; margin:24px 0 0;
+  }
+  .lede b{color:var(--fg); font-weight:600}
+  .kick{
+    margin:28px 0 0; font-family:var(--mono); font-size:clamp(.92rem,1.6vw,1.06rem);
+    color:var(--fg); border-left:3px solid var(--accent); padding:4px 0 4px 16px;
+    max-width:60ch; line-height:1.5;
+  }
+
+  /* cover */
+  .cover .wordmark{
+    font-family:var(--mono); font-weight:700; font-size:clamp(2.6rem,7vw,5.2rem);
+    letter-spacing:-.02em; line-height:1;
+  }
+  .cover .wordmark b{color:var(--accent)}
+  .cover .sub{
+    font-size:clamp(1.1rem,2.4vw,1.6rem); color:var(--fg-dim);
+    margin:26px 0 0; max-width:34ch; line-height:1.4;
+  }
+  .cover .meta{
+    margin-top:44px; padding-top:18px; border-top:var(--edge);
+    display:flex; flex-wrap:wrap; gap:10px 26px; font-family:var(--mono);
+    font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--fg-dim);
+  }
+  .cover .meta b{color:var(--fg); font-weight:600}
+
+  /* ledger list */
+  .ledger{margin:30px 0 0; display:grid; max-width:78ch}
+  .ledger li{
+    display:grid; grid-template-columns:9.5em 1fr; gap:16px; align-items:baseline;
+    padding:14px 0; border-top:var(--edge); font-size:clamp(.98rem,1.55vw,1.1rem); line-height:1.5;
+  }
+  .ledger li:last-child{border-bottom:var(--edge)}
+  .ledger .k{
+    font-family:var(--mono); font-size:.74em; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--accent);
+  }
+  .ledger .v b{font-weight:600}
+
+  /* two cards */
+  .pair{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:30px 0 0; max-width:880px}
+  .card{background:var(--card); border:var(--edge); border-radius:6px; padding:20px 22px}
+  .card h3{margin:0 0 8px; font-family:var(--mono); font-size:1.02rem}
+  .card p{margin:0; color:var(--fg-dim); line-height:1.55}
+
+  /* screenshot slides: words on the left, the real terminal on the right */
+  .shot{display:grid; grid-template-columns:minmax(260px,380px) auto; gap:clamp(28px,4vw,60px);
+    align-items:center; justify-content:center}
+  .shot .claim{font-size:clamp(1.7rem,3.1vw,2.6rem)}
+  .shot .lede{font-size:clamp(1rem,1.5vw,1.14rem)}
+  .note{
+    margin:22px 0 0; font-family:var(--mono); font-size:.78rem; line-height:1.55;
+    color:var(--fg-dim); letter-spacing:.02em; max-width:44ch;
+  }
+  .term{
+    margin:0; background:var(--term); border:1px solid var(--term-edge); border-radius:10px;
+    box-shadow:0 18px 50px -24px #0009; overflow:hidden; justify-self:start;
+  }
+  .term .bar{
+    height:28px; display:flex; align-items:center; gap:7px; padding:0 12px;
+    border-bottom:1px solid var(--term-edge);
+  }
+  .term .bar i{width:10px; height:10px; border-radius:50%; background:#3A3D48}
+  .term .bar span{margin-left:8px; font-family:var(--mono); font-size:11px; color:#9A9FAB; letter-spacing:.04em}
+  .term a{display:block}
+  .term img{display:block; width:auto; height:auto; max-width:100%;
+    max-height:calc(100svh - 60px - 76px - 30px)}
+
+  /* the ask */
+  .steps{margin:26px 0 0; display:grid; gap:0; max-width:940px}
+  .steps li{display:grid; grid-template-columns:5.5em 1fr; gap:16px; padding:16px 0; border-top:var(--edge); align-items:baseline}
+  .steps li:last-child{border-bottom:var(--edge)}
+  .steps .k{font-family:var(--mono); font-size:.8em; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+  .steps p{margin:0; line-height:1.55}
+  .steps pre{
+    margin:10px 0; padding:10px 12px; background:var(--card); border:var(--edge); border-radius:4px;
+    font-family:var(--mono); font-size:.84rem; line-height:1.5;
+    white-space:pre-wrap; overflow-wrap:anywhere;
+  }
+  .claim.ask{font-size:clamp(1.7rem,3.6vw,2.9rem); max-width:24ch}
+  .status{
+    margin:24px 0 0; font-family:var(--mono); font-size:.8rem; letter-spacing:.06em;
+    color:var(--fg-dim); display:flex; flex-wrap:wrap; gap:6px 18px;
+  }
+  .status b{color:var(--fg); font-weight:600}
+  .links{margin:18px 0 0; display:flex; flex-wrap:wrap; gap:10px 22px; font-family:var(--mono); font-size:.86rem}
+
+  /* ---- nav ---- */
+  .nav{
+    position:fixed; inset:auto 0 0 0; height:56px; z-index:30;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 clamp(16px,4vw,44px);
+    background:linear-gradient(transparent,var(--bg) 45%);
+    font-family:var(--mono); font-size:12px; color:var(--fg-dim); letter-spacing:.1em;
+  }
+  .dots{display:flex; gap:9px}
+  .dots button{
+    width:9px; height:9px; padding:0; border:1px solid var(--fg-dim); background:transparent;
+    border-radius:50%; cursor:pointer; transition:all .25s;
+  }
+  .dots button[aria-current="true"]{background:var(--accent); border-color:var(--accent); transform:scale(1.15)}
+  .arrows{display:flex; gap:8px}
+  .arrows button{
+    font-family:var(--mono); font-size:13px; color:var(--fg); background:var(--card);
+    border:var(--edge); border-radius:2px; width:38px; height:32px; cursor:pointer;
+  }
+  .arrows button:hover{border-color:var(--accent); color:var(--accent)}
+  .arrows button:disabled{opacity:.4; cursor:default}
+  .count b{color:var(--fg)}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+
+  /* short desktop windows: the screenshot slides get the room */
+  @media (min-width:900px) and (max-height:760px){
+    .slide{padding-top:52px; padding-bottom:64px}
+    .term img{max-height:calc(100svh - 52px - 64px - 30px)}
+  }
+
+  /* phones and narrow windows: slides stack and the page scrolls down */
+  @media (max-width:899px){
+    body{overflow:auto; height:auto}
+    html{height:auto}
+    .rail{position:static; background:var(--bg); border-bottom:var(--edge)}
+    .rail .prog{display:none}
+    .deck{display:block; height:auto; overflow:visible}
+    .slide{height:auto; min-height:0; padding:44px 16px 52px; border-bottom:var(--edge); display:block}
+    .slide.cover{padding-top:64px; padding-bottom:72px}
+    .nav{display:none}
+    .shot{grid-template-columns:1fr; gap:22px}
+    .term{justify-self:stretch}
+    .term img{width:100%; max-height:none}
+    .pair{grid-template-columns:1fr}
+    .ledger li{grid-template-columns:1fr; gap:4px}
+    .steps li{grid-template-columns:1fr; gap:6px}
+    .tnav{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="rail">
+  <a class="mark" href="/hivemind-site/">HIVE<b>MIND</b></a>
+  <span class="prog"><span id="railnum">00 / 08</span><span class="bar"><i id="railbar"></i></span></span>
+</header>
+
+<main class="deck" id="deck" tabindex="0" aria-label="HiveMind, a short deck. Use the arrow keys to move between slides.">
+
+  <!-- 00 cover -->
+  <section class="slide cover" aria-label="Cover">
+    <div class="wrap">
+      <p class="eyebrow">For friends and early users</p>
+      <h1 class="wordmark">Hive<b>Mind</b></h1>
+      <p class="sub">Memory for decisions, for you and your coding agents.</p>
+      <div class="meta">
+        <span><b>Early</b></span>
+        <span><b>Self-hosted</b></span>
+        <span>AGPL-3.0</span>
+        <span class="tnav">→ arrow keys to move</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 the problem, in the words people use -->
+  <section class="slide" aria-label="The problem">
+    <div class="wrap">
+      <p class="eyebrow">The problem</p>
+      <h2 class="claim">Your agent forgets<br>what you <span class="hl">decided.</span></h2>
+      <ul class="ledger">
+        <li><span class="k">It undid it</span><span class="v">You dropped the ORM on purpose. A few weeks later the agent helpfully brings it back, with confidence.</span></li>
+        <li><span class="k">Nobody knows why</span><span class="v"><code>git blame</code> says who changed a line, not why the agent did it that way. The chat was the design meeting, and it is gone.</span></li>
+        <li><span class="k">It went stale</span><span class="v">The <code>DECISIONS.md</code> you keep by hand misses a reversal, and the agent follows the dead entry.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 02 what it is: the 2026-09-22 paragraph, verbatim -->
+  <section class="slide" aria-label="What it is">
+    <div class="wrap">
+      <p class="eyebrow">What it is</p>
+      <h2 class="claim">HiveMind is memory<br>for <span class="hl">decisions.</span></h2>
+      <p class="lede">Your coding agents record what was decided, which options lost and why, and who decided, you or the agent. The next session does not reintroduce what you dropped or rewrite what you agreed. When a decision is contested or replaced, its status changes; nothing goes quietly stale.</p>
+      <p class="kick">One engineer and their agents, local-first, AGPL-3.0, free to self-host.</p>
+    </div>
+  </section>
+
+  <!-- 03 what you get -->
+  <section class="slide" aria-label="What you get">
+    <div class="wrap">
+      <p class="eyebrow">What you get</p>
+      <h2 class="claim">Memory, but for <span class="hl">decisions.</span></h2>
+      <p class="lede">When an agent forgets, you look for a fix under memory. HiveMind keeps two things that memory tools don't.</p>
+      <div class="pair">
+        <div class="card">
+          <h3>The why</h3>
+          <p>The options that lost and the reasons, the evidence, and who decided: you or an agent. Ask later, and the answer comes from the record.</p>
+        </div>
+        <div class="card">
+          <h3>Whether it held up</h3>
+          <p>When a decision is contested or replaced, its status says so. Nobody has to remember to update it, and the old entry is never edited or deleted.</p>
+        </div>
+      </div>
+      <p class="kick">It's yours: one binary and a SQLite ledger in your project. No account, no sign-up.</p>
+    </div>
+  </section>
+
+  <!-- 04 screenshot: capture -->
+  <section class="slide" aria-label="In Claude Code: recording a decision">
+    <div class="wrap shot">
+      <div>
+        <p class="eyebrow">In Claude Code <span class="dim">/ 1 of 3</span></p>
+        <h2 class="claim">You make the call. The agent <span class="hl">writes it down.</span></h2>
+        <p class="lede">Say what you decided and why. The agent records the options that lost, the reasons, and that <b>you</b> decided, not the agent.</p>
+        <p class="note">A real session in pantry, a small demo app. HiveMind built from main, 24&nbsp;Sep&nbsp;2026.</p>
+      </div>
+      <figure class="term">
+        <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>~/code/pantry</span></div>
+        <a href="img/capture.png"><img src="img/capture.png" width="1160" height="1158"
+          alt="Claude Code session in ~/code/pantry. The user writes: We need real storage for pantry. My call: SQLite, one file next to the app. Postgres is overkill for a one-person app, it's a server to run and back up. The JSON file we have now loses writes when two requests land at once. Record the decision in HiveMind. The agent calls HiveMind once and replies: I saved the decision in HiveMind and marked it accepted. Chosen: SQLite, as a single file next to the app. Also listed: Postgres, turned down as overkill because it's a server to run and back up; keeping the JSON file, turned down because it loses writes when two requests arrive at once. Decided by: human:you@example.com. Your own words are attached as the quote. Topics: pantry, storage, database."></a>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 05 screenshot: why -->
+  <section class="slide" aria-label="In Claude Code: why was this decided?">
+    <div class="wrap shot">
+      <div>
+        <p class="eyebrow">In Claude Code <span class="dim">/ 2 of 3</span></p>
+        <h2 class="claim">A new session asks <span class="hl">why.</span></h2>
+        <p class="lede">No chat history, only the record. The answer has your own words, the options you ruled out, and the fact that nothing has replaced the decision.</p>
+        <p class="note">The same project, a fresh Claude Code session, after the agent moved the code to SQLite.</p>
+      </div>
+      <figure class="term">
+        <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>~/code/pantry</span></div>
+        <a href="img/why.png"><img src="img/why.png" width="1160" height="1816"
+          alt="A fresh Claude Code session. The user asks: Why is pantry on SQLite and not Postgres? What did we rule out? The agent calls HiveMind and replies: It was your decision, recorded in HiveMind as Use SQLite (single file next to the app) for pantry storage. Its status is accepted and nothing has replaced it. It quotes the user's own words, lists the options ruled out (Postgres: too much for a one-person app, another server to run and back up; keeping the JSON file: it was losing writes), explains why SQLite, and notes that no evidence is attached to the decision."></a>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 06 screenshot: did it hold up? -->
+  <section class="slide" aria-label="In Claude Code: did it hold up?">
+    <div class="wrap shot">
+      <div>
+        <p class="eyebrow">In Claude Code <span class="dim">/ 3 of 3</span></p>
+        <h2 class="claim">Did it <span class="hl">hold up?</span></h2>
+        <p class="lede">Then the plan changed. Pantry had to work from a phone as well, so Postgres replaced SQLite. Nobody edited the old entry. It now reads <b>superseded</b>, and the answer says what changed.</p>
+        <p class="note">Another fresh session. In an earlier one the agent recorded the Postgres decision as replacing the SQLite one.</p>
+      </div>
+      <figure class="term">
+        <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>~/code/pantry</span></div>
+        <a href="img/held-up.png"><img src="img/held-up.png" width="1160" height="1776"
+          alt="A fresh Claude Code session. The user asks: Did the SQLite storage decision hold up? The agent calls HiveMind four times and replies: No. According to HiveMind, the SQLite decision has been replaced, though the replacement isn't finished yet. It restates the original decision and why Postgres was rejected, then: Why it didn't hold: it's marked superseded by Use Postgres on the home server for pantry storage, because pantry must work from a phone and a laptop and one SQLite file can't be shared. The concurrency reasoning was sound; the one device, one user assumption is what changed. It adds that the Postgres decision is still proposed, that the code still uses SQLite, and that neither decision has evidence attached."></a>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 07 today and next -->
+  <section class="slide" aria-label="Where it is today and what is next">
+    <div class="wrap">
+      <p class="eyebrow">Where it is</p>
+      <h2 class="claim">Early, and <span class="hl">self-hosted.</span></h2>
+      <ul class="ledger">
+        <li><span class="k">Works today</span><span class="v">Claude Code, Codex and Cursor connect over MCP. Your agent records decisions with the options, the reasons and who decided, and answers why and whether it held up. There's a CLI for the same.</span></li>
+        <li><span class="k">Runs on</span><span class="v">One binary for Linux and Apple Silicon Macs, with a SQLite ledger in your project. AGPL-3.0. No hosted version.</span></li>
+        <li><span class="k">To be fair</span><span class="v">The screens are from main. In the v0.6.0 release, a decision your agent records stays “proposed”, it can't record you as the one who decided, and “did it hold up?” returns an error. The fixes are released in v0.7.0.</span></li>
+        <li><span class="k">Next</span><span class="v">A much simpler, decision-first UI. The redesign is under way.</span></li>
+        <li><span class="k">Then</span><span class="v">The same agent work with and without HiveMind, side by side, to show whether it helps.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 08 the ask -->
+  <section class="slide" aria-label="One ask">
+    <div class="wrap">
+      <p class="eyebrow">One ask</p>
+      <h2 class="claim ask">Try it on one project, or tell me how you <span class="hl">do this today.</span></h2>
+      <ul class="steps">
+        <li><span class="k">Try it</span><div>
+          <pre>curl -fsSL https://raw.githubusercontent.com/alexknips/hivemind/master/scripts/install.sh | sh</pre>
+          <pre>claude mcp add hivemind -- hivemind mcp</pre>
+          <p>Run the second one in your project. Then record the next thing you and your agent decide, ask why a week later, and tell me where it breaks.</p>
+        </div></li>
+        <li><span class="k">Or talk</span><div>
+          <p>Twenty minutes on how you stop your agents from undoing what you decided. Reply to whoever sent you this, or open an issue on GitHub.</p>
+        </div></li>
+      </ul>
+      <p class="status"><span><b>Status:</b> early</span><span>self-hosted only</span><span>no hosted version, no sign-up</span><span>AGPL-3.0</span></p>
+      <p class="links">
+        <a href="/hivemind-site/#self-host">Self-host guide</a>
+        <a href="/hivemind-site/getting-started/quickstart/">Docs</a>
+        <a href="https://github.com/alexknips/hivemind">GitHub</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<nav class="nav" aria-label="Deck controls">
+  <span class="count">SLIDE <b id="cur">00</b> / 08</span>
+  <div class="dots" id="dots" role="tablist" aria-label="Slides"></div>
+  <div class="arrows">
+    <button id="prev" aria-label="Previous slide">←</button>
+    <button id="next" aria-label="Next slide">→</button>
+  </div>
+</nav>
+
+<script>
+  const deck=document.getElementById('deck');
+  const slides=[...deck.querySelectorAll('.slide')];
+  const dotsWrap=document.getElementById('dots');
+  const cur=document.getElementById('cur'), railnum=document.getElementById('railnum'), railbar=document.getElementById('railbar');
+  const prev=document.getElementById('prev'), next=document.getElementById('next');
+  const N=slides.length, last=String(N-1).padStart(2,'0'); let i=0;
+  const stacked=matchMedia('(max-width:899px)');
+
+  slides.forEach((s,n)=>{
+    const b=document.createElement('button');
+    b.setAttribute('role','tab'); b.setAttribute('aria-label','Go to slide '+String(n).padStart(2,'0'));
+    b.addEventListener('click',()=>go(n));
+    dotsWrap.appendChild(b);
+  });
+  const dots=[...dotsWrap.children];
+
+  function pad(n){return String(n).padStart(2,'0')}
+  function paint(){
+    cur.textContent=pad(i);
+    railnum.textContent=pad(i)+' / '+last;
+    railbar.style.width=(N<2?100:(i/(N-1))*100)+'%';
+    dots.forEach((d,n)=>d.setAttribute('aria-current',n===i?'true':'false'));
+    prev.disabled=i===0; next.disabled=i===N-1;
+  }
+  function go(n){
+    i=Math.max(0,Math.min(N-1,n));
+    slides[i].scrollIntoView({behavior:'smooth',inline:'start',block:stacked.matches?'start':'nearest'});
+    paint();
+  }
+
+  next.addEventListener('click',()=>go(i+1));
+  prev.addEventListener('click',()=>go(i-1));
+
+  addEventListener('keydown',e=>{
+    if(stacked.matches) return;
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(i+1);}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1);}
+    else if(e.key==='Home'){e.preventDefault();go(0);}
+    else if(e.key==='End'){e.preventDefault();go(N-1);}
+  });
+
+  let t; deck.addEventListener('scroll',()=>{
+    clearTimeout(t); t=setTimeout(()=>{
+      const n=Math.round(deck.scrollLeft/deck.clientWidth);
+      if(n!==i){ i=n; paint(); }
+    },90);
+  },{passive:true});
+
+  if(!stacked.matches) deck.focus({preventScroll:true});
+  paint();
+</script>
+</body>
+</html>

@@ -16,7 +16,7 @@ copy. The product is HiveMind.
 assets and install script. "Coming next" and "planned" items rest on the product plan as of
 2026-09-26; the deck at `/pitch/` (2026-09-24) says the same things where it covers them.
 
-Last checked: 2026-09-26, against `v0.7.0` (the latest release).
+Last checked: 2026-09-28, against `v0.7.0` (still the latest release on that day).
 
 ## Works today (v0.7.0)
 
@@ -54,7 +54,7 @@ Last checked: 2026-09-26, against `v0.7.0` (the latest release).
 |---|---|
 | A much simpler, decision-first UI: a decision list, newest first, as the front door; one decision's neighbourhood as the graph; arrows newer to older | All five children of the UI redesign are merged in the UI repository (design tokens, browser-mode tests, React Flow graph, decision page, decision list front door); the redesign is not published anywhere yet, and the site's `/demo/` still runs the previous UI. Deck slide "Where it is": "Next: a much simpler, decision-first UI. The redesign is under way." |
 | The capture plugin asks up front what a decision rests on | Merged to hivemind master on 2026-09-25 after the `v0.7.0` tag; in the next release |
-| A quality profile on seven dimensions, each line naming the facts it was read from; not a grade | The dimensions are `docs/DECISION_SCORING.md` in alexknips/hivemind; the engine that computes the profile merged to master on 2026-09-25 after the tag; it is not yet visible over the CLI or MCP |
+| A quality profile on seven dimensions, each line naming the facts it was read from; not a grade | The dimensions are `docs/DECISION_SCORING.md` in alexknips/hivemind; the engine that computes the profile merged to master on 2026-09-25 and `score_decision` returning it over the CLI and MCP on 2026-09-26, both after the tag; not in a release |
 | Capture that runs all day inside the coding agent; pieces in the release, one-step setup not yet | CHANGELOG v0.7.0, Fixed: "Passive capture no longer drops the session"; Added: "Classification over HTTP and MCP" with a daily cap. The setup still takes the hook from the repository plus a classifier key or the keyless path; no single-step install exists |
 
 ## Planned (decided, not built)
@@ -75,6 +75,28 @@ Last checked: 2026-09-26, against `v0.7.0` (the latest release).
 | Memory tools remember facts and preferences for the agent's next prompt; they do not keep the options that lost, the evidence, who decided, or whether it held up | The landscape brief of 2026-09-21; positioning locked on 2026-09-22 ("memory, but for decisions") |
 | Where it is not different: capture over MCP, supersession, local-first under an open licence exist elsewhere; the combination has not been found elsewhere | `vision/README.md` (company repository), "Where HiveMind is different, and where it is not" |
 | HiveMind does not claim to win on recall against memory tools, that anyone outside uses it, or that it makes decisions better | `vision/README.md`, "What we do not claim yet" |
+
+## Use cases section of the landing page (`#showcase`)
+
+One card per feature, in the order agreed on 2026-09-28 from the company's showcase draft
+(`marketing/showcase.md` in the company repository, approved by the founder on 2026-09-26 with the
+rule "no tracker ids, no changelog quotes, no internal names in the public copy"). The examples
+(REST and gRPC, retries, the ORM, caching by record id) are illustrations, not recorded sessions;
+the one with numbers says the numbers are made up. "Capture without typing anything" is left out:
+the scheduled classification it needs is our own setup, not something a reader can install.
+Each "In the demo" line was checked against the 12 Angry Men data in the demo bundle
+(`website/public/demo/assets/index-*.js`, node ids `jm-*`) on 2026-09-28.
+
+| Card | Status | Evidence |
+|---|---|---|
+| Change your mind, and the old decision says so: a replaced one reads superseded with what replaced it, a disputed one reads contested with both sides; nothing edited or deleted | Works today | CHANGELOG v0.7.0, Added, Fluent verbs (`supersede` and `disagree` take a description); Fixed, "Did it hold up?" works; status derived from edges on the [Decision Graph](website/src/content/docs/concepts/decision-graph.md) page. Demo: `jm-d00` "Opening ballot: 11–1 to convict" is `superseded`, `supersededBy` the verdict `jm-d01`; hypothesis `jm-h02` "The boy is guilty beyond reasonable doubt" is `refuted` |
+| Who decided, a person or an agent, apart from who wrote it down; an agent deciding within what you handed it reads differently from one deciding alone | Works today | CHANGELOG v0.7.0, Added, Attribution: `--decided-by` (accepted by the human, `verify` shows both) and `--delegated-by` ("reads differently from an agent deciding alone"); Added, `why` answers why (`verify` shows the recorder and the decider as separate lines); Fixed, Attribution is honest. Demo: `jm-h01` held by "Juror 8 (Davis)", `jm-h02` by "Juror 3 (Cobb)", the verdict by "Jury (12 men)"; no agent actors |
+| What a decision rests on: an earlier decision, something observed, an assumption, or a bet with a date to check; a replaced premise makes it read stale; asking why shows the premise and whether it holds | Works today | CHANGELOG v0.7.0, Breaking, Capture and supersede require grounding (the four answers, `--bet` with `--check-by`); Added, "Answers show what a decision rests on" (each premise with its state; a superseded or rejected premise makes the decision stale; an overdue bet reads unchecked and does not flip "still holds"). Demo: the verdict `jm-d01` `assumes` `jm-h01` "Reasonable doubt exists"; evidence `jm-e01` to `jm-e07` support or contradict `jm-h01` / `jm-h02` |
+| Ask "why did we…" in a fresh session: the reason, the options that lost and why, who decided, whether it still holds | Works today | CHANGELOG v0.7.0, Added, `why` answers why (the brief: rationale, chosen and rejected options, who decided, whether it still holds); deck slide "A new session asks why". Demo: options `jm-o01` "Guilty verdict" (`rejected`, supports `jm-h02`) and `jm-o02` "Not guilty verdict" (`chose`, supports `jm-h01`) |
+| A quality profile on seven dimensions, lines naming their facts, "not assessed" where nothing is recorded; not a grade. Example levels: alternatives solid, information partial, calibration not assessed | Coming next | As in "Coming next" above. The example follows the floors in `docs/DECISION_SCORING.md` on hivemind master: Alternatives `solid` when every rejected option carries its own description; Information `partial` when only an assumption counts; Calibration not assessed when no confidence was declared |
+| Two projects drifting apart. Works today: a decision resting on a replaced one reads stale, and "what should I know" from one project also looks in the project it depends on. Planned: re-examine items on dependents; catching contradictions with no recorded link | Planned (the "works today" line is marked) | Works today: CHANGELOG v0.7.0, Added, "Answers show what a decision rests on" and Projects, "What should I know" asks from one project (`part_of` and `depends_on`, one hop). Planned: as the first two rows of "Planned" above |
+| Speed, consistency and flexibility across decisions; consistency and flexibility side by side, never one number, no ranking | Planned | As in "Planned" above; the measures are defined in the company's research brief of 2026-09-25 on speed, consistency and flexibility. Demo line: the ballot `jm-d00` is replaced by the verdict and seven evidence nodes are on the graph; the demo computes no measures |
+| The demo is the 12 Angry Men jury room as a decision graph: the question, the two verdicts, the hypotheses, seven pieces of evidence, the ballot the verdict replaced | Works today (the demo) | Demo: `jm-q01` "Is the defendant guilty of murder?", `jm-o01` / `jm-o02`, `jm-h01` / `jm-h02`, `jm-e01` to `jm-e07`, `jm-d00` superseded by `jm-d01`. Keeping the demo: the founder, 2026-09-25 ("let's keep it") |
 
 ## How to keep this file true
 

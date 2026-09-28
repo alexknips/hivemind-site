@@ -1,7 +1,7 @@
 # hivemind-site
 
 The HiveMind website: the landing page, the docs, the pitch deck (`/pitch/`), the use cases
-(`/use-cases/`) and the 12 Angry Men demo (`/demo/`).
+(`/use-cases/`) and the demo (`/demo/`): the app itself, read-only, over made-up example data.
 
 **Live:** https://alexknips.github.io/hivemind-site/
 
@@ -18,8 +18,12 @@ website/                  Astro + Starlight site
   src/components/         the header, footer and colour-scheme script the pages above share
   src/styles/tokens.css   design tokens: a copy of the app's (hivemind-ui src/styles/tokens.css), so site and app look the same
   src/content/docs/       the docs
-  public/demo/            12 Angry Men demo (vendored hivemind-ui build, light only until it is rebuilt from the current app)
+  public/demo/            the demo: hivemind-ui's read-only snapshot build, never edited by hand
+  src/demo-fallback.mjs   shows the demo, not the 404 page, at a missing path under /demo/
 pitch-screens/            raw captures behind the deck's terminal screenshots, and how to re-render them
+scripts/
+  rebuild-demo.sh         rebuild public/demo/ from hivemind-ui and open a pull request
+  demo-routes.mjs         its helper: a page for every link the demo app makes
 CLAIMS.md                 every claim on the landing and use cases pages, with its evidence (release, changelog section, plan)
 .github/workflows/
   deploy.yml                  build and deploy to GitHub Pages on push to main
@@ -73,9 +77,35 @@ cargo run --manifest-path ../hivemind/Cargo.toml --bin generate-reference
 
 ## The demo
 
-`website/public/demo/` is a production build of hivemind-ui with the Vite base
-`/hivemind-site/demo/`. To re-vendor it, build hivemind-ui with that base and replace the
-directory's contents with its `dist/`.
+`website/public/demo/` is hivemind-ui's read-only snapshot build (`npm run build:demo`): the
+current app over made-up example data, labelled "Example data" on every screen, with no server,
+no sign-in and nothing to write to. The example data is part of that build
+(`demo/public/snapshot/` in hivemind-ui), so new data arrives the same way as a new UI.
+
+Don't edit it by hand. To bring the demo up to date with hivemind-ui:
+
+```sh
+scripts/rebuild-demo.sh <hivemind-ui repository>          # builds main
+scripts/rebuild-demo.sh <hivemind-ui repository> <ref>    # a branch, tag or commit
+```
+
+The repository is anything `git clone` takes, a path or a URL. The script builds the demo in a
+temporary clone with the base `/hivemind-site/demo/`, writes a page for every link the app
+makes (`scripts/demo-routes.mjs`), replaces `website/public/demo/`, records the UI commit in
+`website/public/demo/build.json`, and opens a pull request that lists the UI changes since the
+last build. Check it locally (`cd website && npm run build && npx astro preview`), then merge:
+`deploy.yml` publishes it. `--no-pr` only rebuilds the working tree. It needs git, Node, npm,
+rsync, jq and a logged-in `gh`. hivemind-ui is not on GitHub, so no workflow here can build it;
+the script runs where a checkout of it is.
+
+**Links.** The app gives each page its own path: `/demo/decisions/<slug>`, `/demo/graph/<slug>`,
+`/demo/flow`, `/demo/diagnostics`. Each of those is a real file (a copy of the app's
+`index.html`), so a pasted link answers 200 (once Pages has added the trailing slash) and
+unfurls. GitHub Pages answers any other missing path with the site's one `404.html`; under
+`/demo/` that page loads the app in its place (`website/src/demo-fallback.mjs`), which shows
+what the path names or says it has no such decision. Such a link still answers 404 to a
+crawler. `/demo-preview/`, an older preview of the UI, now only points to `/demo/`. Old links such as
+`/demo/?view=graph&node=<id>` are `/demo/` itself; the app moves them to the new path.
 
 ## License
 

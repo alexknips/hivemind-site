@@ -1,10 +1,13 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import tailwind from '@astrojs/tailwind';
+import { demoFallback } from './src/demo-fallback.mjs';
+
+const base = '/hivemind-site/';
 
 export default defineConfig({
   site: 'https://alexknips.github.io',
-  base: '/hivemind-site/',
+  base,
   integrations: [
     starlight({
       title: 'HiveMind',
@@ -47,6 +50,9 @@ export default defineConfig({
         },
       ],
       customCss: ['./src/styles/custom.css'],
+      // On the site's 404 page at a path under demo/, show the demo app instead
+      // (src/demo-fallback.mjs); on every other page it does nothing.
+      head: [{ tag: 'script', content: `(${demoFallback})(${JSON.stringify(`${base}demo/`)});` }],
     }),
     tailwind({ applyBaseStyles: false }),
   ],

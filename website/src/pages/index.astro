@@ -53,7 +53,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
           Open the demo &rarr;
         </a>
       </div>
-      <p class="text-sm text-muted-foreground">The demo is the jury room of <em>12 Angry Men</em> as a decision graph. No signup, no install.</p>
+      <p class="text-sm text-muted-foreground">The demo is the app itself, read-only, over made-up projects, the jury room of <em>12 Angry Men</em> among them. No signup, no install.</p>
     </section>
 
     <!-- The problem: the three failures, in the words people use (vision/README.md; deck slide 1) -->
@@ -236,8 +236,8 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
           </div>
         </div>
         <p class="text-sm text-muted-foreground text-center mt-10 max-w-2xl mx-auto leading-relaxed">
-          <a href={`${base}demo/`} class="link">The demo</a> is a jury room, not a codebase, on purpose: the same
-          record fits any decision that people and agents make together. Engineers first, though.
+          <a href={`${base}demo/`} class="link">The demo</a> holds a jury room next to two software projects, on
+          purpose: the same record fits any decision that people and agents make together. Engineers first, though.
         </p>
       </div>
     </section>
@@ -301,7 +301,6 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
               <li>Two tracks of your work that contradict each other with no recorded link between them, detected.</li>
               <li>Across decisions: how fast you get from question to decision, how often a new decision stays in line with standing ones, and how often you change your mind when evidence arrives. Shown side by side, never as one number, never as a ranking.</li>
               <li>The same agent work with and without HiveMind, side by side, to show whether it helps.</li>
-              <li>The demo on this site becomes the app itself, read-only, over example data, with <em>12 Angry Men</em> kept as one of the projects to explore.</li>
             </ul>
             <p class="text-sm text-muted-foreground mt-5 leading-relaxed">
               The <a href={`${base}use-cases/`} class="link">use cases page</a> has one example per item, with the command or tool call behind each one that works today.
@@ -413,9 +412,9 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
             </p>
             <div class="mt-auto pt-5">
               <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4">
-                <span class="font-medium text-foreground">In the demo:</span> the opening ballot, 11 to 1 to convict,
-                reads superseded by the verdict, and the hypothesis that the boy is guilty beyond reasonable doubt
-                reads refuted. Both stay on the graph.
+                <span class="font-medium text-foreground">In the demo:</span> the first vote, 11 to 1 for guilty,
+                reads superseded by the verdict, and the premise it rested on, that the two witnesses' accounts prove
+                the boy did it, reads refuted. Both stay on the graph.
               </p>
             </div>
           </article>
@@ -438,9 +437,9 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
             </p>
             <div class="mt-auto pt-5">
               <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4">
-                <span class="font-medium text-foreground">In the demo:</span> every position names who held it.
-                Reasonable doubt is Juror 8's, guilty beyond reasonable doubt is Juror 3's, and the verdict is the
-                jury's. A jury room has no agents, so it shows the who, not person versus agent.
+                <span class="font-medium text-foreground">In the demo:</span> every decision names who proposed it
+                and who decided it. Juror 8 proposes the verdict and Juror 1 decides it; the first vote is Juror 3's.
+                A jury room has no agents, so it shows the who, not person versus agent.
               </p>
             </div>
           </article>
@@ -465,9 +464,9 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
             </p>
             <div class="mt-auto pt-5">
               <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4">
-                <span class="font-medium text-foreground">In the demo:</span> the verdict rests on the hypothesis that
-                reasonable doubt exists. Seven pieces of evidence support or contradict the two competing hypotheses,
-                and the losing one reads refuted.
+                <span class="font-medium text-foreground">In the demo:</span> the first vote rests on the premise that
+                the two witnesses' accounts prove the boy did it. Three pieces of evidence refute it, and it reads
+                refuted. The verdict rests on those three and on the vote it replaced.
               </p>
             </div>
           </article>
@@ -491,7 +490,8 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
             <div class="mt-auto pt-5">
               <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4">
                 <span class="font-medium text-foreground">In the demo:</span> the verdict keeps both options,
-                not guilty (chosen) and guilty (rejected), each linked to the hypothesis it leans on.
+                not guilty (chosen) and guilty (not chosen), with the jury's reason and the three pieces of evidence
+                for it.
               </p>
             </div>
           </article>
@@ -566,8 +566,8 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
             <div class="mt-auto pt-5">
               <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4">
                 <span class="font-medium text-foreground">In the demo:</span> the story, not the numbers. An opening
-                11 to 1 vote is reversed as seven pieces of evidence are weighed. The demo shows the reversal and
-                computes nothing.
+                11 to 1 vote ends 12 to 0 the other way once three pieces of evidence are tested. The demo shows the
+                reversal and computes nothing.
               </p>
             </div>
           </article>
@@ -576,9 +576,10 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
           <aside class="rounded-lg bg-info-soft p-6 flex flex-col min-w-0">
             <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Every "in the demo" is a jury room</h3>
             <p class="text-base text-muted-foreground leading-relaxed mb-5">
-              The demo records the jury room of <em>12 Angry Men</em> as a decision graph: the question, the two
-              verdicts, the hypotheses, seven pieces of evidence and the ballot the verdict replaced. Not a codebase,
-              and that is the point: the same record fits any decision people and agents make together.
+              The demo is the app itself, read-only, over made-up projects: a recipe app, an orders API with its
+              mobile app, and the jury room of <em>12 Angry Men</em>. The jury room holds the first vote, the choices
+              to talk the case through and to re-enact a witness's walk, and the verdict that replaced the vote. Not
+              a codebase, and that is the point: the same record fits any decision people and agents make together.
             </p>
             <div class="mt-auto">
               <a href={`${base}demo/`} class="btn btn-outline">Open the demo &rarr;</a>

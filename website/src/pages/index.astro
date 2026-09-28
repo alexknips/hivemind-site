@@ -428,12 +428,226 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
       </div>
     </section>
 
-    <!-- Slot: the feature showcase (one everyday example per feature, each marked works today / coming next / planned)
-         lands here in a follow-up, once the order is agreed. Keep the anchor id. -->
-    <div id="showcase" class="scroll-mt-20"></div>
+    <!-- The feature showcase: one everyday example per feature, from one engineer and their agents, and
+         where the 12 Angry Men demo shows the same thing (the draft is marketing/showcase.md in the company
+         repository, approved by the founder on 2026-09-26). Order as agreed on 2026-09-28: works today =
+         revised or replaced, who decided, what it rests on, why with the options that lost; coming next = the
+         seven dimensions; planned = projects diverging, then speed with consistency and flexibility. Capture
+         without typing is left out on purpose. Reordering is moving a card; CLAIMS.md lists the evidence. -->
+    <section id="showcase" class="border-t border-border bg-sidebar scroll-mt-20">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">Use cases</p>
+        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">What it is useful for</h2>
+        <p class="text-md text-muted-foreground text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+          One feature at a time, each with an everyday example from one engineer and their agents, and where the
+          demo's jury room shows the same thing. Each is marked works today, coming next or planned.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-6">
+
+          <!-- A decision is revised or replaced, and its status changes -->
+          <article class="rounded-lg border border-border bg-card shadow-xs p-6 flex flex-col min-w-0">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="badge bg-success-soft text-success-foreground">Works today</span>
+            </div>
+            <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Change your mind, and the old decision says so</h3>
+            <p class="text-base text-foreground leading-relaxed mb-4">
+              A new decision that replaces an old one leaves the old one reading <span class="badge badge-neutral">superseded</span>,
+              with what replaced it. A disagreement leaves it <span class="badge badge-warning">contested</span>, with both sides kept.
+              Nothing is edited or deleted.
+            </p>
+            <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-1.5">For example</p>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              You settled on REST for the public API. Two months later a partner needs streaming, so you and your
+              agent move to gRPC and record it as replacing REST. The REST decision now reads superseded and points
+              to gRPC, and "did REST hold up?" answers: no, replaced, and why. When your agent only disagrees, say
+              with your choice of date library, that decision reads contested instead, and both sides stay.
+            </p>
+            <div class="mt-auto pt-5">
+              <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4">
+                <span class="font-medium text-foreground">In the demo:</span> the opening ballot, 11 to 1 to convict,
+                reads superseded by the verdict, and the hypothesis that the boy is guilty beyond reasonable doubt
+                reads refuted. Both stay on the graph.
+              </p>
+            </div>
+          </article>
+
+          <!-- Who decided: you or the agent -->
+          <article class="rounded-lg border border-border bg-card shadow-xs p-6 flex flex-col min-w-0">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="badge bg-success-soft text-success-foreground">Works today</span>
+            </div>
+            <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Who decided: you or the agent</h3>
+            <p class="text-base text-foreground leading-relaxed mb-4">
+              Every decision says who made it, a person or an agent, apart from who wrote it down. An agent deciding
+              within what you handed it reads differently from one deciding alone.
+            </p>
+            <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-1.5">For example</p>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              Your agent picked the retry count on its own while you were at lunch. The connection pool size was
+              your call, and the agent recorded it for you. A month later, "who decided on three retries?" says the
+              agent did. The pool size says you decided and the agent wrote it down: two lines, not one.
+            </p>
+            <div class="mt-auto pt-5">
+              <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4">
+                <span class="font-medium text-foreground">In the demo:</span> every position names who held it.
+                Reasonable doubt is Juror 8's, guilty beyond reasonable doubt is Juror 3's, and the verdict is the
+                jury's. A jury room has no agents, so it shows the who, not person versus agent.
+              </p>
+            </div>
+          </article>
+
+          <!-- What a decision rests on -->
+          <article class="rounded-lg border border-border bg-card shadow-xs p-6 flex flex-col min-w-0">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="badge bg-success-soft text-success-foreground">Works today</span>
+            </div>
+            <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">What a decision rests on</h3>
+            <p class="text-base text-foreground leading-relaxed mb-4">
+              Every decision says what it rests on: an earlier decision, something observed, an assumption, or, when
+              there is nothing yet, a bet with a date to check. When an earlier decision it rests on is replaced, it
+              reads stale.
+            </p>
+            <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-1.5">For example</p>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              When your agent records "cache responses by record id", it names what that rests on: your earlier
+              decision that record ids never change. Ask later why it caches by id, and the answer shows that premise
+              and whether it still holds. With nothing to rest on, the agent records a bet instead: "ids look stable;
+              check by the end of the quarter". A bet is not a mark against you. It is a gap you named.
+            </p>
+            <div class="mt-auto pt-5">
+              <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4">
+                <span class="font-medium text-foreground">In the demo:</span> the verdict rests on the hypothesis that
+                reasonable doubt exists. Seven pieces of evidence support or contradict the two competing hypotheses,
+                and the losing one reads refuted.
+              </p>
+            </div>
+          </article>
+
+          <!-- Decisions are remembered with the options that lost, and why -->
+          <article class="rounded-lg border border-border bg-card shadow-xs p-6 flex flex-col min-w-0">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="badge bg-success-soft text-success-foreground">Works today</span>
+            </div>
+            <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Ask why, and get the options that lost</h3>
+            <p class="text-base text-foreground leading-relaxed mb-4">
+              Ask "why did we…" in a fresh session and get the reason, the options that lost and why they lost, who
+              decided, and whether the decision still holds.
+            </p>
+            <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-1.5">For example</p>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              Last month you ruled out an ORM because it hid the slow queries. Today a fresh session, with no chat
+              history, suggests adding one. You ask why there is no ORM and get your own reason back, the option that
+              lost and why, and that nothing has replaced the decision.
+            </p>
+            <div class="mt-auto pt-5">
+              <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4">
+                <span class="font-medium text-foreground">In the demo:</span> the verdict keeps both options,
+                not guilty (chosen) and guilty (rejected), each linked to the hypothesis it leans on.
+              </p>
+            </div>
+          </article>
+
+          <!-- Metrics per decision: the seven dimensions -->
+          <article class="rounded-lg border border-border bg-card shadow-xs p-6 flex flex-col min-w-0">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="badge badge-warning">Coming next</span>
+            </div>
+            <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">How well made was this decision?</h3>
+            <p class="text-base text-foreground leading-relaxed mb-4">
+              A profile on seven dimensions: framing, alternatives, information, reasoning, values and trade-offs,
+              bias exposure, calibration. Each line names the recorded facts it was read from, and says "not
+              assessed" where there is nothing to read. Not a grade, and never a mark against changing your mind.
+            </p>
+            <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-1.5">For example</p>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              You ask how well made the no-ORM decision was. Alternatives: solid, because the option that lost carries
+              its own reason. Information: partial, because it rests on an assumption and nothing observed is linked.
+              Calibration: not assessed, because you never said how confident you were. Every line names the records
+              it came from, so you can argue with it.
+            </p>
+          </article>
+
+          <!-- Projects diverging: works today in part, the rest planned -->
+          <article class="rounded-lg border border-dashed border-input p-6 flex flex-col min-w-0">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="badge badge-outline">Planned</span>
+            </div>
+            <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Two projects, drifting apart</h3>
+            <p class="text-base text-foreground leading-relaxed mb-4">
+              When your agents work several projects in parallel and one of them replaces a decision another rests
+              on, the decisions that depend on it show it.
+            </p>
+            <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-1.5">For example</p>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              Your agents run two tracks, the API and the mobile client. The client's caching decision rests on the
+              API's decision that record ids never change. Then the API track decides to merge duplicate records,
+              replacing that decision.
+            </p>
+            <ul class="mt-3 space-y-2 text-base leading-relaxed">
+              <li>
+                <span class="font-medium text-success-foreground">Works today:</span>
+                <span class="text-muted-foreground">the caching decision reads stale, and "what should I know before I
+                touch this?" asked from the client also looks in the API project it depends on.</span>
+              </li>
+              <li>
+                <span class="font-medium text-foreground">Planned:</span>
+                <span class="text-muted-foreground">the client is handed an open "re-examine" item, and two tracks that
+                contradict each other with no recorded link between them are caught.</span>
+              </li>
+            </ul>
+          </article>
+
+          <!-- Metrics across decisions: speed, and consistency with flexibility as a pair -->
+          <article class="rounded-lg border border-dashed border-input p-6 flex flex-col min-w-0">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="badge badge-outline">Planned</span>
+            </div>
+            <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Speed, consistency and flexibility</h3>
+            <p class="text-base text-foreground leading-relaxed mb-4">
+              Across all your decisions: how fast you get from question to decision, how often a new decision stays in
+              line with the ones standing, and how often you change your mind when evidence arrives. Consistency and
+              flexibility side by side, never one number, no ranking and no blame.
+            </p>
+            <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-1.5">For example</p>
+            <p class="text-base text-muted-foreground leading-relaxed">
+              Over a quarter, with made-up numbers: your decisions took a median of a day from question to recorded
+              answer. Nine in ten new decisions stayed in line with standing ones; the other one in ten were reversals,
+              most of them after new evidence. A fast reversal on new evidence reads as a strength, not a mark against you.
+            </p>
+            <div class="mt-auto pt-5">
+              <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4">
+                <span class="font-medium text-foreground">In the demo:</span> the story, not the numbers. An opening
+                11 to 1 vote is reversed as seven pieces of evidence are weighed. The demo shows the reversal and
+                computes nothing.
+              </p>
+            </div>
+          </article>
+
+          <!-- The demo: kept on purpose, the hint that this goes beyond code -->
+          <aside class="rounded-lg bg-info-soft p-6 flex flex-col min-w-0">
+            <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Every "in the demo" is a jury room</h3>
+            <p class="text-base text-muted-foreground leading-relaxed mb-5">
+              The demo records the jury room of <em>12 Angry Men</em> as a decision graph: the question, the two
+              verdicts, the hypotheses, seven pieces of evidence and the ballot the verdict replaced. Not a codebase,
+              and that is the point: the same record fits any decision people and agents make together.
+            </p>
+            <div class="mt-auto">
+              <a href={`${base}demo/`} class="btn btn-outline">Explore the demo &rarr;</a>
+            </div>
+          </aside>
+
+        </div>
+
+        <p class="text-sm text-muted-foreground text-center mt-12 max-w-2xl mx-auto leading-relaxed">
+          The <a href={`${base}use-cases/`} class="link">use cases page</a> has the command or tool call behind each one
+          that works today, and more of them.
+        </p>
+      </div>
+    </section>
 
     <!-- How to start: self-host (deck slide 8) -->
-    <section id="self-host" class="border-t border-border bg-sidebar scroll-mt-20">
+    <section id="self-host" class="border-t border-border scroll-mt-20">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">How to start</p>
         <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Start on your own machine</h2>
@@ -498,7 +712,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
     </section>
 
     <!-- Bottom CTA -->
-    <section class="border-t border-border">
+    <section class="border-t border-border bg-sidebar">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-24 text-center">
         <h2 class="text-xl font-semibold tracking-tight text-foreground mb-3">Start with one decision</h2>
         <p class="text-md text-muted-foreground mb-10 max-w-lg mx-auto">

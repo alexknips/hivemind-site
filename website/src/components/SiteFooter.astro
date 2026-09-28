@@ -1,0 +1,18 @@
+---
+// The site footer of the landing page and the use cases page.
+const base = import.meta.env.BASE_URL;
+---
+<footer class="border-t border-border py-12">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="text-sm text-muted-foreground">
+      HiveMind &mdash; memory for decisions
+    </div>
+    <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+      <a href={`${base}getting-started/quickstart/`} class="hover:text-foreground transition-colors">Docs</a>
+      <a href={`${base}demo/`} class="hover:text-foreground transition-colors">Demo</a>
+      <a href={`${base}use-cases/`} class="hover:text-foreground transition-colors">Use cases</a>
+      <a href={`${base}pitch/`} class="hover:text-foreground transition-colors">Why HiveMind</a>
+      <a href="https://github.com/alexknips/hivemind" class="hover:text-foreground transition-colors">GitHub</a>
+    </div>
+  </div>
+</footer>

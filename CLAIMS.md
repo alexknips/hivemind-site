@@ -1,11 +1,13 @@
 # What the site claims, and the evidence
 
 Every claim on the landing page (`website/src/pages/index.astro`) and the use cases page
-(`website/public/use-cases/index.html`), with what it rests on. Kept next to the copy so that a
+(`website/src/pages/use-cases.astro`), with what it rests on. Kept next to the copy so that a
 change to either is a change to both.
 
 **The rules the copy follows.** Only what is in a release is said to work today. Anything merged
 but not released, or under way, says "coming next". Anything decided but not built says "planned".
+Both pages show the legend in one line, next to the tags: works today = in v0.7.0 (25 Sep 2026),
+coming next = merged or under way, not yet released, planned = decided, not built.
 No claim that HiveMind checks before it acts, or that it makes decisions better: the side-by-side
 that could show that is planned. No internal names, tracker ids or changelog quotes in the public
 copy. The product is HiveMind.
@@ -61,6 +63,7 @@ Last checked: 2026-09-28, against `v0.7.0` (still the latest release on that day
 
 | Claim | Evidence, as of 2026-09-26 |
 |---|---|
+| "Soon to come" (who it is for): teams, meaning several engineers and their agents on one shared record, a view for the team lead across everyone's decisions, later one across the organisation; not built yet | The founder's direction of 2026-09-28, in the review of the live page: "I rather want to explain: soon to come", replacing the "Not for, yet" block. The positioning in `vision/README.md` (company repository) is unchanged: one engineer and their agents first. Nothing for teams is built or scheduled, and the copy says "not built yet" |
 | A disagreement travels: re-examine items on dependents, with "N of M re-examined" visible | Product rule set on 2026-09-21; the feature is defined and blocked on grounding; nothing merged |
 | Detecting two tracks that contradict each other with no recorded link | Deferred on 2026-09-21 until real parallel-track data exists; what shipped earlier is the measuring harness and gold cases, not the detector |
 | Speed, consistency and flexibility across decisions, side by side, never one number | Named by the founder on 2026-09-25; a research brief defines the measures; no product work yet |

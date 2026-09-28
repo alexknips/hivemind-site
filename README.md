@@ -13,11 +13,12 @@ repo holds only the site. It moves again when the product is renamed.
 ```
 website/                  Astro + Starlight site
   src/pages/index.astro   landing page
+  src/pages/use-cases.astro  use cases, on the landing page's header, footer and cards
+  src/pages/pitch/        pitch deck (its own layout and script, the site's tokens); its screenshots are in public/pitch/img/
+  src/components/         the header, footer and colour-scheme script the pages above share
   src/styles/tokens.css   design tokens: a copy of the app's (hivemind-ui src/styles/tokens.css), so site and app look the same
   src/content/docs/       the docs
-  public/pitch/           pitch deck (static HTML)
-  public/use-cases/       use cases (static HTML)
-  public/demo/            12 Angry Men demo (vendored hivemind-ui build)
+  public/demo/            12 Angry Men demo (vendored hivemind-ui build, light only until it is rebuilt from the current app)
 pitch-screens/            raw captures behind the deck's terminal screenshots, and how to re-render them
 CLAIMS.md                 every claim on the landing and use cases pages, with its evidence (release, changelog section, plan)
 .github/workflows/

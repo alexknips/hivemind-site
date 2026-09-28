@@ -1,0 +1,10 @@
+<!-- In <head>, before anything paints: honour the colour scheme picked in the
+     docs' theme menu (Starlight keeps it in localStorage as "starlight-theme"),
+     so every page shows the same scheme. With nothing picked, tokens.css
+     follows the OS. -->
+<script is:inline>
+  try {
+    const theme = localStorage.getItem('starlight-theme');
+    if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+  } catch {}
+</script>

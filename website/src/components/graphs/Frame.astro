@@ -1,0 +1,171 @@
+---
+// One small decision graph, drawn as inline SVG in the app's visual language
+// (graph.ts says how). Colours are token var()s set by CSS classes (graphs.css),
+// so light and dark follow the page. The SVG is one image to assistive tech: `alt`
+// tells what it shows in words.
+import { type GFrame, T, edgeGeom, nodeHeight, outline, padX, textWidth } from './graph';
+
+interface Props {
+  frame: GFrame;
+  /** What the graph shows, in words (the image's alt text). */
+  alt: string;
+  class?: string;
+}
+
+const { frame, alt, class: className } = Astro.props;
+const byId = new Map(frame.nodes.map((n) => [n.id, n]));
+const r = (v: number) => Math.round(v * 10) / 10;
+
+const edges = (frame.edges ?? []).map((e) => ({ e, g: edgeGeom(e, byId) }));
+
+const nodes = frame.nodes.map((n) => {
+  const h = nodeHeight(n);
+  const shape = outline(n, h);
+  const px = padX(n.kind);
+  const lines = n.lines.map((text, i) => ({
+    text,
+    x: n.x + px + (i === 0 && n.chosen ? 13 : 0),
+    y: n.y + T.padY + i * T.titleLh + T.titleLh / 2 + T.title * 0.35,
+  }));
+  const subTop = n.y + T.padY + n.lines.length * T.titleLh + 1;
+  const sub = (n.sub ?? []).map((text, i) => ({
+    text,
+    x: n.x + px,
+    y: subTop + i * T.subLh + T.subLh / 2 + T.sub * 0.35,
+  }));
+  const badge = n.badge
+    ? (() => {
+        const bw = textWidth(n.badge.text, T.badge) + 10;
+        const bx = n.badge.align === 'start' ? n.x + 10 : n.x + n.w - bw - 10;
+        return { ...n.badge, x: bx, y: n.y - 7, w: bw };
+      })()
+    : undefined;
+  const classes = [
+    'hg-node',
+    `hg-node--${n.kind}`,
+    n.state && `is-${n.state}`,
+    n.planned && 'is-planned',
+    n.who && `hg-who--${n.who}`,
+    n.faded && 'is-faded',
+  ]
+    .filter(Boolean)
+    .join(' ');
+  return { n, h, shape, lines, sub, badge, classes };
+});
+---
+<svg
+  class:list={['hg', className]}
+  viewBox={`0 0 ${frame.w} ${frame.h}`}
+  role="img"
+  aria-label={alt}
+  preserveAspectRatio="xMidYMin meet"
+>
+  <rect class="hg-canvas" x="0" y="0" width={frame.w} height={frame.h} rx="10" />
+
+  {(frame.boxes ?? []).map((b) => (
+    <rect
+      class:list={['hg-box', b.dashed && 'is-dashed']}
+      x={b.x}
+      y={b.y}
+      width={b.w}
+      height={b.h}
+      rx="6"
+      data-part={b.part}
+    />
+  ))}
+
+  {edges.map(({ e, g }) => (
+    <g
+      class:list={[
+        'hg-edge',
+        e.tone && `hg-edge--${e.tone}`,
+        e.planned && 'is-planned',
+        e.faded && 'is-faded',
+      ]}
+      data-part={e.part}
+    >
+      <path class="hg-edge-line" d={g.d} />
+      {g.head && <path class="hg-edge-head" d={g.head} />}
+    </g>
+  ))}
+
+  {nodes.map(({ n, h, shape, lines, sub, badge, classes }) => (
+    <g class={classes} data-part={n.part}>
+      {shape.d ? (
+        <path class="hg-shape" d={shape.d} />
+      ) : (
+        <rect class="hg-shape" x={n.x} y={n.y} width={n.w} height={r(h)} rx={r(shape.rx ?? 0)} />
+      )}
+      {n.chosen && (
+        <path
+          class="hg-chosen"
+          d="M20 6 9 17l-5-5"
+          transform={`translate(${r(lines[0].x - 12.5)} ${r(lines[0].y - 8.6)}) scale(0.42)`}
+        />
+      )}
+      <text class="hg-title">
+        {lines.map((l) => (
+          <tspan x={r(l.x)} y={r(l.y)}>{l.text}</tspan>
+        ))}
+      </text>
+      {sub.length > 0 && (
+        <text class="hg-sub">
+          {sub.map((l) => (
+            <tspan x={r(l.x)} y={r(l.y)}>{l.text}</tspan>
+          ))}
+        </text>
+      )}
+      {badge && (
+        <g class={`hg-badge hg-badge--${badge.tone}`}>
+          <rect x={r(badge.x)} y={r(badge.y)} width={r(badge.w)} height="14" rx="4" />
+          <text x={r(badge.x + badge.w / 2)} y={r(badge.y + 10)}>{badge.text}</text>
+        </g>
+      )}
+      {n.status && (
+        <text class="hg-status" x={n.x + 1} y={n.y - (badge ? 12 : 5)}>{n.status}</text>
+      )}
+    </g>
+  ))}
+
+  {edges.map(({ e, g }) =>
+    g.label ? (
+      <text
+        class:list={['hg-edge-label', e.tone && `hg-edge-label--${e.tone}`, e.faded && 'is-faded']}
+        x={r(g.label.x)}
+        y={r(g.label.y)}
+        text-anchor={g.label.anchor}
+        data-part={e.part}
+      >
+        {e.label}
+      </text>
+    ) : null,
+  )}
+
+  {(frame.says ?? []).map((s) => {
+    const h = T.padY * 2 + s.lines.length * T.titleLh;
+    return (
+      <g class="hg-say">
+        <path
+          d={`M${s.x + 6},${s.y} H${s.x + 12} L${s.x + 15},${s.y - 7} L${s.x + 22},${s.y} H${s.x + s.w - 6} Q${s.x + s.w},${s.y} ${s.x + s.w},${s.y + 6} V${s.y + h - 6} Q${s.x + s.w},${s.y + h} ${s.x + s.w - 6},${s.y + h} H${s.x + 6} Q${s.x},${s.y + h} ${s.x},${s.y + h - 6} V${s.y + 6} Q${s.x},${s.y} ${s.x + 6},${s.y} Z`}
+        />
+        <text>
+          {s.lines.map((l, i) => (
+            <tspan x={s.x + 10} y={r(s.y + T.padY + i * T.titleLh + T.titleLh / 2 + T.title * 0.35)}>{l}</tspan>
+          ))}
+        </text>
+      </g>
+    );
+  })}
+
+  {(frame.notes ?? []).map((t) => (
+    <text
+      class:list={['hg-note', `hg-note--${t.kind ?? 'muted'}`]}
+      x={t.x}
+      y={t.y}
+      text-anchor={t.anchor ?? 'start'}
+      data-part={t.part}
+    >
+      {t.text}
+    </text>
+  ))}
+</svg>

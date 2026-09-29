@@ -1,0 +1,293 @@
+/*
+ * The landing page's decision graphs (src/components/graphs/). The app's graph
+ * language, from hivemind-ui RelationshipGraphExplorer.css and NodeShape.tsx:
+ * a muted canvas, one hue per kind of node (a soft fill and the hue as the
+ * outline), the title in the page's text colour, grey edges with their words
+ * behind the arrowhead. Everything is a token, so light and dark follow the page.
+ */
+
+:root {
+  /* As the app defines them for its graph canvas. */
+  --graph-edge: color-mix(in oklab, var(--muted-foreground) 75%, var(--background));
+  --graph-canvas: color-mix(in oklab, var(--muted) 55%, var(--background));
+}
+
+.hg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--font-sans);
+  overflow: visible;
+}
+
+.hg-canvas {
+  fill: var(--graph-canvas);
+}
+
+.hg-box {
+  fill: none;
+  stroke: var(--input);
+  stroke-width: 1;
+}
+.hg-box.is-dashed {
+  stroke-dasharray: 4 3;
+}
+
+/* ── Nodes ─────────────────────────────────────────────────────────────── */
+
+.hg-shape {
+  stroke-width: 1.5;
+}
+.hg-node--decision .hg-shape {
+  fill: var(--node-decision-fill);
+  stroke: var(--node-decision);
+}
+.hg-node--option .hg-shape {
+  fill: var(--node-option-fill);
+  stroke: var(--node-option);
+}
+.hg-node--evidence .hg-shape {
+  fill: var(--node-evidence-fill);
+  stroke: var(--node-evidence);
+}
+.hg-node--hypothesis .hg-shape {
+  fill: var(--node-hypothesis-fill);
+  stroke: var(--node-hypothesis);
+}
+.hg-node--question .hg-shape {
+  fill: var(--node-question-fill);
+  stroke: var(--node-question);
+}
+
+.hg-title {
+  font-size: 11.5px;
+  fill: var(--foreground);
+}
+.hg-sub {
+  font-size: 10px;
+  fill: var(--muted-foreground);
+}
+.hg-chosen {
+  fill: none;
+  stroke: var(--node-option-text);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* A replaced decision stays, greyed (the app's neutral status colour). */
+.hg-node.is-superseded .hg-shape {
+  fill: var(--muted);
+  stroke: var(--neutral);
+  stroke-width: 1.25;
+}
+.hg-node.is-superseded .hg-title {
+  fill: var(--muted-foreground);
+}
+/* Needs a look: stale, a refuted premise, a bet past its date. */
+.hg-node.is-look .hg-shape {
+  stroke: var(--warning);
+  stroke-width: 2.25;
+}
+.hg-node.is-refuted .hg-shape {
+  stroke: var(--destructive);
+  stroke-width: 2;
+}
+.hg-node.is-held .hg-shape {
+  stroke: var(--success);
+  stroke-width: 2;
+}
+/* The node the step is about: the app's heavier focus outline. */
+.hg-node.is-lit .hg-shape {
+  stroke-width: 2.5;
+}
+/* Not built yet. */
+.hg-node.is-planned .hg-shape {
+  fill: var(--graph-canvas);
+  stroke-dasharray: 4 3;
+}
+.hg-node.is-planned .hg-title {
+  fill: var(--muted-foreground);
+}
+.hg-node.is-faded,
+.hg-edge.is-faded,
+.hg-edge-label.is-faded {
+  opacity: 0.35;
+}
+
+/* Who decided (story 6): the page's own colouring, not the app's. */
+.hg-who--you .hg-shape {
+  fill: color-mix(in oklab, var(--node-decision) 28%, var(--background));
+  stroke: var(--node-decision);
+}
+.hg-who--delegated .hg-shape {
+  fill: color-mix(in oklab, var(--node-actor) 28%, var(--background));
+  stroke: var(--node-actor);
+}
+.hg-who--agent .hg-shape {
+  fill: color-mix(in oklab, var(--node-hypothesis) 24%, var(--background));
+  stroke: var(--node-hypothesis);
+}
+.hg-swatch {
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.625rem;
+  border-radius: 3px;
+  border: 1.5px solid;
+  vertical-align: -1px;
+}
+.hg-swatch--you {
+  background: color-mix(in oklab, var(--node-decision) 28%, var(--background));
+  border-color: var(--node-decision);
+}
+.hg-swatch--delegated {
+  background: color-mix(in oklab, var(--node-actor) 28%, var(--background));
+  border-color: var(--node-actor);
+}
+.hg-swatch--agent {
+  background: color-mix(in oklab, var(--node-hypothesis) 24%, var(--background));
+  border-color: var(--node-hypothesis);
+}
+
+/* ── Edges ─────────────────────────────────────────────────────────────── */
+
+.hg-edge-line {
+  fill: none;
+  stroke: var(--graph-edge);
+  stroke-width: 1.25;
+}
+.hg-edge-head {
+  fill: var(--graph-edge);
+}
+.hg-edge--muted .hg-edge-line {
+  stroke: color-mix(in oklab, var(--graph-edge) 50%, var(--graph-canvas));
+}
+.hg-edge--muted .hg-edge-head {
+  fill: color-mix(in oklab, var(--graph-edge) 50%, var(--graph-canvas));
+}
+.hg-edge--warning .hg-edge-line {
+  stroke: var(--warning);
+}
+.hg-edge--warning .hg-edge-head {
+  fill: var(--warning);
+}
+.hg-edge--danger .hg-edge-line {
+  stroke: var(--destructive);
+}
+.hg-edge--danger .hg-edge-head {
+  fill: var(--destructive);
+}
+.hg-edge.is-planned .hg-edge-line {
+  stroke-dasharray: 4 3;
+}
+
+/* An edge's words, on the canvas: a halo in the canvas colour keeps the line
+   from running through them. */
+.hg-edge-label {
+  font-size: 9.5px;
+  fill: var(--muted-foreground);
+  paint-order: stroke;
+  stroke: var(--graph-canvas);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.hg-edge-label--warning {
+  fill: var(--warning-foreground);
+}
+.hg-edge-label--danger {
+  fill: var(--destructive-foreground);
+}
+
+/* ── Badges, status words, notes ───────────────────────────────────────── */
+
+.hg-badge text {
+  font-size: 9px;
+  font-weight: 500;
+  text-anchor: middle;
+}
+.hg-badge--neutral rect {
+  fill: var(--neutral-soft);
+}
+.hg-badge--neutral text {
+  fill: var(--neutral-foreground);
+}
+.hg-badge--warning rect {
+  fill: var(--warning-soft);
+}
+.hg-badge--warning text {
+  fill: var(--warning-foreground);
+}
+.hg-badge--danger rect {
+  fill: var(--destructive-soft);
+}
+.hg-badge--danger text {
+  fill: var(--destructive-foreground);
+}
+.hg-badge--success rect {
+  fill: var(--success-soft);
+}
+.hg-badge--success text {
+  fill: var(--success-foreground);
+}
+
+/* "Planned", "Coming next", lane names: the page's mono eyebrow. */
+.hg-status,
+.hg-note--eyebrow {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.06em;
+  fill: var(--muted-foreground);
+}
+.hg-note--muted {
+  font-size: 10px;
+  fill: var(--muted-foreground);
+}
+.hg-note--count {
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--foreground);
+}
+
+/* Something said in a session: not part of the graph. */
+.hg-say path {
+  fill: var(--card);
+  stroke: var(--input);
+  stroke-width: 1;
+}
+.hg-say text {
+  font-size: 11.5px;
+  fill: var(--foreground);
+}
+
+/* ── The anatomy: hover or tap a part ──────────────────────────────────── */
+
+.hg-anatomy [data-part] {
+  transition: opacity 0.15s ease;
+}
+.hg-anatomy[data-on] .hg [data-part]:not(.is-on) {
+  opacity: 0.22;
+}
+.hg-anatomy .hg [data-part] {
+  cursor: pointer;
+}
+.hg-part-chip[aria-pressed='true'] {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hg-anatomy [data-part] {
+    transition: none;
+  }
+}
+
+/* The status key under the anatomy: a solid and a dashed stroke. */
+.hg-key {
+  display: inline-block;
+  width: 1.25rem;
+  border-top: 1.5px solid var(--graph-edge);
+}
+.hg-key--dashed {
+  border-top-style: dashed;
+}

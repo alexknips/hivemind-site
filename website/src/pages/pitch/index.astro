@@ -143,6 +143,7 @@ import ThemeInit from '../../components/ThemeInit.astro';
     margin:22px 0 0; font-family:var(--font-mono); font-size:.78rem; line-height:1.55;
     color:var(--muted-foreground); letter-spacing:.02em; max-width:44ch;
   }
+  .ledger + .note{max-width:78ch}
   .term{
     margin:0; background:var(--term); border:1px solid var(--term-edge); border-radius:10px;
     box-shadow:0 18px 50px -24px #0009; overflow:hidden; justify-self:start;
@@ -243,7 +244,7 @@ import ThemeInit from '../../components/ThemeInit.astro';
     <div class="wrap">
       <p class="eyebrow">For friends and early users</p>
       <h1 class="wordmark">Hive<b>Mind</b></h1>
-      <p class="sub">Memory for decisions, for you and your coding agents.</p>
+      <p class="sub">Memory for decisions, for you and your agents.</p>
       <div class="meta">
         <span><b>Early</b></span>
         <span><b>Self-hosted</b></span>
@@ -253,16 +254,17 @@ import ThemeInit from '../../components/ThemeInit.astro';
     </div>
   </section>
 
-  <!-- 01 the problem, in the words people use -->
+  <!-- 01 the problem, in plain words (as on the landing page since 2026-09-29); the engineers' words in one line -->
   <section class="slide" aria-label="The problem">
     <div class="wrap">
       <p class="eyebrow">The problem</p>
       <h2 class="claim">Your agent forgets<br>what you <span class="hl">decided.</span></h2>
       <ul class="ledger">
-        <li><span class="k">It undid it</span><span class="v">You dropped the ORM on purpose. A few weeks later the agent helpfully brings it back, with confidence.</span></li>
-        <li><span class="k">Nobody knows why</span><span class="v"><code>git blame</code> says who changed a line, not why the agent did it that way. The chat was the design meeting, and it is gone.</span></li>
-        <li><span class="k">It went stale</span><span class="v">The <code>DECISIONS.md</code> you keep by hand misses a reversal, and the agent follows the dead entry.</span></li>
+        <li><span class="k">It undid it</span><span class="v">You ruled an option out, for a reason. A fresh session never heard about it and suggests it again, with confidence.</span></li>
+        <li><span class="k">Nobody knows why</span><span class="v">You talked it through with your agent, and the chat was the meeting. Once it closes, the reasons are gone, and so is who made the call.</span></li>
+        <li><span class="k">Did it hold up?</span><span class="v">Plans change. The notes still say the old thing, the agent follows it, and nobody can tell which decisions still stand.</span></li>
       </ul>
+      <p class="note">For engineers: the ORM you dropped comes back, <code>git blame</code> says who changed a line but not why, and the <code>DECISIONS.md</code> goes stale after a reversal.</p>
     </div>
   </section>
 
@@ -272,7 +274,7 @@ import ThemeInit from '../../components/ThemeInit.astro';
       <p class="eyebrow">What it is</p>
       <h2 class="claim">HiveMind is memory<br>for <span class="hl">decisions.</span></h2>
       <p class="lede">Your coding agents record what was decided, which options lost and why, and who decided, you or the agent. The next session does not reintroduce what you dropped or rewrite what you agreed. When a decision is contested or replaced, its status changes; nothing goes quietly stale.</p>
-      <p class="kick">One engineer and their agents, local-first, AGPL-3.0, free to self-host.</p>
+      <p class="kick">One person and their agents, local-first, AGPL-3.0, free to self-host. Not only for engineering: any decision you make with an agent fits. Running it today takes a developer's setup.</p>
     </div>
   </section>
 

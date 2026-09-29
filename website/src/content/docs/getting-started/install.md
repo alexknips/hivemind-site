@@ -3,6 +3,10 @@ title: Install
 description: Install the hivemind binary in under a minute, or run your own cell with Docker — your data, your infrastructure.
 ---
 
+HiveMind is not only for engineering: it records any decision a person makes with their agents.
+Installing it is a developer's job today, though: a binary you run from the terminal, or a server in
+Docker, and an agent that connects over MCP.
+
 Your instance, your data, nothing phones home. For local use with a coding agent, install the
 `hivemind` binary. To share one decision graph across a team, run a self-hosted cell with Docker.
 

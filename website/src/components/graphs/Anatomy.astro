@@ -1,0 +1,104 @@
+---
+// The anatomy of a decision, taught once at the top of "What it is useful for":
+// one decision in the middle and every kind of part around it. Hover or tap a
+// part of the graph, or its name under it, to read one line about it. The wide
+// graph shows from lg; below that, a tall one where every part hangs off one line.
+import Frame from './Frame.astro';
+import { anatomyAlt, anatomyNarrow, anatomyParts, anatomyWide } from '../../data/graph-stories';
+
+const base = import.meta.env.BASE_URL;
+const idle = 'Hover or tap a part of the graph, or a name above, to read one line about it.';
+---
+<div class="hg-anatomy rounded-lg border border-border bg-card shadow-xs p-5 sm:p-6 mb-6 min-w-0" data-anatomy>
+  <div class="max-w-3xl mb-6">
+    <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-2">The basics</p>
+    <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">The anatomy of a decision</h3>
+    <p class="text-base text-muted-foreground leading-relaxed">
+      Every story on this page is drawn with the same parts, the way the app draws them: one shape and colour per
+      kind of part, and every arrow pointing from the newer part to the older one. The example is a café changing
+      its coffee supplier.
+    </p>
+  </div>
+
+  <div class="hidden lg:block">
+    <Frame frame={anatomyWide} alt={anatomyAlt} />
+  </div>
+  <div class="lg:hidden max-w-[26rem]">
+    <Frame frame={anatomyNarrow} alt={anatomyAlt} />
+  </div>
+
+  <div class="mt-5">
+    <div class="flex flex-wrap gap-2" role="group" aria-label="The parts of a decision">
+      {anatomyParts.map((p) => (
+        <button
+          type="button"
+          class="hg-part-chip badge badge-outline text-sm px-2 py-0.5 cursor-pointer hover:bg-accent"
+          data-part-chip={p.id}
+          data-line={p.line}
+          aria-pressed="false"
+        >
+          {p.name}
+        </button>
+      ))}
+    </div>
+    <p class="text-base text-foreground leading-relaxed mt-3 min-h-[2.75rem]" data-part-line aria-live="polite">{idle}</p>
+  </div>
+
+  <div class="mt-5 pt-4 border-t border-border flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-8 text-sm text-muted-foreground">
+    <p class="flex flex-wrap items-center gap-x-5 gap-y-2">
+      <span class="inline-flex items-center gap-2"><span class="hg-key" aria-hidden="true"></span> works today, in v0.7.0</span>
+      <span class="inline-flex items-center gap-2"><span class="font-mono text-2xs tracking-wide">COMING NEXT</span> merged, not yet released</span>
+      <span class="inline-flex items-center gap-2"><span class="hg-key hg-key--dashed" aria-hidden="true"></span><span class="font-mono text-2xs tracking-wide">PLANNED</span> decided, not built</span>
+    </p>
+    <p class="lg:ml-auto">
+      <a href={`${base}demo/graph/find-the-defendant-not-guilty/`} class="link">Open a real one in the demo &rarr;</a>
+      <span class="ml-1">the jury's verdict</span>
+    </p>
+  </div>
+</div>
+
+<script>
+  // Hover or tap a part (on the graph or by its name) to read its line; tap again to let go.
+  for (const root of document.querySelectorAll<HTMLElement>('[data-anatomy]')) {
+    const line = root.querySelector<HTMLElement>('[data-part-line]');
+    const chips = [...root.querySelectorAll<HTMLButtonElement>('[data-part-chip]')];
+    const parts = [...root.querySelectorAll<SVGElement>('.hg [data-part]')];
+    if (!line) continue;
+    const idle = line.textContent ?? '';
+    let pinned: string | null = null;
+
+    const show = (part: string | null) => {
+      for (const chip of chips) chip.setAttribute('aria-pressed', String(chip.dataset.partChip === part));
+      if (!part) {
+        delete root.dataset.on;
+        for (const el of parts) el.classList.remove('is-on');
+        line.textContent = idle;
+        return;
+      }
+      root.dataset.on = part;
+      for (const el of parts) el.classList.toggle('is-on', (el.dataset.part ?? '').split(' ').includes(part));
+      line.textContent = chips.find((c) => c.dataset.partChip === part)?.dataset.line ?? idle;
+    };
+    const pin = (part: string) => {
+      pinned = pinned === part ? null : part;
+      show(pinned);
+    };
+
+    for (const chip of chips) {
+      const part = chip.dataset.partChip ?? '';
+      chip.addEventListener('click', () => pin(part));
+      chip.addEventListener('mouseenter', () => show(part));
+      chip.addEventListener('mouseleave', () => show(pinned));
+    }
+    for (const el of parts) {
+      const part = (el.dataset.part ?? '').split(' ')[0];
+      el.addEventListener('click', () => pin(part));
+      el.addEventListener('pointerenter', (e) => {
+        if (e.pointerType === 'mouse') show(part);
+      });
+      el.addEventListener('pointerleave', (e) => {
+        if (e.pointerType === 'mouse') show(pinned);
+      });
+    }
+  }
+</script>

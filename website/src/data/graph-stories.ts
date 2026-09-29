@@ -169,7 +169,7 @@ export const anatomyNarrow: GFrame = {
   ],
 };
 
-// ── 1. Revising a decision: the jury room (as the demo holds it) ─────────────
+// ── 1. Revising a decision: the jury room (as the film tells it) ─────────────
 
 const juryNodes: GNode[] = [
   { id: 'og', kind: 'option', x: 8, y: 24, w: 96, lines: ['Guilty'], chosen: true },
@@ -247,8 +247,8 @@ export const storyRevise: Story = {
     },
   ],
   demo: {
-    href: 'demo/decisions/find-the-defendant-guilty-on-the-first-vote/',
-    text: 'The first vote reads superseded by the verdict, and its premise reads refuted by the three pieces of evidence.',
+    href: 'demo/decisions/the-jury-finds-the-defendant-guilty/',
+    text: 'The guilty verdict reads superseded by not guilty, with the chain from one to the other.',
   },
 };
 
@@ -309,8 +309,8 @@ export const storyWho: Story = {
     },
   ],
   demo: {
-    href: 'demo/decisions/retry-failed-payment-webhooks-5-times-waiting-1-to-16/',
-    text: 'The payment webhook retries read "decided by an agent, within a delegation from Priya Raman".',
+    href: 'demo/decisions/retry-a-failed-location-ping-upload-up-to-5-times-with/',
+    text: 'The location upload retries read "decided by an agent": Ridewell\'s mobile agent chose them on its own.',
   },
 };
 
@@ -396,8 +396,8 @@ export const storyAssumption: Story = {
     },
   ],
   demo: {
-    href: 'demo/decisions/cache-products-on-the-phone-by-product-id/',
-    text: 'The mobile app caches products by id, resting on "Product ids never change once issued"; the catalogue merge refutes it.',
+    href: 'demo/decisions/cache-driver-profiles-in-memory-keyed-by-the-drivers-numeric/',
+    text: 'The API caches driver profiles by numeric id, resting on "Driver ids … never change"; a platform migration refutes it.',
   },
 };
 

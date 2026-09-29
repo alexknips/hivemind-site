@@ -447,9 +447,9 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
                   with your choice of date library, that decision reads contested instead, and both sides stay.
                 </p>
                 <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4 mt-4">
-                  <span class="font-medium text-foreground">In the demo:</span> the first vote, 11 to 1 for guilty,
-                  reads superseded by the verdict, and the premise it rested on, that the two witnesses' accounts prove
-                  the boy did it, reads refuted. Both stay on the graph.
+                  <span class="font-medium text-foreground">In the demo:</span> the jury's first verdict, guilty, eleven
+                  to one on the first ballot, reads superseded by not guilty. Not guilty reads contested: some who decided
+                  accepted it and some rejected it. Both verdicts stay, with the chain from one to the other.
                 </p>
               </div>
             </div>
@@ -479,9 +479,9 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
                 </p>
                 <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4 mt-4">
                   <span class="font-medium text-foreground">In the demo:</span> every decision names who proposed it
-                  and who decided it. Juror 8 proposes the verdict and Juror 1 decides it; the first vote is Juror 3's.
-                  The jury room has no agents, but the orders project has one: its payments agent decided the webhook
-                  retries within what Priya Raman handed it.
+                  and who decided it. In the jury room that is the foreman. Ridewell's mobile app has two agents: one
+                  chose how often a failed location upload is retried, the other to keep the driver's id on the phone,
+                  and both read "decided by an agent". Nothing in the demo was handed to an agent.
                 </p>
               </div>
             </div>
@@ -518,9 +518,10 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
                   check by the end of the quarter". A bet is not a mark against you. It is a gap you named.
                 </p>
                 <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4 mt-4">
-                  <span class="font-medium text-foreground">In the demo:</span> the first vote rests on the premise that
-                  the two witnesses' accounts prove the boy did it. Three pieces of evidence refute it, and it reads
-                  refuted. The verdict rests on those three and on the vote it replaced.
+                  <span class="font-medium text-foreground">In the demo:</span> Ridewell's API caches driver profiles
+                  by their numeric id, resting on the assumption that driver ids never change. A platform migration gave
+                  over a thousand drivers new ids; the assumption reads refuted, and a cache keyed by a stable id replaced
+                  the decision. The jury's not-guilty verdict rests on two pieces of evidence: the walk and the glasses.
                 </p>
               </div>
             </div>
@@ -549,7 +550,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
                 </p>
                 <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4 mt-4">
                   <span class="font-medium text-foreground">In the demo:</span> the verdict keeps both options,
-                  not guilty (chosen) and guilty (not chosen), with the jury's reason and the three pieces of evidence
+                  not guilty (chosen) and guilty (not chosen), with the jury's reason and the two pieces of evidence
                   for it.
                 </p>
               </div>
@@ -720,8 +721,8 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
                 </p>
                 <p class="text-sm text-muted-foreground leading-relaxed border-t border-border pt-4 mt-4">
                   <span class="font-medium text-foreground">In the demo:</span> the story, not the numbers. An opening
-                  11 to 1 vote ends 12 to 0 the other way once three pieces of evidence are tested. The demo shows the
-                  reversal and computes nothing.
+                  11 to 1 vote ends not guilty, all twelve, once the knife, the walk and the glasses are tested. The demo
+                  shows the reversal and computes nothing.
                 </p>
               </div>
             </div>
@@ -732,10 +733,11 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
             <div class="lg:col-span-2">
               <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Most "in the demo" lines are a jury room</h3>
               <p class="text-base text-muted-foreground leading-relaxed">
-                The demo is the app itself, read-only, over made-up projects: a recipe app, an orders API with its
-                mobile app, and the jury room of <em>12 Angry Men</em>. The jury room holds the first vote, the choices
-                to talk the case through and to re-enact a witness's walk, and the verdict that replaced the vote. Not
-                a codebase, and that is the point: the same record fits any decision people and agents make together.
+                The demo is the app itself, read-only, over made-up projects: TrailKeeper, a hiking-log app; Ridewell,
+                a driver dispatch API with its mobile app; and the jury room of <em>12 Angry Men</em>. The jury room
+                holds the first verdict, guilty, and the verdict that replaced it, not guilty, with the evidence that
+                turned it. Not a codebase, and that is the point: the same record fits any decision people and agents
+                make together.
               </p>
             </div>
             <div>

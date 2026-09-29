@@ -1,1024 +1,1253 @@
 {
   "decisions": [
     {
-      "id": "decision-ac9b4f01-f255-4636-a7b9-edea599e1aab",
-      "title": "Store recipes in SQLite on the app server",
-      "rationale": "QUESTION: where do recipes live for the first release? OPTIONS: A, SQLite on the app server: nothing to run besides the app, and backups are a file copy. B, Postgres from day one: room to grow, but a second service to run and pay for before anyone uses the app. WHY A: the waiting list is small and one server is plenty for the first year. ACCEPTED COST: a move to a real database later, if the app takes off.",
-      "topic_keys": [
-        "storage",
-        "database"
+      "decided_at": "2026-09-28T15:18:27.690745691+00:00",
+      "deciders": [
+        {
+          "id": "human:juror-foreman",
+          "kind": "human"
+        }
       ],
-      "occurred_at": "2026-03-02T10:05:00Z",
-      "project": "recipe-box",
+      "event_origin": 63,
+      "expressed_confidence": null,
+      "id": "decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "project": "12-angry-men",
+      "project_source": "stated",
+      "question": "How does the jury find the defendant?",
+      "quote": "That's eleven guilty. Somebody's got a reasonable doubt?",
+      "rationale": "Eleven of twelve jurors voted guilty on the first ballot. The knife matches the defendant's own description of a rare weapon, the downstairs neighbor testified he heard the defendant threaten to kill his father and then heard the body fall, and the woman across the street said she saw the stabbing through the windows of a passing elevated train.",
       "source": "human",
+      "source_ref": "human:juror-foreman",
       "status": "superseded",
-      "deciders": [
-        {
-          "id": "human:maya.lindqvist@example.com",
-          "kind": "human"
-        }
+      "tenant_id": "local",
+      "title": "The jury finds the defendant guilty",
+      "topic_keys": [
+        "verdict",
+        "12-angry-men"
       ]
     },
     {
-      "id": "decision-916594ab-63b9-49c7-a101-02cd3f5e333a",
-      "title": "Sign in with an emailed link instead of a password",
-      "rationale": "QUESTION: how do people sign in? OPTIONS: A, a one-time link sent by email. B, a password with a reset flow. WHY A: password resets are the largest share of support mail, and a link removes them. WHAT CHANGES: the sign-in page asks only for an email address. ACCEPTED COST: signing in needs access to the inbox.",
-      "topic_keys": [
-        "sign-in",
-        "support"
+      "decided_at": "2026-09-28T15:18:27.607675685+00:00",
+      "deciders": [
+        {
+          "id": "human:maya",
+          "kind": "human"
+        }
       ],
-      "occurred_at": "2026-04-10T13:20:00Z",
-      "project": "recipe-box",
+      "event_origin": 54,
+      "expressed_confidence": null,
+      "id": "decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "project": "ridewell-api",
+      "project_source": "inherited",
+      "question": null,
+      "quote": null,
+      "rationale": "The 2026-09-20 platform migration reassigned numeric driver ids for over a thousand accounts and briefly served two drivers each other's cached profile. The dispatch service already receives a separate UUID from the identity provider that survives a backend migration; keying the cache on that UUID removes the failure mode the numeric-id assumption depended on.",
       "source": "human",
+      "source_ref": "human:maya",
       "status": "accepted",
-      "deciders": [
-        {
-          "id": "human:sam.okafor@example.com",
-          "kind": "human"
-        }
+      "tenant_id": "local",
+      "title": "Cache driver profiles keyed by a stable external UUID instead of the mutable numeric id",
+      "topic_keys": [
+        "infrastructure",
+        "ridewell"
       ]
     },
     {
-      "id": "decision-28f61656-1136-4ff9-ab71-b2801c2dad7b",
-      "title": "Move recipe storage from SQLite to Postgres",
-      "rationale": "QUESTION: the app now has 4,100 users and SQLite locks up at the evening peak; what now? OPTIONS: A, move to a managed Postgres. B, keep SQLite and queue the writes. WHY A: the lock timeouts come from concurrent writes, which a queue only delays, and a managed database costs less than the time spent on it. WHAT CHANGES: recipes move to Postgres in one weekend migration; SQLite stays read-only for a month as a fallback. ACCEPTED COST: a monthly database bill.",
-      "topic_keys": [
-        "storage",
-        "database",
-        "migration"
+      "decided_at": "2026-09-28T15:18:27.368597883+00:00",
+      "deciders": [
+        {
+          "id": "human:priya",
+          "kind": "human"
+        }
       ],
-      "occurred_at": "2026-06-18T09:30:00Z",
-      "project": "recipe-box",
+      "event_origin": 17,
+      "expressed_confidence": null,
+      "id": "decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "project": "trailkeeper",
+      "project_source": "inherited",
+      "question": null,
+      "quote": null,
+      "rationale": "The single-device assumption behind local SQLite doesn't hold: the beta survey shows most hikers already use TrailKeeper on their phone and the web dashboard, and a fifth of them lost photos or edits made on the other device. Postgres with a per-user sync log lets both surfaces read and write the same trip; we accept running one small managed instance in exchange for not losing anyone's trip again.",
       "source": "human",
+      "source_ref": "human:priya",
       "status": "accepted",
-      "deciders": [
-        {
-          "id": "human:maya.lindqvist@example.com",
-          "kind": "human"
-        },
-        {
-          "id": "human:sam.okafor@example.com",
-          "kind": "human"
-        }
+      "tenant_id": "local",
+      "title": "Move hike log storage to a hosted Postgres, synced across devices",
+      "topic_keys": [
+        "infrastructure",
+        "trailkeeper"
       ]
     },
     {
-      "id": "decision-1138b54c-449b-4c20-a55c-740dd6062541",
-      "title": "Resize recipe photos once on upload, not on every view",
-      "rationale": "Recipe pages are slow on phones, and most of the time goes into resizing the photo each time the page is opened. OPTIONS: A, resize once when the photo is uploaded and keep three sizes. B, resize on view and cache the result. WHY A: the sizes are known, so the work can happen once. Proposed by the app agent; nobody has decided it yet.",
-      "topic_keys": [
-        "photos",
-        "performance"
-      ],
-      "occurred_at": "2026-07-01T09:15:00Z",
-      "project": "recipe-box",
-      "source": "agent",
-      "status": "proposed",
-      "deciders": []
-    },
-    {
-      "id": "decision-a3be77fb-6885-457c-a95c-f6de79b31d4a",
-      "title": "Cache products on the phone by product id",
-      "rationale": "QUESTION: how does the mobile app keep the product list fast on a slow connection? OPTIONS: A, cache each product on the phone under its product id. B, cache whole API responses by URL. C, no cache. WHY A: a product's id is the one thing that never changes, so the cache never has to be checked. ACCEPTED COST: none expected, as long as ids stay fixed.",
-      "topic_keys": [
-        "mobile",
-        "cache",
-        "products"
-      ],
-      "occurred_at": "2026-04-20T10:00:00Z",
-      "project": "orders-mobile",
-      "source": "human",
-      "status": "accepted",
+      "decided_at": "2026-09-28T15:18:27.513667345+00:00",
       "deciders": [
         {
-          "id": "human:sam.okafor@example.com",
-          "kind": "human"
-        }
-      ]
-    },
-    {
-      "id": "decision-be667dc0-1b36-4791-a0c3-fb46de424399",
-      "title": "Retry failed payment webhooks 5 times, waiting 1 to 16 seconds between tries",
-      "rationale": "QUESTION: how many times should the API retry a payment webhook that fails? OPTIONS: A, 3 tries, 2 seconds apart. B, 5 tries, doubling the wait from 1 to 16 seconds. C, retry until it works, with a dead-letter queue. WHY B: provider outages almost always end within 30 seconds, and 5 doubling waits cover 31 seconds. The payments agent chose this within the limits Priya set for it.",
-      "topic_keys": [
-        "payments",
-        "webhooks",
-        "retries"
-      ],
-      "occurred_at": "2026-05-12T08:45:00Z",
-      "project": "orders-api",
-      "source": "agent",
-      "status": "accepted",
-      "deciders": [
-        {
-          "id": "agent:claude:payments-agent",
+          "id": "agent:claude:ridewell-mobile-ci",
           "kind": "agent"
         }
+      ],
+      "event_origin": 45,
+      "expressed_confidence": null,
+      "id": "decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "project": "ridewell-mobile",
+      "project_source": "stated",
+      "question": null,
+      "quote": null,
+      "rationale": "Field logs from the last two weeks show sync failures during cell-tower handoff mostly clear within 4 attempts. A fixed short retry gives up too early on a flaky handoff; an unbounded retry can spin all day and drains the phone's battery mid-shift.",
+      "source": "agent",
+      "source_ref": "agent:claude:ridewell-mobile-ci",
+      "status": "accepted",
+      "tenant_id": "local",
+      "title": "Retry a failed location-ping upload up to 5 times with exponential backoff, capped at 30 seconds",
+      "topic_keys": [
+        "ridewell",
+        "mobile",
+        "reliability"
       ]
     },
     {
-      "id": "decision-3ff4bdcd-e25b-4655-a9dc-e26f609cd57c",
-      "title": "Give products new ids when two catalogues merge",
-      "rationale": "QUESTION: the spring and autumn catalogues overlap; how do products get ids after the merge? OPTIONS: A, give the merged products new ids. B, keep both id ranges and add a prefix to one. WHY A: one id range keeps every report and export simple. WHAT CHANGES: 1,240 products get new ids on 20 August. ACCEPTED COST: anything that stored an old id has to look it up again.",
-      "topic_keys": [
-        "products",
-        "catalogue",
-        "ids"
-      ],
-      "occurred_at": "2026-08-20T15:00:00Z",
-      "project": "orders-api",
-      "source": "human",
-      "status": "accepted",
+      "decided_at": "2026-09-28T15:18:27.469047163+00:00",
       "deciders": [
         {
-          "id": "human:priya.raman@example.com",
-          "kind": "human"
+          "id": "agent:codex:ridewell-sync",
+          "kind": "agent"
         }
+      ],
+      "event_origin": 35,
+      "expressed_confidence": null,
+      "id": "decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "project": "ridewell-mobile",
+      "project_source": "stated",
+      "question": "How do we avoid blocking cold start on a profile fetch?",
+      "quote": null,
+      "rationale": "Cold start currently blocks on a profile fetch before the map can render. The API already treats driver_id as stable once assigned, so storing it in local device storage at login and reusing it on every cold start removes that fetch with no correctness cost.",
+      "source": "agent",
+      "source_ref": "agent:codex:ridewell-sync",
+      "status": "accepted",
+      "tenant_id": "local",
+      "title": "Cache the driver's id on the phone at login and skip the profile lookup on cold start",
+      "topic_keys": [
+        "ridewell",
+        "mobile"
       ]
     },
     {
-      "id": "decision-698c1552-b02e-4889-a838-b378077073d9",
-      "title": "Find the defendant guilty on the first vote",
-      "rationale": "QUESTION: is the defendant guilty of murder? The first show of hands is 11 to 1 for guilty. WHY: the two witnesses, the knife and the boy's weak alibi seem to settle it.",
-      "topic_keys": [
-        "verdict"
+      "decided_at": "2026-09-28T15:18:27.969617145+00:00",
+      "deciders": [
+        {
+          "id": "human:juror-foreman",
+          "kind": "human"
+        }
       ],
-      "occurred_at": "2026-09-01T14:00:00Z",
-      "project": "twelve-angry-men",
+      "event_origin": 75,
+      "expressed_confidence": null,
+      "id": "decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "project": "12-angry-men",
+      "project_source": "inherited",
+      "question": null,
+      "quote": null,
+      "rationale": "A second knife identical to the one in evidence turned up two blocks from the apartment, undercutting the claim it was one of a kind. The re-enactment showed the upstairs witness could not have reached his door in time to see what he described. And the only eyewitness needed glasses she was not wearing in bed. None of this proves innocence, but it is enough reasonable doubt that all twelve of us can no longer say guilty beyond it.",
       "source": "human",
+      "source_ref": "human:juror-foreman",
+      "status": "contested",
+      "tenant_id": "local",
+      "title": "The jury finds the defendant not guilty",
+      "topic_keys": [
+        "verdict",
+        "12-angry-men"
+      ]
+    },
+    {
+      "decided_at": "2026-09-28T15:18:27.421182921+00:00",
+      "deciders": [
+        {
+          "id": "human:maya",
+          "kind": "human"
+        }
+      ],
+      "event_origin": 26,
+      "expressed_confidence": null,
+      "id": "decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "project": "ridewell-api",
+      "project_source": "stated",
+      "question": "How do we avoid a database round trip on every dispatch lookup?",
+      "quote": null,
+      "rationale": "Driver-profile reads dominate dispatch-service load, about 70% of calls. An in-memory LRU keyed by driver_id avoids a database round trip on every dispatch and is simple to reason about, since driver_id is the primary key login already returns.",
+      "source": "human",
+      "source_ref": "human:maya",
       "status": "superseded",
-      "deciders": [
-        {
-          "id": "human:juror.3@example.com",
-          "kind": "human"
-        }
-      ]
-    },
-    {
-      "id": "decision-ff679d91-3fce-4cd9-a89a-49fb37bd2b6c",
-      "title": "Talk the case through before voting again",
-      "rationale": "Juror 8 alone votes not guilty. OPTIONS: A, vote again at once. B, talk it through for an hour, then vote. WHY B: a boy's life is at stake, and eleven people reached their vote in five minutes.",
+      "tenant_id": "local",
+      "title": "Cache driver profiles in memory, keyed by the driver's numeric id",
       "topic_keys": [
-        "procedure"
-      ],
-      "occurred_at": "2026-09-01T14:10:00Z",
-      "project": "twelve-angry-men",
-      "source": "human",
-      "status": "accepted",
-      "deciders": [
-        {
-          "id": "human:juror.1@example.com",
-          "kind": "human"
-        }
+        "infrastructure",
+        "ridewell"
       ]
     },
     {
-      "id": "decision-7cc2149a-724b-43f1-a6d1-b65ad4eace86",
-      "title": "Re-enact the old man's walk to his door",
-      "rationale": "The old man said he got from his bed to the door in 15 seconds, with a stroke behind him. OPTIONS: A, take his word for it. B, pace it out in the jury room and time it. WHY B: the timing is checkable, so check it.",
+      "decided_at": "2026-09-28T15:18:27.325272698+00:00",
+      "deciders": [
+        {
+          "id": "human:priya",
+          "kind": "human"
+        }
+      ],
+      "event_origin": 7,
+      "expressed_confidence": null,
+      "id": "decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "project": "trailkeeper",
+      "project_source": "stated",
+      "question": "Where do we store a hiker's trip logs?",
+      "quote": "Let's not stand up a backend before we know anyone wants this.",
+      "rationale": "TrailKeeper v1 is single-device: one hiker records one trip on one phone. SQLite needs no server, keeps the app fully usable with no signal on trail, and keeps hosting cost at zero while we find out if anyone wants this at all.",
+      "source": "human",
+      "source_ref": "human:priya",
+      "status": "superseded",
+      "tenant_id": "local",
+      "title": "Store hike logs in local SQLite on the phone",
       "topic_keys": [
-        "evidence",
-        "witness"
-      ],
-      "occurred_at": "2026-09-01T16:15:00Z",
-      "project": "twelve-angry-men",
-      "source": "human",
-      "status": "accepted",
-      "deciders": [
-        {
-          "id": "human:juror.1@example.com",
-          "kind": "human"
-        }
+        "infrastructure",
+        "trailkeeper"
       ]
-    },
-    {
-      "id": "decision-118b93aa-1cac-4dbf-a1bb-b332baf62e02",
-      "title": "Find the defendant not guilty",
-      "rationale": "QUESTION: is the defendant guilty of murder? The final vote is 12 to 0 for not guilty. WHY: the knife is not unique, the old man could not have reached the door in time, and the woman across the tracks was not wearing her glasses. Neither witness holds up, so there is reasonable doubt.",
-      "topic_keys": [
-        "verdict"
-      ],
-      "occurred_at": "2026-09-01T18:30:00Z",
-      "project": "twelve-angry-men",
-      "source": "human",
-      "status": "accepted",
-      "deciders": [
-        {
-          "id": "human:juror.1@example.com",
-          "kind": "human"
-        }
-      ]
-    }
-  ],
-  "nodes": [
-    {
-      "id": "Project:recipe-box",
-      "kind": "Project",
-      "label": "Recipe Box app"
-    },
-    {
-      "id": "Project:orders",
-      "kind": "Project",
-      "label": "Orders"
-    },
-    {
-      "id": "Project:orders-api",
-      "kind": "Project",
-      "label": "Orders API"
-    },
-    {
-      "id": "Project:orders-mobile",
-      "kind": "Project",
-      "label": "Orders mobile app"
-    },
-    {
-      "id": "Project:twelve-angry-men",
-      "kind": "Project",
-      "label": "12 Angry Men"
-    },
-    {
-      "id": "Actor:agent:claude:app-agent",
-      "kind": "Actor"
-    },
-    {
-      "id": "Actor:agent:claude:payments-agent",
-      "kind": "Actor"
-    },
-    {
-      "id": "Actor:human:juror.1@example.com",
-      "kind": "Actor"
-    },
-    {
-      "id": "Actor:human:juror.3@example.com",
-      "kind": "Actor"
-    },
-    {
-      "id": "Actor:human:juror.8@example.com",
-      "kind": "Actor"
-    },
-    {
-      "id": "Actor:human:maya.lindqvist@example.com",
-      "kind": "Actor"
-    },
-    {
-      "id": "Actor:human:priya.raman@example.com",
-      "kind": "Actor"
-    },
-    {
-      "id": "Actor:human:sam.okafor@example.com",
-      "kind": "Actor"
-    },
-    {
-      "id": "Decision:decision-ac9b4f01-f255-4636-a7b9-edea599e1aab",
-      "kind": "Decision",
-      "label": "Store recipes in SQLite on the app server"
-    },
-    {
-      "id": "Option:option-sqlite-on-the-app-server-6cb43355-0750-4e8b-a632-122a7e8c64c8",
-      "kind": "Option",
-      "label": "sqlite on the app server",
-      "title": "sqlite on the app server"
-    },
-    {
-      "id": "Option:option-postgres-from-day-one-6a81b151-26ae-4f45-a811-35be9a40c079",
-      "kind": "Option",
-      "label": "postgres from day one",
-      "title": "postgres from day one"
-    },
-    {
-      "id": "Decision:decision-916594ab-63b9-49c7-a101-02cd3f5e333a",
-      "kind": "Decision",
-      "label": "Sign in with an emailed link instead of a password"
-    },
-    {
-      "id": "Option:option-emailed-sign-in-link-20639883-26b8-4b46-aa7b-532f971e95b3",
-      "kind": "Option",
-      "label": "emailed sign in link",
-      "title": "emailed sign in link"
-    },
-    {
-      "id": "Option:option-password-with-reset-flow-3d8c79c4-9d69-435b-a1c4-b8c05b7ac8a7",
-      "kind": "Option",
-      "label": "password with reset flow",
-      "title": "password with reset flow"
-    },
-    {
-      "id": "Decision:decision-28f61656-1136-4ff9-ab71-b2801c2dad7b",
-      "kind": "Decision",
-      "label": "Move recipe storage from SQLite to Postgres"
-    },
-    {
-      "id": "Option:option-managed-postgres-663dd46d-1160-4bf4-a79a-c207ffe7d4ea",
-      "kind": "Option",
-      "label": "managed postgres",
-      "title": "managed postgres"
-    },
-    {
-      "id": "Option:option-keep-sqlite-and-queue-writes-0b0ab6f8-6c06-4010-a9d6-18c266e98238",
-      "kind": "Option",
-      "label": "keep sqlite and queue writes",
-      "title": "keep sqlite and queue writes"
-    },
-    {
-      "id": "Decision:decision-1138b54c-449b-4c20-a55c-740dd6062541",
-      "kind": "Decision",
-      "label": "Resize recipe photos once on upload, not on every view"
-    },
-    {
-      "id": "Option:option-resize-on-upload-d1583bd5-e31c-462d-ab55-6ae9caa57e26",
-      "kind": "Option",
-      "label": "resize on upload",
-      "title": "resize on upload"
-    },
-    {
-      "id": "Option:option-resize-on-view-with-a-cache-b505dd89-ad35-4a1b-a4e6-59d88669bf53",
-      "kind": "Option",
-      "label": "resize on view with a cache",
-      "title": "resize on view with a cache"
-    },
-    {
-      "id": "Decision:decision-a3be77fb-6885-457c-a95c-f6de79b31d4a",
-      "kind": "Decision",
-      "label": "Cache products on the phone by product id"
-    },
-    {
-      "id": "Option:option-cache-by-product-id-b00757a4-82b1-4c34-af0a-d213c21bac68",
-      "kind": "Option",
-      "label": "cache by product id",
-      "title": "cache by product id"
-    },
-    {
-      "id": "Option:option-cache-responses-by-url-be1c4bdd-4d91-4b98-a1a3-2de9414f96d8",
-      "kind": "Option",
-      "label": "cache responses by url",
-      "title": "cache responses by url"
-    },
-    {
-      "id": "Option:option-no-cache-e5e8e3d5-9b39-4975-a109-ef2e5508c156",
-      "kind": "Option",
-      "label": "no cache",
-      "title": "no cache"
-    },
-    {
-      "id": "Decision:decision-be667dc0-1b36-4791-a0c3-fb46de424399",
-      "kind": "Decision",
-      "label": "Retry failed payment webhooks 5 times, waiting 1 to 16 seconds between tries"
-    },
-    {
-      "id": "Option:option-3-tries-2-seconds-apart-65ec2391-f9d5-4678-ad5f-3dc951080217",
-      "kind": "Option",
-      "label": "3 tries 2 seconds apart",
-      "title": "3 tries 2 seconds apart"
-    },
-    {
-      "id": "Option:option-5-tries-doubling-from-1-to-16-seconds-e2088494-0f1b-450b-a135-10fa80778142",
-      "kind": "Option",
-      "label": "5 tries doubling from 1 to 16 seconds",
-      "title": "5 tries doubling from 1 to 16 seconds"
-    },
-    {
-      "id": "Option:option-retry-until-it-works-2a46e6f6-aec4-4d3c-a0c0-f8eea1c64937",
-      "kind": "Option",
-      "label": "retry until it works",
-      "title": "retry until it works"
-    },
-    {
-      "id": "Decision:decision-3ff4bdcd-e25b-4655-a9dc-e26f609cd57c",
-      "kind": "Decision",
-      "label": "Give products new ids when two catalogues merge"
-    },
-    {
-      "id": "Option:option-new-ids-after-the-merge-bbebbbe5-57bd-4094-aa91-2631260cb0c6",
-      "kind": "Option",
-      "label": "new ids after the merge",
-      "title": "new ids after the merge"
-    },
-    {
-      "id": "Option:option-keep-both-ranges-with-a-prefix-33979aa5-cb57-46cd-ab77-668b37ff953a",
-      "kind": "Option",
-      "label": "keep both ranges with a prefix",
-      "title": "keep both ranges with a prefix"
-    },
-    {
-      "id": "Decision:decision-698c1552-b02e-4889-a838-b378077073d9",
-      "kind": "Decision",
-      "label": "Find the defendant guilty on the first vote"
-    },
-    {
-      "id": "Option:option-guilty-ea690e17-fd0e-4ce5-a193-2a339e64d926",
-      "kind": "Option",
-      "label": "guilty",
-      "title": "guilty"
-    },
-    {
-      "id": "Option:option-not-guilty-7a5aa3b8-8abc-41ca-a6b7-be4a85da2a87",
-      "kind": "Option",
-      "label": "not guilty",
-      "title": "not guilty"
-    },
-    {
-      "id": "Decision:decision-ff679d91-3fce-4cd9-a89a-49fb37bd2b6c",
-      "kind": "Decision",
-      "label": "Talk the case through before voting again"
-    },
-    {
-      "id": "Option:option-vote-again-at-once-2da8c1fc-130e-44df-ad58-4d746e9b7804",
-      "kind": "Option",
-      "label": "vote again at once",
-      "title": "vote again at once"
-    },
-    {
-      "id": "Option:option-talk-it-through-first-01dbdded-d727-444d-a9e6-675d78bc3efe",
-      "kind": "Option",
-      "label": "talk it through first",
-      "title": "talk it through first"
-    },
-    {
-      "id": "Decision:decision-7cc2149a-724b-43f1-a6d1-b65ad4eace86",
-      "kind": "Decision",
-      "label": "Re-enact the old man's walk to his door"
-    },
-    {
-      "id": "Option:option-take-his-word-for-it-3d365620-c338-43b9-a9c2-440cb94a55f1",
-      "kind": "Option",
-      "label": "take his word for it",
-      "title": "take his word for it"
-    },
-    {
-      "id": "Option:option-pace-it-out-and-time-it-907b8773-6dcd-450d-ad18-bab170c7feff",
-      "kind": "Option",
-      "label": "pace it out and time it",
-      "title": "pace it out and time it"
-    },
-    {
-      "id": "Decision:decision-118b93aa-1cac-4dbf-a1bb-b332baf62e02",
-      "kind": "Decision",
-      "label": "Find the defendant not guilty"
-    },
-    {
-      "id": "Option:option-guilty-ec3bcb12-31b2-479b-a8ca-6a2429f62d50",
-      "kind": "Option",
-      "label": "guilty",
-      "title": "guilty"
-    },
-    {
-      "id": "Option:option-not-guilty-a146964e-5a3f-41e6-ad40-8e6c00dadbf4",
-      "kind": "Option",
-      "label": "not guilty",
-      "title": "not guilty"
-    },
-    {
-      "id": "Evidence:evidence-6c2fd51f-187f-4ab5-acae-46e604fc275d",
-      "kind": "Evidence",
-      "label": "Sign-ups on the waiting list: 180 people, and the first year's plan expects under 2,000 users."
-    },
-    {
-      "id": "Evidence:evidence-1946294a-6544-4acd-aec9-40cfe02ae652",
-      "kind": "Evidence",
-      "label": "Write-lock timeouts on 3 of the last 7 days, all at the evening peak, with 4,100 users."
-    },
-    {
-      "id": "Evidence:evidence-6a7292ad-0b93-4ce0-aaa8-c8e1f8126fd8",
-      "kind": "Evidence",
-      "label": "Support inbox, February: 41% of messages were password resets."
-    },
-    {
-      "id": "Evidence:evidence-a7635355-83ee-4cb9-ae08-8df63cfe4071",
-      "kind": "Evidence",
-      "label": "Payment provider status page, last 12 months: 98% of outages ended within 30 seconds."
-    },
-    {
-      "id": "Evidence:evidence-25494235-6b43-4390-a649-ad2d65682773",
-      "kind": "Evidence",
-      "label": "The catalogue merge on 20 August gave new ids to 1,240 products."
-    },
-    {
-      "id": "Evidence:evidence-ea997859-4a38-427b-a8f5-329ce5ea5d88",
-      "kind": "Evidence",
-      "label": "Recipe pages with photos take 2.8 s to show on a mid-range phone; resizing is 2.1 s of it."
-    },
-    {
-      "id": "Evidence:evidence-5327b031-d99f-4501-add0-5e6178afd895",
-      "kind": "Evidence",
-      "label": "Juror 8: \"It's not easy to raise my hand and send a boy off to die without talking about it first.\""
-    },
-    {
-      "id": "Evidence:evidence-bc2283d9-1277-459f-a159-8ab1bbf081f8",
-      "kind": "Evidence",
-      "label": "Juror 8 bought a switchblade identical to the murder weapon in a shop near the boy's home."
-    },
-    {
-      "id": "Evidence:evidence-3cbea241-a6d7-443e-a1e3-b34c0cef7c82",
-      "kind": "Evidence",
-      "label": "Re-enacting the old man's walk from his bed to the door took 41 seconds, not the 15 he told the court."
-    },
-    {
-      "id": "Evidence:evidence-b3087fa4-dbcc-4099-a987-d373302e7d6f",
-      "kind": "Evidence",
-      "label": "The woman across the tracks wears glasses, and would not have worn them in bed."
-    },
-    {
-      "id": "Hypothesis:hypothesis-36ff3459-e394-4bb3-a51a-e581119acc12",
-      "kind": "Hypothesis",
-      "label": "One server with SQLite handles the first year's load."
-    },
-    {
-      "id": "Hypothesis:hypothesis-5258f214-c63a-4bc7-aaf6-7800d02839a5",
-      "kind": "Hypothesis",
-      "label": "Product ids never change once issued."
-    },
-    {
-      "id": "Hypothesis:hypothesis-85286fbb-5fa7-478d-ac72-fd8510587123",
-      "kind": "Hypothesis",
-      "label": "The two witnesses' accounts prove the boy did it."
     }
   ],
   "edges": [
     {
-      "from": "Project:orders-api",
-      "to": "Project:orders",
-      "relation": "PART_OF",
-      "label": "is part of"
-    },
-    {
-      "from": "Project:orders-mobile",
-      "to": "Project:orders",
-      "relation": "PART_OF",
-      "label": "is part of"
-    },
-    {
-      "from": "Decision:decision-ac9b4f01-f255-4636-a7b9-edea599e1aab",
-      "to": "Actor:human:maya.lindqvist@example.com",
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "proposed by",
       "relation": "PROPOSED_BY",
-      "label": "proposed by"
+      "reversed": false,
+      "to": "Actor:human:juror-foreman"
     },
     {
-      "from": "Decision:decision-ac9b4f01-f255-4636-a7b9-edea599e1aab",
-      "to": "Actor:human:maya.lindqvist@example.com",
-      "relation": "ACCEPTED_BY",
-      "label": "accepted by"
-    },
-    {
-      "from": "Decision:decision-ac9b4f01-f255-4636-a7b9-edea599e1aab",
-      "to": "Option:option-sqlite-on-the-app-server-6cb43355-0750-4e8b-a632-122a7e8c64c8",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-ac9b4f01-f255-4636-a7b9-edea599e1aab",
-      "to": "Option:option-sqlite-on-the-app-server-6cb43355-0750-4e8b-a632-122a7e8c64c8",
-      "relation": "CHOSE",
-      "label": "chose"
-    },
-    {
-      "from": "Decision:decision-ac9b4f01-f255-4636-a7b9-edea599e1aab",
-      "to": "Option:option-postgres-from-day-one-6a81b151-26ae-4f45-a811-35be9a40c079",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-ac9b4f01-f255-4636-a7b9-edea599e1aab",
-      "to": "Evidence:evidence-6c2fd51f-187f-4ab5-acae-46e604fc275d",
-      "relation": "BASED_ON",
-      "label": "based on"
-    },
-    {
-      "from": "Decision:decision-ac9b4f01-f255-4636-a7b9-edea599e1aab",
-      "to": "Hypothesis:hypothesis-36ff3459-e394-4bb3-a51a-e581119acc12",
-      "relation": "PREMISED_ON_DIRECT",
-      "label": "rests on"
-    },
-    {
-      "from": "Decision:decision-916594ab-63b9-49c7-a101-02cd3f5e333a",
-      "to": "Actor:human:sam.okafor@example.com",
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "proposed by",
       "relation": "PROPOSED_BY",
-      "label": "proposed by"
+      "reversed": false,
+      "to": "Actor:human:maya"
     },
     {
-      "from": "Decision:decision-916594ab-63b9-49c7-a101-02cd3f5e333a",
-      "to": "Actor:human:sam.okafor@example.com",
-      "relation": "ACCEPTED_BY",
-      "label": "accepted by"
-    },
-    {
-      "from": "Decision:decision-916594ab-63b9-49c7-a101-02cd3f5e333a",
-      "to": "Option:option-emailed-sign-in-link-20639883-26b8-4b46-aa7b-532f971e95b3",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-916594ab-63b9-49c7-a101-02cd3f5e333a",
-      "to": "Option:option-emailed-sign-in-link-20639883-26b8-4b46-aa7b-532f971e95b3",
-      "relation": "CHOSE",
-      "label": "chose"
-    },
-    {
-      "from": "Decision:decision-916594ab-63b9-49c7-a101-02cd3f5e333a",
-      "to": "Option:option-password-with-reset-flow-3d8c79c4-9d69-435b-a1c4-b8c05b7ac8a7",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-916594ab-63b9-49c7-a101-02cd3f5e333a",
-      "to": "Evidence:evidence-6a7292ad-0b93-4ce0-aaa8-c8e1f8126fd8",
-      "relation": "BASED_ON",
-      "label": "based on"
-    },
-    {
-      "from": "Decision:decision-28f61656-1136-4ff9-ab71-b2801c2dad7b",
-      "to": "Actor:human:maya.lindqvist@example.com",
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "proposed by",
       "relation": "PROPOSED_BY",
-      "label": "proposed by"
+      "reversed": false,
+      "to": "Actor:human:priya"
     },
     {
-      "from": "Decision:decision-28f61656-1136-4ff9-ab71-b2801c2dad7b",
-      "to": "Actor:human:maya.lindqvist@example.com",
+      "from": "Decision:decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "label": "proposed by",
+      "relation": "PROPOSED_BY",
+      "reversed": false,
+      "to": "Actor:agent:claude:ridewell-mobile-ci"
+    },
+    {
+      "from": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "label": "proposed by",
+      "relation": "PROPOSED_BY",
+      "reversed": false,
+      "to": "Actor:agent:codex:ridewell-sync"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "proposed by",
+      "relation": "PROPOSED_BY",
+      "reversed": false,
+      "to": "Actor:human:juror-foreman"
+    },
+    {
+      "from": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "label": "proposed by",
+      "relation": "PROPOSED_BY",
+      "reversed": false,
+      "to": "Actor:human:maya"
+    },
+    {
+      "from": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "label": "proposed by",
+      "relation": "PROPOSED_BY",
+      "reversed": false,
+      "to": "Actor:human:priya"
+    },
+    {
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "accepted by",
       "relation": "ACCEPTED_BY",
-      "label": "accepted by"
+      "reversed": false,
+      "to": "Actor:human:juror-foreman"
     },
     {
-      "from": "Decision:decision-28f61656-1136-4ff9-ab71-b2801c2dad7b",
-      "to": "Actor:human:sam.okafor@example.com",
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "accepted by",
       "relation": "ACCEPTED_BY",
-      "label": "accepted by"
+      "reversed": false,
+      "to": "Actor:human:maya"
     },
     {
-      "from": "Decision:decision-28f61656-1136-4ff9-ab71-b2801c2dad7b",
-      "to": "Option:option-managed-postgres-663dd46d-1160-4bf4-a79a-c207ffe7d4ea",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "accepted by",
+      "relation": "ACCEPTED_BY",
+      "reversed": false,
+      "to": "Actor:human:priya"
     },
     {
-      "from": "Decision:decision-28f61656-1136-4ff9-ab71-b2801c2dad7b",
-      "to": "Option:option-managed-postgres-663dd46d-1160-4bf4-a79a-c207ffe7d4ea",
-      "relation": "CHOSE",
-      "label": "chose"
+      "from": "Decision:decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "label": "accepted by",
+      "relation": "ACCEPTED_BY",
+      "reversed": false,
+      "to": "Actor:agent:claude:ridewell-mobile-ci"
     },
     {
-      "from": "Decision:decision-28f61656-1136-4ff9-ab71-b2801c2dad7b",
-      "to": "Option:option-keep-sqlite-and-queue-writes-0b0ab6f8-6c06-4010-a9d6-18c266e98238",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
+      "from": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "label": "accepted by",
+      "relation": "ACCEPTED_BY",
+      "reversed": false,
+      "to": "Actor:agent:codex:ridewell-sync"
     },
     {
-      "from": "Decision:decision-28f61656-1136-4ff9-ab71-b2801c2dad7b",
-      "to": "Evidence:evidence-1946294a-6544-4acd-aec9-40cfe02ae652",
-      "relation": "BASED_ON",
-      "label": "based on"
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "accepted by",
+      "relation": "ACCEPTED_BY",
+      "reversed": false,
+      "to": "Actor:human:juror-foreman"
     },
     {
-      "from": "Decision:decision-28f61656-1136-4ff9-ab71-b2801c2dad7b",
-      "to": "Decision:decision-ac9b4f01-f255-4636-a7b9-edea599e1aab",
+      "from": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "label": "accepted by",
+      "relation": "ACCEPTED_BY",
+      "reversed": false,
+      "to": "Actor:human:maya"
+    },
+    {
+      "from": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "label": "accepted by",
+      "relation": "ACCEPTED_BY",
+      "reversed": false,
+      "to": "Actor:human:priya"
+    },
+    {
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "rejected by",
+      "relation": "REJECTED_BY",
+      "reversed": false,
+      "to": "Actor:human:juror-8"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "rejected by",
+      "relation": "REJECTED_BY",
+      "reversed": false,
+      "to": "Actor:human:juror-3"
+    },
+    {
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "supersedes",
       "relation": "SUPERSEDES",
-      "label": "supersedes"
+      "reversed": false,
+      "to": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76"
     },
     {
-      "from": "Decision:decision-1138b54c-449b-4c20-a55c-740dd6062541",
-      "to": "Actor:agent:claude:app-agent",
-      "relation": "PROPOSED_BY",
-      "label": "proposed by"
-    },
-    {
-      "from": "Decision:decision-1138b54c-449b-4c20-a55c-740dd6062541",
-      "to": "Option:option-resize-on-upload-d1583bd5-e31c-462d-ab55-6ae9caa57e26",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-1138b54c-449b-4c20-a55c-740dd6062541",
-      "to": "Option:option-resize-on-upload-d1583bd5-e31c-462d-ab55-6ae9caa57e26",
-      "relation": "CHOSE",
-      "label": "chose"
-    },
-    {
-      "from": "Decision:decision-1138b54c-449b-4c20-a55c-740dd6062541",
-      "to": "Option:option-resize-on-view-with-a-cache-b505dd89-ad35-4a1b-a4e6-59d88669bf53",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-1138b54c-449b-4c20-a55c-740dd6062541",
-      "to": "Evidence:evidence-ea997859-4a38-427b-a8f5-329ce5ea5d88",
-      "relation": "BASED_ON",
-      "label": "based on"
-    },
-    {
-      "from": "Decision:decision-a3be77fb-6885-457c-a95c-f6de79b31d4a",
-      "to": "Actor:human:sam.okafor@example.com",
-      "relation": "PROPOSED_BY",
-      "label": "proposed by"
-    },
-    {
-      "from": "Decision:decision-a3be77fb-6885-457c-a95c-f6de79b31d4a",
-      "to": "Actor:human:sam.okafor@example.com",
-      "relation": "ACCEPTED_BY",
-      "label": "accepted by"
-    },
-    {
-      "from": "Decision:decision-a3be77fb-6885-457c-a95c-f6de79b31d4a",
-      "to": "Option:option-cache-by-product-id-b00757a4-82b1-4c34-af0a-d213c21bac68",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-a3be77fb-6885-457c-a95c-f6de79b31d4a",
-      "to": "Option:option-cache-by-product-id-b00757a4-82b1-4c34-af0a-d213c21bac68",
-      "relation": "CHOSE",
-      "label": "chose"
-    },
-    {
-      "from": "Decision:decision-a3be77fb-6885-457c-a95c-f6de79b31d4a",
-      "to": "Option:option-cache-responses-by-url-be1c4bdd-4d91-4b98-a1a3-2de9414f96d8",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-a3be77fb-6885-457c-a95c-f6de79b31d4a",
-      "to": "Option:option-no-cache-e5e8e3d5-9b39-4975-a109-ef2e5508c156",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-a3be77fb-6885-457c-a95c-f6de79b31d4a",
-      "to": "Hypothesis:hypothesis-5258f214-c63a-4bc7-aaf6-7800d02839a5",
-      "relation": "PREMISED_ON_DIRECT",
-      "label": "rests on"
-    },
-    {
-      "from": "Decision:decision-be667dc0-1b36-4791-a0c3-fb46de424399",
-      "to": "Actor:agent:claude:payments-agent",
-      "relation": "PROPOSED_BY",
-      "label": "proposed by"
-    },
-    {
-      "from": "Decision:decision-be667dc0-1b36-4791-a0c3-fb46de424399",
-      "to": "Actor:agent:claude:payments-agent",
-      "relation": "ACCEPTED_BY",
-      "label": "accepted by"
-    },
-    {
-      "from": "Decision:decision-be667dc0-1b36-4791-a0c3-fb46de424399",
-      "to": "Option:option-3-tries-2-seconds-apart-65ec2391-f9d5-4678-ad5f-3dc951080217",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-be667dc0-1b36-4791-a0c3-fb46de424399",
-      "to": "Option:option-5-tries-doubling-from-1-to-16-seconds-e2088494-0f1b-450b-a135-10fa80778142",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-be667dc0-1b36-4791-a0c3-fb46de424399",
-      "to": "Option:option-5-tries-doubling-from-1-to-16-seconds-e2088494-0f1b-450b-a135-10fa80778142",
-      "relation": "CHOSE",
-      "label": "chose"
-    },
-    {
-      "from": "Decision:decision-be667dc0-1b36-4791-a0c3-fb46de424399",
-      "to": "Option:option-retry-until-it-works-2a46e6f6-aec4-4d3c-a0c0-f8eea1c64937",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-be667dc0-1b36-4791-a0c3-fb46de424399",
-      "to": "Evidence:evidence-a7635355-83ee-4cb9-ae08-8df63cfe4071",
-      "relation": "BASED_ON",
-      "label": "based on"
-    },
-    {
-      "from": "Decision:decision-3ff4bdcd-e25b-4655-a9dc-e26f609cd57c",
-      "to": "Actor:human:priya.raman@example.com",
-      "relation": "PROPOSED_BY",
-      "label": "proposed by"
-    },
-    {
-      "from": "Decision:decision-3ff4bdcd-e25b-4655-a9dc-e26f609cd57c",
-      "to": "Actor:human:priya.raman@example.com",
-      "relation": "ACCEPTED_BY",
-      "label": "accepted by"
-    },
-    {
-      "from": "Decision:decision-3ff4bdcd-e25b-4655-a9dc-e26f609cd57c",
-      "to": "Option:option-new-ids-after-the-merge-bbebbbe5-57bd-4094-aa91-2631260cb0c6",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-3ff4bdcd-e25b-4655-a9dc-e26f609cd57c",
-      "to": "Option:option-new-ids-after-the-merge-bbebbbe5-57bd-4094-aa91-2631260cb0c6",
-      "relation": "CHOSE",
-      "label": "chose"
-    },
-    {
-      "from": "Decision:decision-3ff4bdcd-e25b-4655-a9dc-e26f609cd57c",
-      "to": "Option:option-keep-both-ranges-with-a-prefix-33979aa5-cb57-46cd-ab77-668b37ff953a",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-3ff4bdcd-e25b-4655-a9dc-e26f609cd57c",
-      "to": "Evidence:evidence-25494235-6b43-4390-a649-ad2d65682773",
-      "relation": "BASED_ON",
-      "label": "based on"
-    },
-    {
-      "from": "Decision:decision-698c1552-b02e-4889-a838-b378077073d9",
-      "to": "Actor:human:juror.3@example.com",
-      "relation": "PROPOSED_BY",
-      "label": "proposed by"
-    },
-    {
-      "from": "Decision:decision-698c1552-b02e-4889-a838-b378077073d9",
-      "to": "Actor:human:juror.3@example.com",
-      "relation": "ACCEPTED_BY",
-      "label": "accepted by"
-    },
-    {
-      "from": "Decision:decision-698c1552-b02e-4889-a838-b378077073d9",
-      "to": "Option:option-guilty-ea690e17-fd0e-4ce5-a193-2a339e64d926",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-698c1552-b02e-4889-a838-b378077073d9",
-      "to": "Option:option-guilty-ea690e17-fd0e-4ce5-a193-2a339e64d926",
-      "relation": "CHOSE",
-      "label": "chose"
-    },
-    {
-      "from": "Decision:decision-698c1552-b02e-4889-a838-b378077073d9",
-      "to": "Option:option-not-guilty-7a5aa3b8-8abc-41ca-a6b7-be4a85da2a87",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-698c1552-b02e-4889-a838-b378077073d9",
-      "to": "Hypothesis:hypothesis-85286fbb-5fa7-478d-ac72-fd8510587123",
-      "relation": "PREMISED_ON_DIRECT",
-      "label": "rests on"
-    },
-    {
-      "from": "Decision:decision-ff679d91-3fce-4cd9-a89a-49fb37bd2b6c",
-      "to": "Actor:human:juror.8@example.com",
-      "relation": "PROPOSED_BY",
-      "label": "proposed by"
-    },
-    {
-      "from": "Decision:decision-ff679d91-3fce-4cd9-a89a-49fb37bd2b6c",
-      "to": "Actor:human:juror.1@example.com",
-      "relation": "ACCEPTED_BY",
-      "label": "accepted by"
-    },
-    {
-      "from": "Decision:decision-ff679d91-3fce-4cd9-a89a-49fb37bd2b6c",
-      "to": "Option:option-vote-again-at-once-2da8c1fc-130e-44df-ad58-4d746e9b7804",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-ff679d91-3fce-4cd9-a89a-49fb37bd2b6c",
-      "to": "Option:option-talk-it-through-first-01dbdded-d727-444d-a9e6-675d78bc3efe",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-ff679d91-3fce-4cd9-a89a-49fb37bd2b6c",
-      "to": "Option:option-talk-it-through-first-01dbdded-d727-444d-a9e6-675d78bc3efe",
-      "relation": "CHOSE",
-      "label": "chose"
-    },
-    {
-      "from": "Decision:decision-ff679d91-3fce-4cd9-a89a-49fb37bd2b6c",
-      "to": "Evidence:evidence-5327b031-d99f-4501-add0-5e6178afd895",
-      "relation": "BASED_ON",
-      "label": "based on"
-    },
-    {
-      "from": "Decision:decision-7cc2149a-724b-43f1-a6d1-b65ad4eace86",
-      "to": "Actor:human:juror.8@example.com",
-      "relation": "PROPOSED_BY",
-      "label": "proposed by"
-    },
-    {
-      "from": "Decision:decision-7cc2149a-724b-43f1-a6d1-b65ad4eace86",
-      "to": "Actor:human:juror.1@example.com",
-      "relation": "ACCEPTED_BY",
-      "label": "accepted by"
-    },
-    {
-      "from": "Decision:decision-7cc2149a-724b-43f1-a6d1-b65ad4eace86",
-      "to": "Option:option-take-his-word-for-it-3d365620-c338-43b9-a9c2-440cb94a55f1",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-7cc2149a-724b-43f1-a6d1-b65ad4eace86",
-      "to": "Option:option-pace-it-out-and-time-it-907b8773-6dcd-450d-ad18-bab170c7feff",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-7cc2149a-724b-43f1-a6d1-b65ad4eace86",
-      "to": "Option:option-pace-it-out-and-time-it-907b8773-6dcd-450d-ad18-bab170c7feff",
-      "relation": "CHOSE",
-      "label": "chose"
-    },
-    {
-      "from": "Decision:decision-7cc2149a-724b-43f1-a6d1-b65ad4eace86",
-      "to": "Evidence:evidence-3cbea241-a6d7-443e-a1e3-b34c0cef7c82",
-      "relation": "BASED_ON",
-      "label": "based on"
-    },
-    {
-      "from": "Decision:decision-118b93aa-1cac-4dbf-a1bb-b332baf62e02",
-      "to": "Actor:human:juror.8@example.com",
-      "relation": "PROPOSED_BY",
-      "label": "proposed by"
-    },
-    {
-      "from": "Decision:decision-118b93aa-1cac-4dbf-a1bb-b332baf62e02",
-      "to": "Actor:human:juror.1@example.com",
-      "relation": "ACCEPTED_BY",
-      "label": "accepted by"
-    },
-    {
-      "from": "Decision:decision-118b93aa-1cac-4dbf-a1bb-b332baf62e02",
-      "to": "Option:option-guilty-ec3bcb12-31b2-479b-a8ca-6a2429f62d50",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-118b93aa-1cac-4dbf-a1bb-b332baf62e02",
-      "to": "Option:option-not-guilty-a146964e-5a3f-41e6-ad40-8e6c00dadbf4",
-      "relation": "HAS_OPTION",
-      "label": "weighs"
-    },
-    {
-      "from": "Decision:decision-118b93aa-1cac-4dbf-a1bb-b332baf62e02",
-      "to": "Option:option-not-guilty-a146964e-5a3f-41e6-ad40-8e6c00dadbf4",
-      "relation": "CHOSE",
-      "label": "chose"
-    },
-    {
-      "from": "Decision:decision-118b93aa-1cac-4dbf-a1bb-b332baf62e02",
-      "to": "Evidence:evidence-bc2283d9-1277-459f-a159-8ab1bbf081f8",
-      "relation": "BASED_ON",
-      "label": "based on"
-    },
-    {
-      "from": "Decision:decision-118b93aa-1cac-4dbf-a1bb-b332baf62e02",
-      "to": "Evidence:evidence-3cbea241-a6d7-443e-a1e3-b34c0cef7c82",
-      "relation": "BASED_ON",
-      "label": "based on"
-    },
-    {
-      "from": "Decision:decision-118b93aa-1cac-4dbf-a1bb-b332baf62e02",
-      "to": "Evidence:evidence-b3087fa4-dbcc-4099-a987-d373302e7d6f",
-      "relation": "BASED_ON",
-      "label": "based on"
-    },
-    {
-      "from": "Decision:decision-118b93aa-1cac-4dbf-a1bb-b332baf62e02",
-      "to": "Decision:decision-698c1552-b02e-4889-a838-b378077073d9",
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "supersedes",
       "relation": "SUPERSEDES",
-      "label": "supersedes"
+      "reversed": false,
+      "to": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4"
     },
     {
-      "from": "Evidence:evidence-6c2fd51f-187f-4ab5-acae-46e604fc275d",
-      "to": "Hypothesis:hypothesis-36ff3459-e394-4bb3-a51a-e581119acc12",
-      "relation": "SUPPORTS",
-      "label": "supports"
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "supersedes",
+      "relation": "SUPERSEDES",
+      "reversed": false,
+      "to": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2"
     },
     {
-      "from": "Evidence:evidence-1946294a-6544-4acd-aec9-40cfe02ae652",
-      "to": "Hypothesis:hypothesis-36ff3459-e394-4bb3-a51a-e581119acc12",
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "based on",
+      "relation": "BASED_ON",
+      "reversed": false,
+      "to": "Evidence:evidence-fd39d14b-d23d-4182-93e4-d370ffd11fca"
+    },
+    {
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "based on",
+      "relation": "BASED_ON",
+      "reversed": false,
+      "to": "Evidence:evidence-fd39d14b-d23d-4182-93e4-d370ffd11fca"
+    },
+    {
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "based on",
+      "relation": "BASED_ON",
+      "reversed": false,
+      "to": "Evidence:evidence-ae93e726-edbf-4268-b4bf-4211808cab7a"
+    },
+    {
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "based on",
+      "relation": "BASED_ON",
+      "reversed": false,
+      "to": "Evidence:evidence-ae93e726-edbf-4268-b4bf-4211808cab7a"
+    },
+    {
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "based on",
+      "relation": "BASED_ON",
+      "reversed": false,
+      "to": "Evidence:evidence-22650114-8538-5ecb-ae31-414a3119e13b"
+    },
+    {
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "based on",
+      "relation": "BASED_ON",
+      "reversed": false,
+      "to": "Evidence:evidence-22650114-8538-5ecb-ae31-414a3119e13b"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "based on",
+      "relation": "BASED_ON",
+      "reversed": false,
+      "to": "Evidence:evidence-0b37924e-5d3e-4b58-9686-03fb4c9c5533"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "based on",
+      "relation": "BASED_ON",
+      "reversed": false,
+      "to": "Evidence:evidence-0b37924e-5d3e-4b58-9686-03fb4c9c5533"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "based on",
+      "relation": "BASED_ON",
+      "reversed": false,
+      "to": "Evidence:evidence-6fec26da-b245-4200-a086-b2cdc8147195"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "based on",
+      "relation": "BASED_ON",
+      "reversed": false,
+      "to": "Evidence:evidence-6fec26da-b245-4200-a086-b2cdc8147195"
+    },
+    {
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-5c41a4a4-4ecc-4d5b-9db9-dd7290b8c60a"
+    },
+    {
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-5c41a4a4-4ecc-4d5b-9db9-dd7290b8c60a"
+    },
+    {
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-6686cb7b-0316-4bac-b728-4a656b9948e1"
+    },
+    {
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-6686cb7b-0316-4bac-b728-4a656b9948e1"
+    },
+    {
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-b29cf133-3962-4974-ad64-e8d2df46f925"
+    },
+    {
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-b29cf133-3962-4974-ad64-e8d2df46f925"
+    },
+    {
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-121797f8-1080-5c61-8385-6de66a3312d8"
+    },
+    {
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-121797f8-1080-5c61-8385-6de66a3312d8"
+    },
+    {
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-86f1cd4d-b923-5ce3-a447-021c1def8237"
+    },
+    {
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-86f1cd4d-b923-5ce3-a447-021c1def8237"
+    },
+    {
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-94f19673-0db1-5bb0-945c-2a564e546630"
+    },
+    {
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-94f19673-0db1-5bb0-945c-2a564e546630"
+    },
+    {
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-006ffdfa-9f0d-523f-9da7-b02a36c86483"
+    },
+    {
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-006ffdfa-9f0d-523f-9da7-b02a36c86483"
+    },
+    {
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-46457399-b2a1-515d-b84b-527387fb4528"
+    },
+    {
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-46457399-b2a1-515d-b84b-527387fb4528"
+    },
+    {
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-811c6460-a8b2-585b-be24-ba14924d06e1"
+    },
+    {
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-811c6460-a8b2-585b-be24-ba14924d06e1"
+    },
+    {
+      "from": "Decision:decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-87700cc8-9fb1-4358-82a6-09586886abdb"
+    },
+    {
+      "from": "Decision:decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-87700cc8-9fb1-4358-82a6-09586886abdb"
+    },
+    {
+      "from": "Decision:decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-cafd0146-2f20-4c79-80aa-c31224b0a053"
+    },
+    {
+      "from": "Decision:decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-cafd0146-2f20-4c79-80aa-c31224b0a053"
+    },
+    {
+      "from": "Decision:decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-f9067686-a9f7-4637-a599-b657338ee7e6"
+    },
+    {
+      "from": "Decision:decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-f9067686-a9f7-4637-a599-b657338ee7e6"
+    },
+    {
+      "from": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-2ea73236-d836-45dd-9de1-aa8aadd8ba82"
+    },
+    {
+      "from": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-2ea73236-d836-45dd-9de1-aa8aadd8ba82"
+    },
+    {
+      "from": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-49b07f7a-56bb-4583-9f39-aaccc1246baa"
+    },
+    {
+      "from": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-49b07f7a-56bb-4583-9f39-aaccc1246baa"
+    },
+    {
+      "from": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-ce1b6a71-b11e-40e8-91c2-c085969ae4f5"
+    },
+    {
+      "from": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-ce1b6a71-b11e-40e8-91c2-c085969ae4f5"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-30ef20f1-fcaf-5d64-a569-43747cbb2d27"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-30ef20f1-fcaf-5d64-a569-43747cbb2d27"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-e3fd94b1-f9a7-5676-a219-b3fa75202ebc"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-e3fd94b1-f9a7-5676-a219-b3fa75202ebc"
+    },
+    {
+      "from": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-425b23d8-47bc-48af-a657-7a833050f907"
+    },
+    {
+      "from": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-425b23d8-47bc-48af-a657-7a833050f907"
+    },
+    {
+      "from": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-4f8fa3c3-405a-4283-b731-afe6781063dd"
+    },
+    {
+      "from": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-4f8fa3c3-405a-4283-b731-afe6781063dd"
+    },
+    {
+      "from": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-c0435edc-b405-499a-85c3-80bacd01eaca"
+    },
+    {
+      "from": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-c0435edc-b405-499a-85c3-80bacd01eaca"
+    },
+    {
+      "from": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-014e8a18-a86b-4590-8019-66cb71d88a4d"
+    },
+    {
+      "from": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-014e8a18-a86b-4590-8019-66cb71d88a4d"
+    },
+    {
+      "from": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-112f9329-2331-428d-acb3-fb4c3aab465d"
+    },
+    {
+      "from": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-112f9329-2331-428d-acb3-fb4c3aab465d"
+    },
+    {
+      "from": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-f18ec5a3-3a90-487b-acbe-fb032c8a7366"
+    },
+    {
+      "from": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "label": "weighs",
+      "relation": "HAS_OPTION",
+      "reversed": false,
+      "to": "Option:option-f18ec5a3-3a90-487b-acbe-fb032c8a7366"
+    },
+    {
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-b29cf133-3962-4974-ad64-e8d2df46f925"
+    },
+    {
+      "from": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-b29cf133-3962-4974-ad64-e8d2df46f925"
+    },
+    {
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-94f19673-0db1-5bb0-945c-2a564e546630"
+    },
+    {
+      "from": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-94f19673-0db1-5bb0-945c-2a564e546630"
+    },
+    {
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-811c6460-a8b2-585b-be24-ba14924d06e1"
+    },
+    {
+      "from": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-811c6460-a8b2-585b-be24-ba14924d06e1"
+    },
+    {
+      "from": "Decision:decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-cafd0146-2f20-4c79-80aa-c31224b0a053"
+    },
+    {
+      "from": "Decision:decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-cafd0146-2f20-4c79-80aa-c31224b0a053"
+    },
+    {
+      "from": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-49b07f7a-56bb-4583-9f39-aaccc1246baa"
+    },
+    {
+      "from": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-49b07f7a-56bb-4583-9f39-aaccc1246baa"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-e3fd94b1-f9a7-5676-a219-b3fa75202ebc"
+    },
+    {
+      "from": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-e3fd94b1-f9a7-5676-a219-b3fa75202ebc"
+    },
+    {
+      "from": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-c0435edc-b405-499a-85c3-80bacd01eaca"
+    },
+    {
+      "from": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-c0435edc-b405-499a-85c3-80bacd01eaca"
+    },
+    {
+      "from": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-014e8a18-a86b-4590-8019-66cb71d88a4d"
+    },
+    {
+      "from": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "label": "chose",
+      "relation": "CHOSE",
+      "reversed": false,
+      "to": "Option:option-014e8a18-a86b-4590-8019-66cb71d88a4d"
+    },
+    {
+      "from": "Option:option-014e8a18-a86b-4590-8019-66cb71d88a4d",
+      "label": "rests on",
+      "relation": "PREMISED_ON",
+      "reversed": false,
+      "to": "Hypothesis:hypothesis-5b82ca07-6688-48f6-8dac-fda22f05227c"
+    },
+    {
+      "from": "Option:option-014e8a18-a86b-4590-8019-66cb71d88a4d",
+      "label": "rests on",
+      "relation": "PREMISED_ON",
+      "reversed": false,
+      "to": "Hypothesis:hypothesis-5b82ca07-6688-48f6-8dac-fda22f05227c"
+    },
+    {
+      "from": "Option:option-c0435edc-b405-499a-85c3-80bacd01eaca",
+      "label": "rests on",
+      "relation": "PREMISED_ON",
+      "reversed": false,
+      "to": "Hypothesis:hypothesis-01fe4ba7-f356-46eb-bbd6-05f136be0c9a"
+    },
+    {
+      "from": "Option:option-c0435edc-b405-499a-85c3-80bacd01eaca",
+      "label": "rests on",
+      "relation": "PREMISED_ON",
+      "reversed": false,
+      "to": "Hypothesis:hypothesis-01fe4ba7-f356-46eb-bbd6-05f136be0c9a"
+    },
+    {
+      "from": "Option:option-cafd0146-2f20-4c79-80aa-c31224b0a053",
+      "label": "rests on",
+      "relation": "PREMISED_ON",
+      "reversed": false,
+      "to": "Hypothesis:hypothesis-67f780b5-5096-4d9a-9419-1189284c9533"
+    },
+    {
+      "from": "Option:option-cafd0146-2f20-4c79-80aa-c31224b0a053",
+      "label": "rests on",
+      "relation": "PREMISED_ON",
+      "reversed": false,
+      "to": "Hypothesis:hypothesis-67f780b5-5096-4d9a-9419-1189284c9533"
+    },
+    {
+      "from": "Evidence:evidence-ae93e726-edbf-4268-b4bf-4211808cab7a",
+      "label": "refutes",
       "relation": "REFUTES",
-      "label": "refutes"
+      "reversed": false,
+      "to": "Hypothesis:hypothesis-01fe4ba7-f356-46eb-bbd6-05f136be0c9a"
     },
     {
-      "from": "Evidence:evidence-25494235-6b43-4390-a649-ad2d65682773",
-      "to": "Hypothesis:hypothesis-5258f214-c63a-4bc7-aaf6-7800d02839a5",
-      "relation": "REFUTES",
-      "label": "refutes"
+      "from": "Project:ridewell-mobile",
+      "label": "depends on",
+      "relation": "DEPENDS_ON",
+      "reversed": false,
+      "to": "Project:ridewell-api"
     },
     {
-      "from": "Evidence:evidence-bc2283d9-1277-459f-a159-8ab1bbf081f8",
-      "to": "Hypothesis:hypothesis-85286fbb-5fa7-478d-ac72-fd8510587123",
-      "relation": "REFUTES",
-      "label": "refutes"
+      "from": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "label": "follows from",
+      "relation": "FOLLOWS_FROM",
+      "reversed": false,
+      "to": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76"
     },
     {
-      "from": "Evidence:evidence-3cbea241-a6d7-443e-a1e3-b34c0cef7c82",
-      "to": "Hypothesis:hypothesis-85286fbb-5fa7-478d-ac72-fd8510587123",
-      "relation": "REFUTES",
-      "label": "refutes"
+      "from": "Question:question-4fdba55b-3b1b-5c58-afaa-30f19fabd444",
+      "label": "is answered by",
+      "relation": "ANSWERS",
+      "reversed": true,
+      "to": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2"
     },
     {
-      "from": "Evidence:evidence-b3087fa4-dbcc-4099-a987-d373302e7d6f",
-      "to": "Hypothesis:hypothesis-85286fbb-5fa7-478d-ac72-fd8510587123",
-      "relation": "REFUTES",
-      "label": "refutes"
+      "from": "Question:question-b03d75d1-05e1-5212-8bb5-ec6637180d2c",
+      "label": "is answered by",
+      "relation": "ANSWERS",
+      "reversed": true,
+      "to": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176"
+    },
+    {
+      "from": "Question:question-e05aecb0-39ce-5bd9-b3fb-e9eb6e4be777",
+      "label": "is answered by",
+      "relation": "ANSWERS",
+      "reversed": true,
+      "to": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76"
+    },
+    {
+      "from": "Question:question-b2a2db41-eed8-5c4f-9f63-d05461d1465a",
+      "label": "is answered by",
+      "relation": "ANSWERS",
+      "reversed": true,
+      "to": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4"
+    }
+  ],
+  "nodes": [
+    {
+      "decided_at": "2026-09-28T15:18:27.690745691+00:00",
+      "id": "Decision:decision-0b0394e6-0f7f-43b1-ae32-f12a451bced2",
+      "kind": "Decision",
+      "label": "The jury finds the defendant guilty"
+    },
+    {
+      "decided_at": "2026-09-28T15:18:27.607675685+00:00",
+      "id": "Decision:decision-1d40ca69-08fa-4aa1-baac-72eaded92c2e",
+      "kind": "Decision",
+      "label": "Cache driver profiles keyed by a stable external UUID instead of the mutable numeric id"
+    },
+    {
+      "decided_at": "2026-09-28T15:18:27.368597883+00:00",
+      "id": "Decision:decision-808db22c-820a-4f54-be1c-7bc97ed2b6d5",
+      "kind": "Decision",
+      "label": "Move hike log storage to a hosted Postgres, synced across devices"
+    },
+    {
+      "decided_at": "2026-09-28T15:18:27.513667345+00:00",
+      "id": "Decision:decision-959e704b-f6f2-4528-a93b-a9b4c9cff8f0",
+      "kind": "Decision",
+      "label": "Retry a failed location-ping upload up to 5 times with exponential backoff, capped at 30 seconds"
+    },
+    {
+      "decided_at": "2026-09-28T15:18:27.469047163+00:00",
+      "id": "Decision:decision-9be526a6-ed80-4d80-997a-476c6da23176",
+      "kind": "Decision",
+      "label": "Cache the driver's id on the phone at login and skip the profile lookup on cold start"
+    },
+    {
+      "decided_at": "2026-09-28T15:18:27.969617145+00:00",
+      "id": "Decision:decision-9d30dc23-92c2-48bb-9bf7-23706cef42f3",
+      "kind": "Decision",
+      "label": "The jury finds the defendant not guilty"
+    },
+    {
+      "decided_at": "2026-09-28T15:18:27.421182921+00:00",
+      "id": "Decision:decision-cbb4f5ba-4b76-488f-8b6b-0a592ea2de76",
+      "kind": "Decision",
+      "label": "Cache driver profiles in memory, keyed by the driver's numeric id"
+    },
+    {
+      "decided_at": "2026-09-28T15:18:27.325272698+00:00",
+      "id": "Decision:decision-cbb9030a-7d84-49d1-859b-e19b506ea9d4",
+      "kind": "Decision",
+      "label": "Store hike logs in local SQLite on the phone"
+    },
+    {
+      "id": "Actor:agent:claude:ridewell-mobile-ci",
+      "kind": "Actor"
+    },
+    {
+      "id": "Actor:agent:codex:ridewell-sync",
+      "kind": "Actor"
+    },
+    {
+      "id": "Actor:human:juror-3",
+      "kind": "Actor"
+    },
+    {
+      "id": "Actor:human:juror-8",
+      "kind": "Actor"
+    },
+    {
+      "id": "Actor:human:juror-9",
+      "kind": "Actor"
+    },
+    {
+      "id": "Actor:human:juror-foreman",
+      "kind": "Actor"
+    },
+    {
+      "id": "Actor:human:maya",
+      "kind": "Actor"
+    },
+    {
+      "id": "Actor:human:priya",
+      "kind": "Actor"
+    },
+    {
+      "id": "Evidence:evidence-0b37924e-5d3e-4b58-9686-03fb4c9c5533",
+      "kind": "Evidence",
+      "label": "Re-enactment in the jury room: walking from the bed to the front door in the defendant's apartment takes 41 seconds using his own cane, not the 15 seconds the old man upstairs claimed for hearing the threat, running to the door, and seeing the defendant flee."
+    },
+    {
+      "id": "Evidence:evidence-22650114-8538-5ecb-ae31-414a3119e13b",
+      "kind": "Evidence",
+      "label": "Beta survey, Sept 2026: 61% of 140 respondents use TrailKeeper on both phone and web; 22% reported a trip missing photos or edits made on the other device"
+    },
+    {
+      "id": "Evidence:evidence-6fec26da-b245-4200-a086-b2cdc8147195",
+      "kind": "Evidence",
+      "label": "The woman across the street testified she saw the stabbing through the windows of a passing elevated train, but she was also seen with fresh marks on her nose from eyeglasses — she would not have been wearing them in bed, and without them an identification across the street at night is unreliable."
+    },
+    {
+      "id": "Evidence:evidence-ae93e726-edbf-4268-b4bf-4211808cab7a",
+      "kind": "Evidence",
+      "label": "Incident review, 2026-09-20: migrating dispatch to the new fleet-partner platform reassigned driver_id for about 1,200 accounts during the backfill; two drivers were shown another driver's cached profile for several minutes before the cache expired."
+    },
+    {
+      "id": "Evidence:evidence-fd39d14b-d23d-4182-93e4-d370ffd11fca",
+      "kind": "Evidence",
+      "label": "Trial testimony: the downstairs neighbor says he heard 'I'm gonna kill you' followed by a body hitting the floor, one second after a train passed"
+    },
+    {
+      "id": "Option:option-006ffdfa-9f0d-523f-9da7-b02a36c86483",
+      "kind": "Option",
+      "label": "Firebase Realtime Database",
+      "title": "Firebase Realtime Database"
+    },
+    {
+      "id": "Option:option-014e8a18-a86b-4590-8019-66cb71d88a4d",
+      "kind": "Option",
+      "label": "Local SQLite",
+      "title": "Local SQLite"
+    },
+    {
+      "id": "Option:option-112f9329-2331-428d-acb3-fb4c3aab465d",
+      "kind": "Option",
+      "label": "Local JSON files",
+      "title": "Local JSON files"
+    },
+    {
+      "id": "Option:option-121797f8-1080-5c61-8385-6de66a3312d8",
+      "kind": "Option",
+      "label": "Redis cache keyed by the UUID",
+      "title": "Redis cache keyed by the UUID"
+    },
+    {
+      "id": "Option:option-2ea73236-d836-45dd-9de1-aa8aadd8ba82",
+      "kind": "Option",
+      "label": "Cache the whole profile object with a 1-hour TTL",
+      "title": "Cache the whole profile object with a 1-hour TTL"
+    },
+    {
+      "id": "Option:option-30ef20f1-fcaf-5d64-a569-43747cbb2d27",
+      "kind": "Option",
+      "label": "Guilty",
+      "title": "Guilty"
+    },
+    {
+      "id": "Option:option-425b23d8-47bc-48af-a657-7a833050f907",
+      "kind": "Option",
+      "label": "Redis cache keyed by driver_id",
+      "title": "Redis cache keyed by driver_id"
+    },
+    {
+      "id": "Option:option-46457399-b2a1-515d-b84b-527387fb4528",
+      "kind": "Option",
+      "label": "Keep SQLite and add a manual export/import",
+      "title": "Keep SQLite and add a manual export/import"
+    },
+    {
+      "id": "Option:option-49b07f7a-56bb-4583-9f39-aaccc1246baa",
+      "kind": "Option",
+      "label": "Store driver_id locally and skip the cold-start lookup",
+      "title": "Store driver_id locally and skip the cold-start lookup"
+    },
+    {
+      "id": "Option:option-4f8fa3c3-405a-4283-b731-afe6781063dd",
+      "kind": "Option",
+      "label": "No cache (read through on every request)",
+      "title": "No cache (read through on every request)"
+    },
+    {
+      "id": "Option:option-5c41a4a4-4ecc-4d5b-9db9-dd7290b8c60a",
+      "kind": "Option",
+      "label": "Not guilty",
+      "title": "Not guilty"
+    },
+    {
+      "id": "Option:option-6686cb7b-0316-4bac-b728-4a656b9948e1",
+      "kind": "Option",
+      "label": "Hung jury (cannot agree)",
+      "title": "Hung jury (cannot agree)"
+    },
+    {
+      "id": "Option:option-811c6460-a8b2-585b-be24-ba14924d06e1",
+      "kind": "Option",
+      "label": "Hosted Postgres with a per-user sync log",
+      "title": "Hosted Postgres with a per-user sync log"
+    },
+    {
+      "id": "Option:option-86f1cd4d-b923-5ce3-a447-021c1def8237",
+      "kind": "Option",
+      "label": "Drop the profile cache entirely",
+      "title": "Drop the profile cache entirely"
+    },
+    {
+      "id": "Option:option-87700cc8-9fb1-4358-82a6-09586886abdb",
+      "kind": "Option",
+      "label": "3 retries fixed 5s gap",
+      "title": "3 retries fixed 5s gap"
+    },
+    {
+      "id": "Option:option-94f19673-0db1-5bb0-945c-2a564e546630",
+      "kind": "Option",
+      "label": "In-memory LRU keyed by the identity-provider UUID",
+      "title": "In-memory LRU keyed by the identity-provider UUID"
+    },
+    {
+      "id": "Option:option-b29cf133-3962-4974-ad64-e8d2df46f925",
+      "kind": "Option",
+      "label": "Guilty",
+      "title": "Guilty"
+    },
+    {
+      "id": "Option:option-c0435edc-b405-499a-85c3-80bacd01eaca",
+      "kind": "Option",
+      "label": "In-memory LRU keyed by driver_id",
+      "title": "In-memory LRU keyed by driver_id"
+    },
+    {
+      "id": "Option:option-cafd0146-2f20-4c79-80aa-c31224b0a053",
+      "kind": "Option",
+      "label": "5 retries exponential backoff capped at 30s",
+      "title": "5 retries exponential backoff capped at 30s"
+    },
+    {
+      "id": "Option:option-ce1b6a71-b11e-40e8-91c2-c085969ae4f5",
+      "kind": "Option",
+      "label": "Always re-fetch the profile on cold start",
+      "title": "Always re-fetch the profile on cold start"
+    },
+    {
+      "id": "Option:option-e3fd94b1-f9a7-5676-a219-b3fa75202ebc",
+      "kind": "Option",
+      "label": "Not guilty",
+      "title": "Not guilty"
+    },
+    {
+      "id": "Option:option-f18ec5a3-3a90-487b-acbe-fb032c8a7366",
+      "kind": "Option",
+      "label": "A hosted database from day one",
+      "title": "A hosted database from day one"
+    },
+    {
+      "id": "Option:option-f9067686-a9f7-4637-a599-b657338ee7e6",
+      "kind": "Option",
+      "label": "Unlimited retries with a circuit breaker",
+      "title": "Unlimited retries with a circuit breaker"
+    },
+    {
+      "id": "Hypothesis:hypothesis-01fe4ba7-f356-46eb-bbd6-05f136be0c9a",
+      "kind": "Hypothesis",
+      "label": "Driver ids are assigned once at signup and never change for the lifetime of the account"
+    },
+    {
+      "id": "Hypothesis:hypothesis-5b82ca07-6688-48f6-8dac-fda22f05227c",
+      "kind": "Hypothesis",
+      "label": "Each hiker uses TrailKeeper from a single phone; nobody needs the same trip log on two devices"
+    },
+    {
+      "id": "Hypothesis:hypothesis-67f780b5-5096-4d9a-9419-1189284c9533",
+      "kind": "Hypothesis",
+      "label": "Capping at 5 retries with backoff will clear at least 90% of handoff failures without a manual retry"
+    },
+    {
+      "id": "Question:question-4fdba55b-3b1b-5c58-afaa-30f19fabd444",
+      "kind": "Question"
+    },
+    {
+      "id": "Question:question-b03d75d1-05e1-5212-8bb5-ec6637180d2c",
+      "kind": "Question"
+    },
+    {
+      "id": "Question:question-b2a2db41-eed8-5c4f-9f63-d05461d1465a",
+      "kind": "Question"
+    },
+    {
+      "id": "Question:question-e05aecb0-39ce-5bd9-b3fb-e9eb6e4be777",
+      "kind": "Question"
+    },
+    {
+      "id": "Project:12-angry-men",
+      "kind": "Project",
+      "label": "12 Angry Men"
+    },
+    {
+      "id": "Project:ridewell-api",
+      "kind": "Project",
+      "label": "Ridewell API"
+    },
+    {
+      "id": "Project:ridewell-mobile",
+      "kind": "Project",
+      "label": "Ridewell Mobile"
+    },
+    {
+      "id": "Project:trailkeeper",
+      "kind": "Project",
+      "label": "TrailKeeper"
     }
   ]
 }

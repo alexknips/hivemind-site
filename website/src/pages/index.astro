@@ -41,8 +41,14 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
         you agreed. When a decision is contested or replaced, its status changes; nothing goes
         quietly stale.
       </p>
-      <p class="text-md text-muted-foreground max-w-2xl mx-auto mb-10">
-        One engineer and their agents, local-first, AGPL-3.0, free to self-host.
+      <p class="text-md text-muted-foreground max-w-2xl mx-auto mb-5">
+        One person and their agents, local-first, AGPL-3.0, free to self-host.
+      </p>
+      <!-- Not only for engineering, and who can run it now (the founder's direction of 2026-09-29; CLAIMS.md) -->
+      <p class="text-md text-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
+        <span class="font-semibold">Not only for engineering.</span> Any decision you make with an agent fits:
+        a plan, a hire, a supplier, a verdict. Running it today takes a developer's setup: you self-host it and
+        connect your agent over MCP.
       </p>
 
       <div class="flex flex-col sm:flex-row gap-3 justify-center mb-4">
@@ -56,40 +62,42 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
       <p class="text-sm text-muted-foreground">The demo is the app itself, read-only, over made-up projects, the jury room of <em>12 Angry Men</em> among them. No signup, no install.</p>
     </section>
 
-    <!-- The problem: the three failures, in the words people use (vision/README.md; deck slide 1) -->
+    <!-- The problem, in plain words (the founder's direction of 2026-09-29): what goes wrong when you decide
+         things with agents. The engineers' words (vision/README.md) are the one "For engineers" line. Deck slide 1. -->
     <section id="problem" class="border-t border-border bg-sidebar scroll-mt-20">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">The problem</p>
         <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Your agent forgets what you decided.</h2>
         <p class="text-md text-muted-foreground text-center max-w-xl mx-auto mb-12 sm:mb-16">
-          Coding agents forget. These are the three ways it hurts, in the words people use, and what HiveMind keeps instead.
+          Decide something together with an agent, about code or anything else, and three things go wrong.
+          Here they are, and what HiveMind keeps instead.
         </p>
         <div class="grid md:grid-cols-3 gap-8 sm:gap-10">
           <div class="border-t border-border pt-5">
-            <h3 class="text-md font-semibold text-foreground mb-2">It undid what you decided</h3>
+            <h3 class="text-md font-semibold text-foreground mb-2">The next session undoes it</h3>
             <p class="text-base text-muted-foreground leading-relaxed mb-3">
-              You dropped the ORM on purpose. A few weeks later the agent helpfully brings it back,
-              with confidence.
+              You ruled an option out, for a reason. A fresh session never heard about it and suggests it
+              again, with confidence, and you argue it all over.
             </p>
             <p class="text-base text-foreground leading-relaxed">
               HiveMind keeps the options that lost and why they lost, next to the one you chose.
             </p>
           </div>
           <div class="border-t border-border pt-5">
-            <h3 class="text-md font-semibold text-foreground mb-2">Nobody knows why</h3>
+            <h3 class="text-md font-semibold text-foreground mb-2">The reasons are lost</h3>
             <p class="text-base text-muted-foreground leading-relaxed mb-3">
-              <code class="code">git blame</code> says who changed a line, not why the agent did it
-              that way. The chat was the design meeting, and it is gone.
+              You talked it through with your agent, and the chat was the meeting. Once it closes, nobody can
+              say why it went that way, or whether you or the agent made the call.
             </p>
             <p class="text-base text-foreground leading-relaxed">
-              HiveMind records the decision with its rationale, its evidence and who made it: you or the agent.
+              HiveMind records the decision with its reasons, its evidence and who made it: you or the agent.
             </p>
           </div>
           <div class="border-t border-border pt-5">
-            <h3 class="text-md font-semibold text-foreground mb-2">It forgot what you agreed</h3>
+            <h3 class="text-md font-semibold text-foreground mb-2">Nobody can say if it held up</h3>
             <p class="text-base text-muted-foreground leading-relaxed mb-3">
-              The hand-kept <code class="code">DECISIONS.md</code> goes stale after a reversal, and the
-              agent follows the dead entry.
+              Plans change. The notes still say the old thing, the agent follows it, and nobody can tell which
+              decisions still stand.
             </p>
             <p class="text-base text-foreground leading-relaxed">
               In HiveMind a replaced decision reads <span class="badge badge-neutral">superseded</span> and a disputed one
@@ -97,6 +105,11 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
             </p>
           </div>
         </div>
+        <p class="text-sm text-muted-foreground text-center mt-12 max-w-2xl mx-auto leading-relaxed">
+          <span class="font-medium text-foreground">For engineers:</span> the ORM you dropped comes back,
+          <code class="code">git blame</code> says who changed a line but not why, and the
+          <code class="code">DECISIONS.md</code> goes stale after a reversal.
+        </p>
       </div>
     </section>
 
@@ -216,20 +229,21 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
     <section id="who-it-is-for" class="border-t border-border scroll-mt-20">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">Who it is for</p>
-        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-12">One engineer and their agents</h2>
+        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-12">One person and their agents</h2>
         <div class="grid sm:grid-cols-2 gap-8 sm:gap-10">
           <div class="border-t border-border pt-5">
             <h3 class="text-md font-semibold text-foreground mb-2">For</h3>
             <p class="text-base text-muted-foreground leading-relaxed">
-              One engineer who runs coding agents every day and has already paid the cost of an agent that forgets.
-              If you keep a <code class="code">DECISIONS.md</code>, ADRs or a <code class="code">rejected.md</code>
-              by hand and have watched it go stale after a reversal, this is for you.
+              One person who decides things with agents every day and has already paid the cost of an agent that
+              forgets. Today that is mostly engineers, because running HiveMind takes a developer's setup. If you keep
+              a <code class="code">DECISIONS.md</code>, ADRs or a <code class="code">rejected.md</code> by hand and
+              have watched it go stale after a reversal, this is for you.
             </p>
           </div>
           <div class="border-t border-border pt-5">
             <h3 class="text-md font-semibold text-foreground mb-2">Soon to come</h3>
             <p class="text-base text-muted-foreground leading-relaxed">
-              Teams: several engineers and their agents on one shared record, a view for the team lead across
+              Teams: several people and their agents on one shared record, a view for the team lead across
               everyone's decisions, and later one across the organisation. That is where HiveMind is going; it is
               not built yet.
             </p>
@@ -237,7 +251,8 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
         </div>
         <p class="text-sm text-muted-foreground text-center mt-10 max-w-2xl mx-auto leading-relaxed">
           <a href={`${base}demo/`} class="link">The demo</a> holds a jury room next to two software projects, on
-          purpose: the same record fits any decision that people and agents make together. Engineers first, though.
+          purpose: HiveMind is not only for engineering, and the same record fits any decision that people and agents
+          make together. Engineers can run it first, though, while that takes a developer's setup.
         </p>
       </div>
     </section>
@@ -343,10 +358,10 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
             </p>
           </div>
           <div class="border-t border-border pt-5">
-            <h3 class="text-md font-semibold text-foreground mb-2"><code class="code">git blame</code> and the chat</h3>
+            <h3 class="text-md font-semibold text-foreground mb-2">Deciding in the chat</h3>
             <p class="text-base text-muted-foreground leading-relaxed mb-3">
-              <code class="code">git blame</code> says who changed a line, not why the agent did it that way.
-              The chat where it was decided is gone by the next session.
+              Most decisions made with an agent live only in the conversation. By the next session it is gone, and
+              with it the reasons and who made the call.
             </p>
             <p class="text-base text-foreground leading-relaxed">
               HiveMind keeps the decision with your own words attached, and a fresh session can ask.
@@ -360,7 +375,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
               Capturing decisions from an agent over MCP, marking a decision superseded, and running local-first under
               an open licence: other tools have those too. What we have not found elsewhere is the combination: a typed
               decision with its options, its evidence and a human-or-agent decider, whose status follows from later
-              contest and replacement, open source, local-first, and built for one engineer.
+              contest and replacement, open source, local-first, and built for one person and their agents.
             </p>
           </div>
           <div class="rounded-lg bg-muted p-6">
@@ -386,7 +401,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp';
         <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">Use cases</p>
         <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">What it is useful for</h2>
         <p class="text-md text-muted-foreground text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          One feature at a time, each with an everyday example from one engineer and their agents, and where the
+          One feature at a time, each with an everyday example from an engineer and their agents, and where the
           demo's jury room shows the same thing. Each is marked works today, coming next or planned.
         </p>
 

@@ -31,20 +31,23 @@ Choose your path:
      "mcpServers": {
        "hivemind": {
          "command": "hivemind",
-         "args": ["mcp"],
+         "args": ["mcp", "--agent-tool", "claude"],
          "env": { "HIVEMIND_DIR": "./hivemind/" }
        }
      }
    }
    ```
 
-   Or connect to your self-hosted cell over HTTP — see [MCP Setup](../../guides/mcp-setup/) for the
-   config and bearer-token setup.
+   `--agent-tool claude` files your agent's captures under Claude Code. Or connect to your
+   self-hosted cell over HTTP — see [MCP Setup](../../guides/mcp-setup/) for the config and
+   bearer-token setup.
 
 2. **Reload your MCP client**
 
-   Claude Code picks up `.mcp.json` changes on restart. The HiveMind tools appear
-   in your agent's tool list.
+   Claude Code picks up `.mcp.json` changes on restart. A server from a project `.mcp.json`
+   shows as "Pending approval" in `claude mcp list` (seen in Claude Code 2.1.284 and 2.1.286) until
+   you start `claude` in the project and approve it. Then the HiveMind tools appear in your agent's
+   tool list.
 
 3. **Start capturing decisions**
 

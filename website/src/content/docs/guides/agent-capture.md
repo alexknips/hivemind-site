@@ -33,12 +33,17 @@ configured, the background classifier picks up `enqueue-capture` batches instead
 /reload-plugins
 ```
 
-This installs three skills and an MCP server:
+This installs five commands, one skill and an MCP server. The server runs the `hivemind` binary,
+so [install it](../../getting-started/install/#install-the-binary) first.
 
-| Skill / Tool | What it does |
+| Command / skill / tool | What it does |
 |-------------|-------------|
-| `/hivemind-capture:capture-decision` | Capture a single decision to the local ledger |
+| `/hivemind-capture:capture` | Capture one decision-memory item to the local ledger |
+| `/hivemind-capture:capture-decision` | Capture a single decision (the older, decision-only path) |
 | `/hivemind-capture:query-decisions` | "What did we decide about X?" — free-text recall of the ledger |
+| `/hivemind-capture:batch-capture` | Classify recent conversation and capture its decisions in one batch, keyless |
+| `/hivemind-capture:classify-queue` | Work through the classification queue on your own subscription |
+| `hivemind-capture` skill | Tells the agent when and how to capture |
 | `hivemind` MCP server | Full write + query access via MCP tools |
 
 ### Codex
@@ -46,10 +51,11 @@ This installs three skills and an MCP server:
 From a local HiveMind checkout: open `/plugins`, choose `HiveMind Plugins`, and
 install `HiveMind Capture`.
 
-From another checkout or machine, add the repository as a marketplace first:
+From another checkout or machine, add the repository as a marketplace, then install the bundle:
 
 ```bash
 codex plugin marketplace add https://github.com/alexknips/hivemind.git
+codex plugin add hivemind-capture@hivemind-plugins
 ```
 
 Or copy the skill bundle directly:

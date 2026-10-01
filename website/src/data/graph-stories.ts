@@ -200,14 +200,14 @@ export const storyRevise: Story = {
     {
       label: 'Before',
       caption:
-        'The first vote, 11 to 1 for guilty. It weighs guilty against not guilty, and rests on one premise: the two witnesses prove the boy did it.',
+        'The first vote, 11 to 1 for guilty, rests on one premise: the two witnesses prove the boy did it.',
       alt: 'A graph. The decision "The first vote: guilty, 11 to 1" chose the option Guilty, weighs the option Not guilty, and rests on the assumption "The two witnesses prove the boy did it".',
       frame: { w: W, h: 292, nodes: juryNodes, edges: juryEdges },
     },
     {
       label: 'What happened',
       caption:
-        'Three pieces of evidence refute that premise. It reads refuted, and so does the vote resting on it: its assumption is refuted.',
+        'Three pieces of evidence refute that premise. The vote resting on it now reads: assumption refuted.',
       alt: 'The same graph with three pieces of evidence added: the knife is not unique, his walk took 41 seconds, not 15, and she had no glasses on. Each refutes the assumption, which is marked refuted. The first vote is marked assumption refuted.',
       frame: {
         w: W,
@@ -225,7 +225,7 @@ export const storyRevise: Story = {
     {
       label: 'After',
       caption:
-        'The verdict, 12 to 0 for not guilty, replaces the first vote. The old vote stays on the graph, greyed and reading superseded, with its options and the premise that fell. Nothing is deleted.',
+        'The verdict, 12 to 0 for not guilty, replaces the first vote. The old vote stays, greyed and reading superseded. Nothing is deleted.',
       alt: 'A new decision, "The verdict: not guilty, 12 to 0", replaces the first vote. The first vote stays, greyed and marked superseded, still linked to its two options and to the refuted assumption, and the three pieces of evidence are still there.',
       frame: {
         w: W,
@@ -446,7 +446,7 @@ export const storyBet: Story = {
     {
       label: 'Evidence arrives',
       caption:
-        '212 readers pay after a month. The evidence supports the bet, which reads held, and the decision stands. Had it gone the other way, the bet would read failed, and you would replace the decision.',
+        '212 readers pay after a month. The evidence supports the bet, which reads held. Had it gone the other way, it would read failed.',
       alt: 'Evidence is added: 212 readers pay after a month, seen in the payments on 3 November. It supports the bet, which is marked held. The decision is marked still holds.',
       frame: {
         w: W,
@@ -526,6 +526,10 @@ export const storyLostOption: Story = {
       },
     },
   ],
+  demo: {
+    href: 'demo/decisions/the-jury-finds-the-defendant-not-guilty/',
+    text: 'The jury\'s verdict keeps both options, not guilty (chosen) and guilty, with the reason.',
+  },
 };
 
 // ── 3. Decisions not being made: a café's open questions ────────────────────

@@ -126,7 +126,7 @@ Add to `.mcp.json` in the project root:
   "mcpServers": {
     "hivemind": {
       "command": "hivemind",
-      "args": ["--hivemind-dir", "./hivemind/", "mcp"]
+      "args": ["--hivemind-dir", "./hivemind/", "mcp", "--agent-tool", "claude"]
     }
   }
 }
@@ -139,12 +139,14 @@ Or set `HIVEMIND_DIR` and omit `--hivemind-dir`:
   "mcpServers": {
     "hivemind": {
       "command": "hivemind",
-      "args": ["mcp"],
+      "args": ["mcp", "--agent-tool", "claude"],
       "env": { "HIVEMIND_DIR": "./hivemind/" }
     }
   }
 }
 ```
+
+`--agent-tool claude` files captures under Claude Code (see [Who a capture is filed under](#who-a-capture-is-filed-under-local-stdio)).
 
 ### Cursor (local)
 
@@ -153,7 +155,7 @@ Or set `HIVEMIND_DIR` and omit `--hivemind-dir`:
   "mcpServers": {
     "hivemind": {
       "command": "hivemind",
-      "args": ["mcp"],
+      "args": ["mcp", "--agent-tool", "cursor"],
       "env": { "HIVEMIND_DIR": "/path/to/hivemind/" }
     }
   }
@@ -163,7 +165,7 @@ Or set `HIVEMIND_DIR` and omit `--hivemind-dir`:
 ### Codex (local)
 
 ```bash
-codex mcp add hivemind -- hivemind mcp
+codex mcp add hivemind -- hivemind mcp --agent-tool codex
 ```
 
 This writes the server to `~/.codex/config.toml`; `codex mcp list` shows it enabled.
@@ -171,7 +173,7 @@ This writes the server to `~/.codex/config.toml`; `codex mcp list` shows it enab
 ```toml
 [mcp_servers.hivemind]
 command = "hivemind"
-args = ["mcp"]
+args = ["mcp", "--agent-tool", "codex"]
 ```
 
 ---
@@ -213,17 +215,21 @@ for full parameter documentation.
 
 ---
 
-## Actor requirement (local stdio)
+## Who a capture is filed under (local stdio)
 
-Every capture call requires an explicit `actor_id`. Use the originating tool as a prefix:
+A capture call may name its actor in `actor_id`; it is optional. Without one, the server records
+`agent:<tool>:mcp-<session-id>`, and a capture that names no `project` lands in that agent's
+personal project. `<tool>` comes from `--agent-tool` on the server's command line, so name your
+client there:
 
 ```
-agent:claude:<session-id>
-agent:cursor:<session-id>
-agent:codex:<session-id>
+hivemind mcp --agent-tool claude    # Claude Code
+hivemind mcp --agent-tool codex     # Codex
+hivemind mcp --agent-tool cursor    # Cursor
 ```
 
-The server records `source=agent` and a per-session `source_ref` for every write.
+Without the flag the server usually cannot tell which client started it, and files captures under
+`codex`. The server records `source=agent` and a per-session `source_ref` for every write.
 
 ---
 

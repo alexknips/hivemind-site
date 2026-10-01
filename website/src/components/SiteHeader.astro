@@ -1,6 +1,8 @@
 ---
 // The site header of the landing page and the use cases page. The links to the
 // landing page's sections carry the base path, so they work from either page.
+// "Roadmap" is the use cases page's "Coming next" section (its three sections are
+// works today, coming next, planned); the landing page keeps only a one-line summary.
 const base = import.meta.env.BASE_URL;
 ---
 <!-- Nav. From md up: the text links in a row. Below md: the wordmark, the
@@ -19,7 +21,7 @@ const base = import.meta.env.BASE_URL;
     </a>
     <div class="flex items-center gap-x-5">
       <a href={`${base}getting-started/quickstart/`} class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Docs</a>
-      <a href={`${base}#where-it-is`} class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Roadmap</a>
+      <a href={`${base}use-cases/#next`} class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Roadmap</a>
       <a href={`${base}pitch/`} class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Why HiveMind</a>
       <a href={`${base}demo/`} class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">Demo</a>
       <a href="https://github.com/alexknips/hivemind" class="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors">GitHub</a>
@@ -39,7 +41,7 @@ const base = import.meta.env.BASE_URL;
             <li><a href={`${base}getting-started/quickstart/`} class="block py-3 text-foreground hover:text-link">Docs</a></li>
             <li><a href={`${base}demo/`} class="block py-3 text-foreground hover:text-link">Demo</a></li>
             <li><a href={`${base}use-cases/`} class="block py-3 text-foreground hover:text-link">Use cases</a></li>
-            <li><a href={`${base}#where-it-is`} class="block py-3 text-foreground hover:text-link">Roadmap</a></li>
+            <li><a href={`${base}use-cases/#next`} class="block py-3 text-foreground hover:text-link">Roadmap</a></li>
             <li><a href={`${base}pitch/`} class="block py-3 text-foreground hover:text-link">Why HiveMind</a></li>
             <li><a href="https://github.com/alexknips/hivemind" class="block py-3 text-foreground hover:text-link">GitHub</a></li>
           </ul>

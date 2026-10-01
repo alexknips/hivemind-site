@@ -25,14 +25,6 @@ configured, the background classifier picks up `enqueue-capture` batches instead
 
 ## Install
 
-:::caution[The plugins are ahead of the v0.7.0 release]
-Both bundles come from hivemind's `master` branch, and their HiveMind server passes a flag the
-v0.7.0 binary does not know (`--project-from-context`). With v0.7.0 the plugin's server does not
-start and its capture command fails; only its query command works. Until a release catches up,
-connect HiveMind as in [MCP setup](../mcp-setup/) and capture with the CLI, as in
-[Direct capture](#direct-capture--single-decision) below.
-:::
-
 ### Claude Code — marketplace
 
 ```text

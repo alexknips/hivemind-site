@@ -53,12 +53,14 @@ Add to Claude Code via `.mcp.json`:
   "mcpServers": {
     "hivemind": {
       "command": "hivemind",
-      "args": ["mcp"],
+      "args": ["mcp", "--agent-tool", "claude"],
       "env": { "HIVEMIND_DIR": "./hivemind/" }
     }
   }
 }
 ```
+
+`--agent-tool claude` files your agent's captures under Claude Code; without it they are filed under Codex.
 
 Run the HTTP API server directly:
 

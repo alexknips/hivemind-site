@@ -51,10 +51,11 @@ so [install it](../../getting-started/install/#install-the-binary) first.
 From a local HiveMind checkout: open `/plugins`, choose `HiveMind Plugins`, and
 install `HiveMind Capture`.
 
-From another checkout or machine, add the repository as a marketplace first:
+From another checkout or machine, add the repository as a marketplace, then install the bundle:
 
 ```bash
 codex plugin marketplace add https://github.com/alexknips/hivemind.git
+codex plugin add hivemind-capture@hivemind-plugins
 ```
 
 Or copy the skill bundle directly:

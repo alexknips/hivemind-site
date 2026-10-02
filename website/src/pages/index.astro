@@ -6,28 +6,20 @@ import ThemeInit from '../components/ThemeInit.astro';
 import '../styles/graphs.css';
 import Anatomy from '../components/graphs/Anatomy.astro';
 import Story from '../components/graphs/Story.astro';
-import {
-  storyAssumption,
-  storyBet,
-  storyDrift,
-  storyLostOption,
-  storyRevise,
-  storyWaiting,
-  storyWho,
-} from '../data/graph-stories';
+import { storyAssumption, storyLostOption, storyRevise, storyWho } from '../data/graph-stories';
 const base = import.meta.env.BASE_URL;
 // The version check is part of step 1: on the landing path, `claude mcp add` succeeds without the
-// binary on PATH and Claude Code only fails later (ENOENT), so the PATH hint is keyed to this line.
+// binary on PATH and Claude Code only fails later (ENOENT); the fix is in the Quickstart, linked here.
 const installCmd = 'curl -fsSL https://raw.githubusercontent.com/alexknips/hivemind/master/scripts/install.sh | sh\nhivemind --version';
 // --agent-tool claude files captures under Claude Code; without it the server files them under codex.
 const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude';
-// Status words on this page: "works today" = in the current release (v0.7.0, 25 Sep 2026);
-// "coming next" = built and merged but not yet in a release, or under way; "planned" = decided, not built.
+// Everything on this page works in the current release (v0.7.0, 25 Sep 2026), so it carries no
+// status marks; what comes next and what is planned is told once, on the use cases page.
 // Every claim on this page is listed with its evidence in CLAIMS.md at the repo root.
 // The page tells the problem (the next session undoes it, nobody knows why, nobody can say if it
 // held up) once, in #problem, and goes straight on to what it is useful for (the founder's review of
-// 2026-09-30: too much duplication, too much text, get to the use cases sooner). Longer lists live on
-// the use cases page; the real Claude Code sessions live in the deck.
+// 2026-09-30: too much duplication, too much text, get to the use cases sooner). Since 2026-10-02 it
+// keeps only what works today, about 1,000 words. The real Claude Code sessions live in the deck.
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -45,8 +37,8 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
 
   <main>
 
-    <!-- Hero: the first and last sentences of the positioning paragraph (vision/README.md); its middle
-         sentences are the three cards right under it, so the story is told once. -->
+    <!-- Hero: the headline, one line and the two buttons. The badge says the release and local-first,
+         the install section says self-hosted, so the hero does not. -->
     <section class="max-w-4xl mx-auto px-4 sm:px-6 pt-14 sm:pt-20 pb-12 sm:pb-16 text-center">
       <p class="badge badge-outline mb-8">
         <span class="size-1.5 rounded-full bg-success" aria-hidden="true"></span>
@@ -55,16 +47,11 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
       <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground mb-6">
         HiveMind is memory<br class="hidden sm:inline" /> <span class="text-muted-foreground">for decisions.</span>
       </h1>
-      <p class="text-md sm:text-lg text-foreground max-w-2xl mx-auto mb-5 leading-relaxed">
+      <p class="text-md sm:text-lg text-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
         Your agent forgets what you decided together. HiveMind keeps it.
       </p>
-      <!-- Not only for engineering (the founder's direction of 2026-09-29); "one person and their agents" (2026-09-30) -->
-      <p class="text-md text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-        One person and their agents, local-first, AGPL-3.0, free to self-host. Not only for engineering: a plan,
-        a hire, a supplier, a verdict.
-      </p>
 
-      <div class="flex flex-col sm:flex-row gap-3 justify-center mb-4">
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
         <a href="#self-host" class="btn btn-primary btn-lg">
           Self-host it &rarr;
         </a>
@@ -72,7 +59,6 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
           Open the demo &rarr;
         </a>
       </div>
-      <p class="text-sm text-muted-foreground">The demo is the app, read-only, over made-up projects, the jury room of <em>12 Angry Men</em> among them.</p>
     </section>
 
     <!-- The problem, told once, in plain words (the founder's direction of 2026-09-29). The one place on
@@ -84,7 +70,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
           <div class="border-t border-border pt-5">
             <h3 class="text-md font-semibold text-foreground mb-2">The next session undoes it</h3>
             <p class="text-base text-muted-foreground leading-relaxed mb-3">
-              You ruled an option out, for a reason. A fresh session never heard about it and suggests it again.
+              You ruled an option out, for a reason. A fresh session never heard of it and suggests it again.
             </p>
             <p class="text-base text-foreground leading-relaxed">
               HiveMind keeps the options that lost, and why they lost.
@@ -93,7 +79,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
           <div class="border-t border-border pt-5">
             <h3 class="text-md font-semibold text-foreground mb-2">Nobody knows why</h3>
             <p class="text-base text-muted-foreground leading-relaxed mb-3">
-              The chat was the meeting. Once it closes, nobody can say why it went that way, or who made the call.
+              The chat was the meeting. Once it closes, nobody can say why, or who made the call.
             </p>
             <p class="text-base text-foreground leading-relaxed">
               HiveMind keeps the reasons, the evidence and who decided: you or the agent.
@@ -118,17 +104,17 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
 
     <!-- The feature showcase, right after the opening (the founder, 2026-09-30: "What it is useful for is
          amazing and we need to get to it sooner"). One feature per card; the card's graph is its example,
-         so the cards carry no second telling in prose. Order: works today = revised or replaced, who
-         decided, what it rests on, why with the options that lost; then the bet (works today, its flag
-         coming next), questions still waiting and the seven dimensions (coming next); planned = projects
-         drifting apart, then speed with consistency and flexibility. Capture without typing is left out
-         on purpose. Reordering is moving a card; CLAIMS.md lists the evidence. -->
+         so the cards carry no second telling in prose. Only what works today (2026-10-02): revised or
+         replaced, who decided, what it rests on, why with the options that lost. The bet, the questions
+         still waiting, the seven dimensions, the drifting projects and speed with consistency and
+         flexibility are on the use cases page, each told once. Reordering is moving a card; CLAIMS.md
+         lists the evidence. -->
     <section id="showcase" class="border-t border-border bg-sidebar scroll-mt-20">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">Use cases</p>
         <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">What it is useful for</h2>
         <p class="text-md text-muted-foreground text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          One feature per card, each with a small graph of an everyday example.
+          Everything on this page works in v0.7.0.
         </p>
 
         <Anatomy />
@@ -138,12 +124,9 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
           <!-- A decision is revised or replaced, and its status changes -->
           <article class="rounded-lg border border-border bg-card shadow-xs p-5 sm:p-6 min-w-0">
             <div class="max-w-3xl">
-              <span class="badge bg-success-soft text-success-foreground mb-4">Works today</span>
               <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Change your mind, and the old decision says so</h3>
               <p class="text-base text-foreground leading-relaxed">
-                Replace a decision and the old one reads <span class="badge badge-neutral">superseded</span>, pointing to
-                what replaced it. Dispute one and it reads <span class="badge badge-warning">contested</span>, with both
-                sides kept. Nothing is edited or deleted.
+                The old decision stays, pointing to what replaced it. Nothing is edited or deleted.
               </p>
             </div>
             <Story story={storyRevise} />
@@ -152,7 +135,6 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
           <!-- Who decided: you or the agent -->
           <article class="rounded-lg border border-border bg-card shadow-xs p-5 sm:p-6 min-w-0">
             <div class="max-w-3xl">
-              <span class="badge bg-success-soft text-success-foreground mb-4">Works today</span>
               <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Who decided: you or the agent</h3>
               <p class="text-base text-foreground leading-relaxed">
                 Every decision says who made it, a person or an agent, apart from who wrote it down. It is for seeing
@@ -172,12 +154,10 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
           <!-- What a decision rests on -->
           <article class="rounded-lg border border-border bg-card shadow-xs p-5 sm:p-6 min-w-0">
             <div class="max-w-3xl">
-              <span class="badge bg-success-soft text-success-foreground mb-4">Works today</span>
               <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">What a decision rests on</h3>
               <p class="text-base text-foreground leading-relaxed">
                 Every decision names what it rests on: an earlier decision, something observed, an assumption, or a bet
-                with a date to check. When evidence refutes the assumption, it says so. When the earlier decision is
-                replaced, it reads stale.
+                with a date to check. When that is refuted or replaced, the decision says so.
               </p>
             </div>
             <Story story={storyAssumption} />
@@ -186,173 +166,56 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
           <!-- Decisions are remembered with the options that lost, and why -->
           <article class="rounded-lg border border-border bg-card shadow-xs p-5 sm:p-6 min-w-0">
             <div class="max-w-3xl">
-              <span class="badge bg-success-soft text-success-foreground mb-4">Works today</span>
               <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Ask why, and get the options that lost</h3>
               <p class="text-base text-foreground leading-relaxed">
-                Ask "why did we…" in a fresh session and get the reason, the options that lost and why, who decided,
-                and whether the decision still holds.
+                In a fresh session, ask why, and get the reason, the options that lost, who decided, and whether it
+                still holds.
               </p>
             </div>
             <Story story={storyLostOption} />
           </article>
 
-          <!-- A bet with a check date, called out when the date passes: works today, the flag without asking is coming next
-         (marked on the graph's second step, so the card does not say it twice) -->
-          <article class="rounded-lg border border-border bg-card shadow-xs p-5 sm:p-6 min-w-0">
-            <div class="max-w-3xl">
-              <span class="badge badge-warning mb-4">Coming next</span>
-              <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">An honest bet, called out</h3>
-              <p class="text-base text-foreground leading-relaxed">
-                With nothing yet to rest a decision on, name a bet and a date to check it. Calling it out is expected,
-                not blame. The graph marks the one part that is coming next; the rest works today.
-              </p>
-            </div>
-            <Story story={storyBet} />
-          </article>
-
-          <!-- Questions asked and not yet decided: coming next, the full lists planned -->
-          <article class="rounded-lg border border-border bg-card shadow-xs p-5 sm:p-6 min-w-0">
-            <div class="max-w-3xl">
-              <span class="badge badge-warning mb-4">Coming next</span>
-              <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Questions nobody has decided yet</h3>
-              <p class="text-base text-foreground leading-relaxed">
-                Ask a question before anything answers it, and it waits, with its age, until a decision answers it.
-              </p>
-              <ul class="mt-3 space-y-1.5 text-base leading-relaxed">
-                <li>
-                  <span class="font-medium text-foreground">Planned:</span>
-                  <span class="text-muted-foreground">the same list beside what is contested and what changed.</span>
-                </li>
-              </ul>
-            </div>
-            <Story story={storyWaiting} />
-          </article>
-
-          <!-- Metrics per decision: the seven dimensions -->
-          <article class="rounded-lg border border-border bg-card shadow-xs p-5 sm:p-6 min-w-0">
-            <div class="max-w-3xl">
-              <span class="badge badge-warning mb-4">Coming next</span>
-              <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">How well made was this decision?</h3>
-              <p class="text-base text-foreground leading-relaxed">
-                A profile on seven dimensions, each line naming the records it was read from: say, alternatives solid,
-                information partial, calibration not assessed. Not a grade, and never a mark against changing your mind.
-              </p>
-            </div>
-          </article>
-
-          <!-- Projects diverging: works today in part, the rest planned -->
-          <article class="rounded-lg border border-dashed border-input p-5 sm:p-6 min-w-0">
-            <div class="max-w-3xl">
-              <span class="badge badge-outline mb-4">Planned</span>
-              <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Two projects, drifting apart</h3>
-              <p class="text-base text-foreground leading-relaxed">
-                When your agents work several projects and one replaces a decision another rests on, the decisions that
-                depend on it show it.
-              </p>
-              <ul class="mt-3 space-y-1.5 text-base leading-relaxed">
-                <li>
-                  <span class="font-medium text-success-foreground">Works today:</span>
-                  <span class="text-muted-foreground">the dependent decision reads stale, and "what should I know?" also
-                  looks in the project it depends on.</span>
-                </li>
-                <li>
-                  <span class="font-medium text-foreground">Planned:</span>
-                  <span class="text-muted-foreground">a "re-examine" item, catching a contradiction with no recorded
-                  link, and a count of the links that hold.</span>
-                </li>
-              </ul>
-            </div>
-            <Story story={storyDrift} />
-          </article>
-
-          <!-- Metrics across decisions: speed, and consistency with flexibility as a pair -->
-          <article class="rounded-lg border border-dashed border-input p-5 sm:p-6 min-w-0">
-            <div class="max-w-3xl">
-              <span class="badge badge-outline mb-4">Planned</span>
-              <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">Speed, consistency and flexibility</h3>
-              <p class="text-base text-foreground leading-relaxed">
-                Across your decisions: how fast you decide, how often a new decision stays in line with the standing
-                ones, and how often you change your mind on new evidence. Side by side, never one number, no ranking.
-              </p>
-            </div>
-          </article>
-
         </div>
 
         <p class="text-sm text-muted-foreground text-center mt-12 max-w-2xl mx-auto leading-relaxed">
-          The <a href={`${base}use-cases/`} class="link">use cases page</a> has every feature, with the command or tool
-          call behind each one that works today.
+          The <a href={`${base}use-cases/#next`} class="link">use cases page</a> has what comes next and what is
+          planned.
         </p>
       </div>
     </section>
 
-    <!-- Who it is for (vision/README.md, "Who it is for"), and where it is. The old "Where it is" lists
-         are the use cases page's three sections; the anchor stays for old links. -->
+    <!-- Who it is for and how it compares, one short section (vision/README.md: "Who it is for", the
+         shelf, what we do not claim yet). "Not only for engineering" (the founder's direction of
+         2026-09-29) and "one person and their agents" (2026-09-30) live here since the hero is one line.
+         The old anchors #how-it-compares and #where-it-is stay for old links. -->
     <section id="who-it-is-for" class="border-t border-border scroll-mt-20">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">Who it is for</p>
         <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-8">One person and their agents</h2>
         <p class="text-base text-muted-foreground leading-relaxed mb-4">
-          Anyone who decides things with agents every day and has paid the cost of an agent that forgets. Today that
-          is mostly engineers, because running HiveMind takes a developer's setup: you self-host it and connect your
-          agent over MCP. If you keep a <code class="code">DECISIONS.md</code> or ADRs by hand and have watched them
-          go stale, start here.
+          Anyone who decides things with agents every day. Not only for engineering: a plan, a hire, a supplier, a
+          verdict. Today it takes a developer's setup: you run it yourself and connect your agent over MCP.
+          <span class="font-medium text-foreground">Soon to come:</span> teams on one shared record, not built yet.
         </p>
-        <p class="text-base text-muted-foreground leading-relaxed mb-4">
-          <span class="font-medium text-foreground">Soon to come:</span> teams, several people and their agents on one
-          shared record, with a view for the team lead across everyone's decisions. It is not built yet.
-        </p>
-        <p id="where-it-is" class="text-base text-muted-foreground leading-relaxed scroll-mt-20">
-          <span class="font-medium text-foreground">Where it is:</span> early, self-hosted only, with no hosted version.
-          The <a href={`${base}use-cases/#next`} class="link">roadmap</a> lists what works today, what comes next and
-          what is planned.
-        </p>
-      </div>
-    </section>
-
-    <!-- How it compares (vision/README.md: the shelf, where it is different and where it is not, what we do not claim yet) -->
-    <section id="how-it-compares" class="border-t border-border bg-sidebar scroll-mt-20">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-        <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">How it compares</p>
-        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-10 sm:mb-12">Against what you do today</h2>
-        <div class="grid md:grid-cols-3 gap-8 sm:gap-10">
-          <div class="border-t border-border pt-5">
-            <h3 class="text-md font-semibold text-foreground mb-2">A hand-kept <code class="code">DECISIONS.md</code> or ADRs</h3>
-            <p class="text-base text-muted-foreground leading-relaxed">
-              Only as true as its last edit: after a reversal the old entry stays, and the agent follows it. In
-              HiveMind the status follows from later decisions.
-            </p>
-          </div>
-          <div class="border-t border-border pt-5">
-            <h3 class="text-md font-semibold text-foreground mb-2">Agent memory tools</h3>
-            <p class="text-base text-muted-foreground leading-relaxed">
-              They remember facts and preferences, and do that well. HiveMind is memory for decisions: the options
-              that lost, the evidence, who decided.
-            </p>
-          </div>
-          <div class="border-t border-border pt-5">
-            <h3 class="text-md font-semibold text-foreground mb-2">Deciding in the chat</h3>
-            <p class="text-base text-muted-foreground leading-relaxed">
-              Gone by the next session, with the reasons. HiveMind keeps the decision with your own words attached,
-              and a fresh session can ask.
-            </p>
-          </div>
-        </div>
-        <p class="text-sm text-muted-foreground text-center mt-10 max-w-3xl mx-auto leading-relaxed">
-          Capture over MCP, superseding and local-first exist elsewhere; the combination is what we have not found.
+        <h3 id="how-it-compares" class="text-md font-semibold text-foreground mt-10 mb-3 scroll-mt-20">Against what you do today</h3>
+        <ul class="space-y-2 text-base text-muted-foreground leading-relaxed">
+          <li><span class="font-medium text-foreground">A hand-kept <code class="code">DECISIONS.md</code> or ADRs</span> are only as true as their last edit. In HiveMind the status follows from later decisions.</li>
+          <li><span class="font-medium text-foreground">Agent memory tools</span> remember facts and preferences. HiveMind remembers decisions: the options that lost, the evidence, who decided.</li>
+        </ul>
+        <p id="where-it-is" class="text-sm text-muted-foreground leading-relaxed mt-6 scroll-mt-20">
           Not claimed yet: that it makes your decisions better (a side-by-side test is planned), that anyone outside
           uses it, or that it recalls better than memory tools.
         </p>
       </div>
     </section>
 
-    <!-- How to start: self-host (deck slide 8) -->
+    <!-- How to start: self-host (the deck's last slide) -->
     <section id="self-host" class="border-t border-border scroll-mt-20">
       <div class="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">How to start</p>
         <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Start on your own machine</h2>
         <p class="text-md text-muted-foreground text-center max-w-xl mx-auto mb-12">
-          One binary and a local ledger in your project. No account, no API key, and nothing phones home.
+          No account, no API key, and nothing phones home.
         </p>
 
         <ol class="border-y border-border divide-y divide-border">
@@ -362,11 +225,9 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
               <h3 class="text-md font-semibold text-foreground mb-3">Install HiveMind</h3>
               <pre class="code-block mb-3"><code>{installCmd}</code></pre>
               <p class="text-base text-muted-foreground leading-relaxed">
-                Linux (x86_64, ARM64) and Apple Silicon Macs; the script checks the release&rsquo;s SHA-256.
-                Elsewhere, <a href="https://github.com/alexknips/hivemind#install" class="link">build it with cargo</a>.
-                If the second line says <code class="code">hivemind: not found</code>, run
-                <code class="code">export PATH="$HOME/.local/bin:$PATH"</code> and add it to your shell's startup file.
-                Without it the next step still succeeds, but Claude Code cannot start HiveMind.
+                Linux (x86_64, ARM64) and Apple Silicon Macs; the script checks the release&rsquo;s SHA-256. Other
+                systems, or <code class="code">hivemind: not found</code>: see the
+                <a href={`${base}getting-started/quickstart/#if-hivemind-is-not-found`} class="link">quickstart</a>.
               </p>
             </div>
           </li>
@@ -377,7 +238,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
               <pre class="code-block mb-3"><code>{connectCmd}</code></pre>
               <p class="text-base text-muted-foreground leading-relaxed">
                 Run it in your project for Claude Code. Decisions go to <code class="code">./hivemind/</code>,
-                a SQLite ledger you own, filed under Claude Code. Codex, Cursor and Claude Desktop are in
+                a SQLite ledger you own. Codex, Cursor and Claude Desktop are in
                 <a href={`${base}guides/mcp-setup/`} class="link">MCP setup</a>.
               </p>
             </div>
@@ -387,13 +248,11 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
             <div class="min-w-0 flex-1">
               <h3 class="text-md font-semibold text-foreground mb-3">Record a decision, then ask why</h3>
               <div class="code-block font-sans text-base whitespace-normal break-normal space-y-2 mb-3">
-                <p><span class="text-muted-foreground">You:</span> Record a decision: we use SQLite for the ledger. We considered Postgres and rejected it: more than we need for now. It rests on the assumption that one machine is enough.</p>
+                <p><span class="text-muted-foreground">You:</span> Record a decision: we use SQLite for the ledger, not Postgres, which is more than we need. It rests on one machine being enough.</p>
                 <p><span class="text-muted-foreground">Later:</span> Why did we pick SQLite, and what did we rule out?</p>
               </div>
               <p class="text-base text-muted-foreground leading-relaxed">
-                Your agent records it with the options, what it rests on and who decided, and answers from the record.
-                The <a href={`${base}getting-started/quickstart/`} class="link">quickstart</a> walks through it, and
-                the <a href={`${base}pitch/`} class="link">deck</a> shows three real Claude Code sessions doing it.
+                The <a href={`${base}pitch/`} class="link">deck</a> shows three real Claude Code sessions doing it.
               </p>
             </div>
           </li>
@@ -401,12 +260,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
 
         <p class="text-sm text-muted-foreground text-center mt-8">
           Prefer a server to a local file?
-          <a href={`${base}getting-started/install/#run-a-cell-with-docker`} class="link">Run a HiveMind cell with Docker Compose</a>.
-        </p>
-        <p class="text-sm text-muted-foreground text-center mt-3 max-w-xl mx-auto">
-          Then record the next thing you and your agent decide, ask why a week later, and
-          <a href="https://github.com/alexknips/hivemind/issues" class="link">open an issue</a>
-          to say where it breaks, or how you do this today.
+          <a href={`${base}getting-started/quickstart/#run-a-cell-with-docker`} class="link">Run a HiveMind cell with Docker Compose</a>.
         </p>
       </div>
     </section>

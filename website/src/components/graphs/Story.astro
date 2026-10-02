@@ -1,8 +1,9 @@
 ---
-// A story in two or three steps (before, what happened, after), each a small
+// A story in one to three steps (before, what happened, after), each a small
 // graph with a line under it. Side by side from lg, stacked below that, each
-// frame capped so its words stay the size of the page's small text. A two-step
-// story keeps the three-column sizes and puts its key (the slot) in the third.
+// frame capped so its words stay the size of the page's small text. A story of
+// fewer than three steps keeps the three-column sizes and puts its key (the
+// slot) in the next column. A one-step story has no step label: the title says it.
 import Frame from './Frame.astro';
 import type { Story } from '../../data/graph-stories';
 
@@ -12,25 +13,29 @@ interface Props {
 
 const { story } = Astro.props;
 const base = import.meta.env.BASE_URL;
-const keyBeside = story.steps.length === 2 && Astro.slots.has('default');
+const n = story.steps.length;
+const keyBeside = n < 3 && Astro.slots.has('default');
+const span = n === 1 ? 'lg:col-span-1 lg:grid-cols-1' : 'lg:col-span-2 lg:grid-cols-2';
 ---
 <figure class="mt-6 pt-6 border-t border-border min-w-0" aria-labelledby={`${story.id}-title`}>
   <figcaption id={`${story.id}-title`} class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-4">
     {story.title}
   </figcaption>
   <div class:list={['grid', keyBeside && 'lg:grid-cols-3 lg:gap-5']}>
-    <ol class:list={['grid gap-7 lg:gap-5', keyBeside ? 'lg:col-span-2 lg:grid-cols-2' : 'lg:grid-cols-3']}>
+    <ol class:list={['grid gap-7 lg:gap-5', keyBeside ? span : 'lg:grid-cols-3']}>
       {story.steps.map((step, i) => (
         <li class="min-w-0 max-w-[26rem] lg:max-w-none">
-          <p class="text-xs font-mono text-muted-foreground mb-2">
-            {i + 1} &middot; {step.label}
-          </p>
+          {n > 1 && (
+            <p class="text-xs font-mono text-muted-foreground mb-2">
+              {i + 1} &middot; {step.label}
+            </p>
+          )}
           <Frame frame={step.frame} alt={step.alt} />
           <p class="text-sm text-muted-foreground leading-relaxed mt-3">{step.caption}</p>
         </li>
       ))}
     </ol>
-    {keyBeside && <div class="min-w-0 lg:pt-6"><slot /></div>}
+    {keyBeside && <div class:list={['min-w-0', n > 1 && 'lg:pt-6']}><slot /></div>}
   </div>
   {!keyBeside && <slot />}
   {story.demo && (

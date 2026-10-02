@@ -2,7 +2,9 @@
 // The anatomy of a decision, taught once at the top of "What it is useful for":
 // one decision in the middle and every kind of part around it. Hover or tap a
 // part of the graph, or its name under it, to read one line about it. The wide
-// graph shows from lg; below that, a tall one where every part hangs off one line.
+// graph shows from lg; below that, a tall one where every part sits on one line.
+// No status legend: everything on the landing page works today; the legend for
+// coming next and planned is on the use cases page.
 import Frame from './Frame.astro';
 import { anatomyAlt, anatomyNarrow, anatomyParts, anatomyWide } from '../../data/graph-stories';
 
@@ -14,8 +16,8 @@ const idle = 'Hover or tap a part of the graph, or a name above, to read one lin
     <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-2">The basics</p>
     <h3 class="text-lg font-semibold tracking-tight text-foreground mb-2">The anatomy of a decision</h3>
     <p class="text-base text-muted-foreground leading-relaxed">
-      Every graph on this page uses these parts, drawn the way the app draws them, with arrows from the newer part
-      to the older one. The example: a café changing its coffee supplier.
+      Every drawing on this page uses these parts, as the app draws them, with arrows from the newer part to the
+      older one. Here, a café changes its coffee supplier.
     </p>
   </div>
 
@@ -43,17 +45,10 @@ const idle = 'Hover or tap a part of the graph, or a name above, to read one lin
     <p class="text-base text-foreground leading-relaxed mt-3 min-h-[2.75rem]" data-part-line aria-live="polite">{idle}</p>
   </div>
 
-  <div class="mt-5 pt-4 border-t border-border flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-8 text-sm text-muted-foreground">
-    <p class="flex flex-wrap items-center gap-x-5 gap-y-2">
-      <span class="inline-flex items-center gap-2"><span class="hg-key" aria-hidden="true"></span> works today, in v0.7.0</span>
-      <span class="inline-flex items-center gap-2"><span class="font-mono text-2xs tracking-wide">COMING NEXT</span> merged, not yet released</span>
-      <span class="inline-flex items-center gap-2"><span class="hg-key hg-key--dashed" aria-hidden="true"></span><span class="font-mono text-2xs tracking-wide">PLANNED</span> decided, not built</span>
-    </p>
-    <p class="lg:ml-auto">
-      <a href={`${base}demo/graph/the-jury-finds-the-defendant-not-guilty/`} class="link">Open a real one in the demo &rarr;</a>
-      <span class="ml-1">the jury's verdict</span>
-    </p>
-  </div>
+  <p class="mt-5 pt-4 border-t border-border text-sm text-muted-foreground">
+    <a href={`${base}demo/graph/the-jury-finds-the-defendant-not-guilty/`} class="link">Open a real one in the demo &rarr;</a>
+    <span class="ml-1">the jury's verdict</span>
+  </p>
 </div>
 
 <script>

@@ -46,7 +46,7 @@ const today: Card[] = [
   {
     title: 'Replace without erasing',
     who: 'Human · Agent',
-    body: 'Record the new decision as replacing the old one. The old one reads <b class="font-semibold text-foreground">superseded</b> and says what replaced it; the whole chain stays, walkable back to the first proposal.',
+    body: 'Record the new decision as replacing the old one. The old one reads <b class="font-semibold text-foreground">superseded</b> and says what replaced it; the whole chain stays, and you can follow it back to the first proposal.',
     cmd: '<span class="text-muted-foreground">hivemind</span> <span class="font-medium">supersede</span> "sqlite for local storage" --title … --rationale …',
     icon: '<path d="M4 7h9a4 4 0 0 1 4 4v0"/><path d="m14 4 3 3-3 3"/><path d="M20 17h-9a4 4 0 0 1-4-4v0"/><path d="m10 20-3-3 3-3"/>',
   },
@@ -60,7 +60,7 @@ const today: Card[] = [
   {
     title: '"What should I know before I touch this?"',
     who: 'Agent',
-    body: 'The decisions that bear on the files your agent is changing, read from the current diff. No question to type, and each one says whether it still holds.',
+    body: 'The decisions about the files your agent is changing, read from the current diff. No question to type, and each one says whether it still holds.',
     cmd: '<span class="text-muted-foreground">hivemind query</span> <span class="font-medium">situational</span>',
     icon: '<path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.5"/>',
   },
@@ -105,7 +105,7 @@ const today: Card[] = [
 const next: Card[] = [
   {
     title: 'A much simpler, decision-first UI',
-    body: "A list of decisions, newest first, as the front door, scoped by project. One decision's neighbourhood as the graph, with every arrow running from newer to older. Less chrome.",
+    body: "A list of decisions, newest first, as the start page, scoped by project. One decision's neighbourhood as the graph, with every arrow running from newer to older. Less clutter.",
     icon: '<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/><path d="M7 13h4M7 15.5h7"/>',
   },
   {

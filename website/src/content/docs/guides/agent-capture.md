@@ -16,7 +16,7 @@ decisions that already exist by description rather than by id, see the
 | Path | When to use | API key on server? |
 |------|-------------|-------------------|
 | **Direct** (`emit decision.capture`) | Single, deterministic decision at the moment it's made | Not required |
-| **Batch / keyless** (`emit ingest.batch_classified`) | Retrospective extraction over accumulated context | Not required — rides your Claude subscription |
+| **Batch / keyless** (`emit ingest.batch_classified`) | Retrospective extraction over accumulated context | Not required — runs on your Claude subscription |
 
 The server-side background classifier (`ANTHROPIC_API_KEY` on the server) is optional.
 The keyless path spawns a Haiku subagent inside your own Claude session and submits
@@ -91,7 +91,7 @@ Use `--agent-tool` and `--agent-session` only when overriding the defaults.
 ## Batch capture (keyless)
 
 For retrospective extraction over a batch of conversation turns, spawn a Haiku
-subagent inside your own session. Classification rides your Claude subscription —
+subagent inside your own session. Classification runs on your Claude subscription —
 no `ANTHROPIC_API_KEY` is read from the server environment.
 
 ### When to use the batch path

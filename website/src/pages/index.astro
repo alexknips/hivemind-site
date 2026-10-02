@@ -160,7 +160,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
               </p>
             </div>
             <Story story={storyWho}>
-              <p class="text-sm text-muted-foreground flex flex-wrap gap-x-5 gap-y-2 mt-5">
+              <p class="text-sm text-muted-foreground flex flex-wrap lg:flex-col gap-x-5 gap-y-2 mt-5 lg:mt-0">
                 <span class="inline-flex items-center gap-2"><span class="hg-swatch hg-swatch--you" aria-hidden="true"></span> you decided</span>
                 <span class="inline-flex items-center gap-2"><span class="hg-swatch hg-swatch--delegated" aria-hidden="true"></span> an agent, within what you handed it</span>
                 <span class="inline-flex items-center gap-2"><span class="hg-swatch hg-swatch--agent" aria-hidden="true"></span> an agent, on its own</span>
@@ -319,7 +319,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
           <div class="border-t border-border pt-5">
             <h3 class="text-md font-semibold text-foreground mb-2">A hand-kept <code class="code">DECISIONS.md</code> or ADRs</h3>
             <p class="text-base text-muted-foreground leading-relaxed">
-              Only as true as its last edit: after a reversal the dead entry stays, and the agent follows it. In
+              Only as true as its last edit: after a reversal the old entry stays, and the agent follows it. In
               HiveMind the status follows from later decisions.
             </p>
           </div>
@@ -341,7 +341,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
         <p class="text-sm text-muted-foreground text-center mt-10 max-w-3xl mx-auto leading-relaxed">
           Capture over MCP, superseding and local-first exist elsewhere; the combination is what we have not found.
           Not claimed yet: that it makes your decisions better (a side-by-side test is planned), that anyone outside
-          uses it, or that it beats memory tools at recall.
+          uses it, or that it recalls better than memory tools.
         </p>
       </div>
     </section>
@@ -387,7 +387,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
             <div class="min-w-0 flex-1">
               <h3 class="text-md font-semibold text-foreground mb-3">Record a decision, then ask why</h3>
               <div class="code-block font-sans text-base whitespace-normal break-normal space-y-2 mb-3">
-                <p><span class="text-muted-foreground">You:</span> Record a decision: we use SQLite for the ledger. We considered Postgres and rejected it as premature. It rests on the assumption that one machine is enough.</p>
+                <p><span class="text-muted-foreground">You:</span> Record a decision: we use SQLite for the ledger. We considered Postgres and rejected it: more than we need for now. It rests on the assumption that one machine is enough.</p>
                 <p><span class="text-muted-foreground">Later:</span> Why did we pick SQLite, and what did we rule out?</p>
               </div>
               <p class="text-base text-muted-foreground leading-relaxed">

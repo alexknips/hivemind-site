@@ -1,6 +1,6 @@
 /*
  * The landing page's graphs (the "What it is useful for" section): the anatomy of a
- * decision, then seven stories of three steps each. Every node is placed by
+ * decision, then seven stories of two or three steps each. Every node is placed by
  * hand in a 340-wide frame (the anatomy's wide variant is 1000 wide); graph.ts turns
  * them into SVG. Arrows run from the newer node to the older one, and the edge words
  * are the product's (docs/GRAPH_CONTRACT.md in hivemind).
@@ -52,12 +52,12 @@ export const anatomyParts: Part[] = [
   {
     id: 'decision',
     name: 'The decision',
-    line: 'The decision: what was decided, in one line. Everything else on the graph hangs off it, and every arrow points from the newer part to the older one.',
+    line: 'The decision: what was decided, in one line. Everything else on the graph links to it, and every arrow points from the newer part to the older one.',
   },
   {
     id: 'options',
     name: 'Options',
-    line: 'The options it weighs: everything that was on the table. The one chosen has a tick.',
+    line: 'The options it weighs: everything that was on the table. The chosen one has a check mark.',
   },
   {
     id: 'lost',
@@ -75,72 +75,55 @@ export const anatomyParts: Part[] = [
     line: 'An assumption it rests on. Evidence can support it, as the tasting does here, or refute it, and then the decision needs a look.',
   },
   {
-    id: 'earlier',
-    name: 'Follows from',
-    line: 'The earlier decision it follows from. Replace that one, and this one reads stale.',
-  },
-  {
     id: 'who',
     name: 'Who decided',
     line: 'Who decided: you or an agent, kept apart from who wrote it down. Here you decided, and your agent recorded it.',
-  },
-  {
-    id: 'question',
-    name: 'The question',
-    line: 'The question it answers. Coming next: ask the question first, and the decision that answers it links back to it.',
   },
 ];
 
 export const anatomyAlt =
   'The anatomy of a decision, drawn as a graph. In the middle, the decision "Buy our coffee beans from Roaster B", decided by you and recorded by your agent. ' +
-  'It chose the option Roaster B and weighs two options that lost, each with its reason: stay with Roaster A, 30% dearer from March, and roast our own, which needs a roaster and a person. ' +
+  'It chose the option Roaster B and weighs two options that lost, each with its reason: stay with Roaster A, which costs 30% more from March, and roast our own, which needs a roaster and a person. ' +
   "It is based on evidence, Roaster A's new price list, 30% more from March, seen in their email on 12 February. " +
-  'It rests on an assumption, regulars will not mind the new beans, which a blind tasting supports: 9 of 12 regulars chose B, seen at the café on 20 February. ' +
-  'It follows from an earlier decision, keep a flat white at 3.50 euros. ' +
-  'It answers the question "Where do we buy beans from March?", a part marked coming next. Every arrow points from the newer part to the older one.';
+  'It rests on an assumption, customers will not mind the new beans, which a blind tasting supports: 9 of 12 customers chose B, seen at the café on 20 February. ' +
+  'Every arrow points from the newer part to the older one.';
 
 const aDecision = ['Buy our coffee beans', 'from Roaster B'];
 const aBy = ['decided by you · recorded by your agent'];
 
 export const anatomyWide: GFrame = {
   w: 1000,
-  h: 364,
+  h: 340,
   nodes: [
     { id: 'd', kind: 'decision', x: 380, y: 160, w: 240, lines: aDecision, sub: aBy, state: 'lit', part: 'decision who' },
-    { id: 'o1', kind: 'option', x: 240, y: 30, w: 130, lines: ['Roaster B'], chosen: true, part: 'options' },
-    { id: 'o2', kind: 'option', x: 390, y: 30, w: 186, lines: ['Stay with Roaster A'], sub: ['lost: 30% dearer from March'], part: 'options lost' },
-    { id: 'o3', kind: 'option', x: 596, y: 30, w: 218, lines: ['Roast our own'], sub: ['lost: needs a roaster and a person'], part: 'options lost' },
+    { id: 'o1', kind: 'option', x: 206, y: 30, w: 130, lines: ['Roaster B'], chosen: true, part: 'options' },
+    { id: 'o2', kind: 'option', x: 356, y: 30, w: 200, lines: ['Stay with Roaster A'], sub: ['lost: costs 30% more from March'], part: 'options lost' },
+    { id: 'o3', kind: 'option', x: 576, y: 30, w: 218, lines: ['Roast our own'], sub: ['lost: needs a roaster and a person'], part: 'options lost' },
     { id: 'e1', kind: 'evidence', x: 50, y: 160, w: 226, lines: ["Roaster A's new price list:", '30% more from March'], sub: ['seen in: their email, 12 Feb'], part: 'evidence' },
-    { id: 'q', kind: 'question', x: 724, y: 167, w: 226, lines: ['Where do we buy beans', 'from March?'], status: 'COMING NEXT', part: 'question' },
-    { id: 'h', kind: 'hypothesis', x: 120, y: 300, w: 238, lines: ["Regulars won't mind the new beans"], part: 'assumption' },
-    { id: 'e2', kind: 'evidence', x: 424, y: 286, w: 214, lines: ['Blind tasting: 9 of 12', 'regulars chose B'], sub: ['seen at: the café, 20 Feb'], part: 'assumption' },
-    { id: 'p', kind: 'decision', x: 724, y: 300, w: 216, lines: ['Keep a flat white at 3.50 €'], part: 'earlier' },
+    { id: 'h', kind: 'hypothesis', x: 700, y: 174, w: 250, lines: ["Customers won't mind the new beans"], part: 'assumption' },
+    { id: 'e2', kind: 'evidence', x: 718, y: 262, w: 214, lines: ['Blind tasting: 9 of 12', 'customers chose B'], sub: ['seen at: the café, 20 Feb'], part: 'assumption' },
   ],
   edges: [
     { from: 'd', to: 'o1', label: 'chose', fromSide: 't', toSide: 'b', fromOff: -80, part: 'options' },
-    { from: 'd', to: 'o2', label: 'weighs', fromSide: 't', toSide: 'b', fromOff: -6, part: 'options lost' },
+    { from: 'd', to: 'o2', label: 'weighs', fromSide: 't', toSide: 'b', fromOff: -10, part: 'options lost' },
     { from: 'd', to: 'o3', label: 'weighs', fromSide: 't', toSide: 'b', fromOff: 70, part: 'options lost' },
     { from: 'd', to: 'e1', label: 'based on', part: 'evidence' },
-    { from: 'd', to: 'q', label: 'answers', part: 'question' },
-    { from: 'd', to: 'h', label: 'rests on', fromSide: 'b', toSide: 't', fromOff: -70, toOff: 60, part: 'assumption' },
+    { from: 'd', to: 'h', label: 'rests on', part: 'assumption' },
     { from: 'e2', to: 'h', label: 'supports', part: 'assumption' },
-    { from: 'd', to: 'p', label: 'follows from', fromSide: 'b', toSide: 't', fromOff: 90, toOff: -40, part: 'earlier' },
   ],
 };
 
 export const anatomyNarrow: GFrame = {
   w: W,
-  h: 532,
+  h: 430,
   nodes: [
     { id: 'd', kind: 'decision', x: 10, y: 10, w: 320, lines: ['Buy our coffee beans from Roaster B'], sub: aBy, state: 'lit', part: 'decision who' },
     { id: 'o1', kind: 'option', x: 100, y: 70, w: 230, lines: ['Roaster B'], chosen: true, part: 'options' },
-    { id: 'o2', kind: 'option', x: 100, y: 110, w: 230, lines: ['Stay with Roaster A'], sub: ['lost: 30% dearer from March'], part: 'options lost' },
+    { id: 'o2', kind: 'option', x: 100, y: 110, w: 230, lines: ['Stay with Roaster A'], sub: ['lost: costs 30% more from March'], part: 'options lost' },
     { id: 'o3', kind: 'option', x: 100, y: 164, w: 230, lines: ['Roast our own'], sub: ['lost: needs a roaster and a person'], part: 'options lost' },
     { id: 'e1', kind: 'evidence', x: 100, y: 220, w: 230, lines: ["Roaster A's new price list:", '30% more from March'], sub: ['seen in: their email, 12 Feb'], part: 'evidence' },
-    { id: 'h', kind: 'hypothesis', x: 100, y: 292, w: 230, lines: ["Regulars won't mind", 'the new beans'], part: 'assumption' },
-    { id: 'e2', kind: 'evidence', x: 130, y: 362, w: 200, lines: ['Blind tasting: 9 of 12', 'regulars chose B'], sub: ['seen at: the café, 20 Feb'], part: 'assumption' },
-    { id: 'p', kind: 'decision', x: 100, y: 440, w: 230, lines: ['Keep a flat white at 3.50 €'], part: 'earlier' },
-    { id: 'q', kind: 'question', x: 100, y: 486, w: 230, lines: ['Where do we buy beans', 'from March?'], status: 'COMING NEXT', part: 'question' },
+    { id: 'h', kind: 'hypothesis', x: 100, y: 292, w: 230, lines: ["Customers won't mind", 'the new beans'], part: 'assumption' },
+    { id: 'e2', kind: 'evidence', x: 130, y: 362, w: 200, lines: ['Blind tasting: 9 of 12', 'customers chose B'], sub: ['seen at: the café, 20 Feb'], part: 'assumption' },
   ],
   edges: [
     ...(
@@ -150,8 +133,6 @@ export const anatomyNarrow: GFrame = {
         ['o3', 'weighs', 'options lost'],
         ['e1', 'based on', 'evidence'],
         ['h', 'rests on', 'assumption'],
-        ['p', 'follows from', 'earlier'],
-        ['q', 'answers', 'question'],
       ] as const
     ).map(
       ([to, label, part]): GEdge => ({
@@ -252,7 +233,7 @@ export const storyRevise: Story = {
   },
 };
 
-// ── 6. Who decided: coloured by who made the call ───────────────────────────
+// ── 6. Who decided: coloured by who made the call (two steps) ───────────────
 
 const whoNodes: GNode[] = [
   { id: 'd4', kind: 'decision', x: 8, y: 90, w: 100, lines: ['Store data in', 'Postgres'], sub: ['you decided'] },
@@ -285,26 +266,14 @@ export const storyWho: Story = {
     },
     {
       label: 'Coloured by who decided',
-      caption: 'The same graph, painted by who made each call instead of by kind.',
-      alt: 'The same four decisions, coloured by who decided: the two you decided in blue, the one an agent decided within what you handed it in teal, the one an agent decided on its own in violet.',
-      frame: { w: W, h: 230, nodes: patch(whoNodes, whoColours), edges: whoEdges },
-    },
-    {
-      label: 'What an agent decided alone',
       caption:
-        'The retry count stands out: an agent picked it on its own while you were at lunch. Look it over, then accept it, dispute it or replace it.',
-      alt: 'The same coloured graph with everything faded except "Retry a failed call 3 times", the decision an agent made on its own.',
+        'Painted by who made each call, the retry count stands out: an agent picked it on its own while you were at lunch. Look it over, then accept it, dispute it or replace it.',
+      alt: 'The same four decisions, coloured by who decided: the two you decided in blue, the one an agent decided within what you handed it in teal, and "Retry a failed call 3 times", which an agent decided on its own, in violet with a heavier outline.',
       frame: {
         w: W,
         h: 230,
-        nodes: patch(whoNodes, {
-          ...whoColours,
-          d4: { who: 'you', faded: true },
-          d1: { who: 'you', faded: true },
-          d3: { who: 'delegated', faded: true },
-          d2: { who: 'agent', state: 'lit' },
-        }),
-        edges: whoEdges.map((e) => (e.from === 'd2' ? e : { ...e, faded: true })),
+        nodes: patch(whoNodes, { ...whoColours, d2: { who: 'agent', state: 'lit' } }),
+        edges: whoEdges,
       },
     },
   ],
@@ -333,8 +302,8 @@ const cafeEvidence: GNode = {
   x: 8,
   y: 206,
   w: 148,
-  lines: ['Till: 60% of sales', 'come after noon'],
-  sub: ["seen in: October's till"],
+  lines: ['60% of sales come', 'after noon'],
+  sub: ["seen in: October's sales"],
 };
 const cafeRefutes: GEdge = { from: 'e', to: 'h', label: 'refutes', fromSide: 't', toSide: 'b', fromOff: -12 };
 const refutedAssumption = { state: 'refuted' as const, badge: { text: 'refuted', tone: 'danger' as const } };
@@ -354,8 +323,8 @@ export const storyAssumption: Story = {
     {
       label: 'What happened',
       caption:
-        "October's till says 60% of sales come after noon. The evidence refutes the assumption, and both decisions resting on it now read: assumption refuted.",
-      alt: "Evidence is added: the till shows 60% of sales come after noon, seen in October's till. It refutes the assumption, which is marked refuted. Both decisions resting on it are marked assumption refuted. The barista decision is not marked yet.",
+        "In October, 60% of sales came after noon. That evidence refutes the assumption, and both decisions resting on it now read: assumption refuted.",
+      alt: "Evidence is added: 60% of sales come after noon, seen in October's sales. It refutes the assumption, which is marked refuted. Both decisions resting on it are marked assumption refuted. The barista decision is not marked yet.",
       frame: {
         w: W,
         h: 272,

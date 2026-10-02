@@ -34,7 +34,7 @@ configured, the background classifier picks up `enqueue-capture` batches instead
 ```
 
 This installs five commands, one skill and an MCP server. The server runs the `hivemind` binary,
-so [install it](../../getting-started/install/#install-the-binary) first.
+so [install it](../../getting-started/quickstart/) first.
 
 | Command / skill / tool | What it does |
 |-------------|-------------|
@@ -168,19 +168,10 @@ that becomes a captured decision is the part that matters six months later.
 
 ## Reviewing agent and document decisions
 
-Agent captures and document imports both land as unreviewed. Humans review
-them in the same guided terminal flow:
+What your agents decided is yours to look over, one by one, in the terminal:
 
 ```bash
-hivemind --actor human:lead --hivemind-dir ./hivemind review \
-  --actor 'agent:*' \
-  --since 7d \
-  --unreviewed-only
+hivemind review --actor 'agent:*' --since 7d --unreviewed-only
 ```
 
-- **Approve** → appends `decision.accepted`
-- **Disagree** → appends `decision.rejected` with the reason
-- **Supersede** → proposes a replacement decision plus `decision.superseded`
-
-Reviewed/unreviewed state is derived from the reviewer's explicit write events,
-not from a separate review flag.
+Approve, disagree or supersede each one; [Human Review](../human-review/) has the details.

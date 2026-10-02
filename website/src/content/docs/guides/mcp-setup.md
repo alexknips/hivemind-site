@@ -11,10 +11,10 @@ to your **self-hosted cell** over HTTP (a shared, team-wide decision graph), or 
 
 ## Self-hosted cell — HTTP
 
-Your [self-hosted cell](../../getting-started/install/#run-a-cell-with-docker) serves MCP at `/mcp`. Agents
+Your [self-hosted cell](../../getting-started/quickstart/#run-a-cell-with-docker) serves MCP at `/mcp`. Agents
 connect to that endpoint and write to a shared, team-wide decision graph — no local
 binary required on the agent's machine. **Authentication is a bearer token:**
-[provision a tenant](../../getting-started/install/#connect-your-agent) and use the
+[provision a tenant](../../getting-started/quickstart/#connect-your-agent-to-the-cell) and use the
 `hm_tk_...` token it returns. The examples below use `http://localhost:8080/mcp`;
 substitute your cell's address.
 
@@ -237,4 +237,4 @@ Without the flag the server usually cannot tell which client started it, and fil
 
 - [MCP Tools reference](../../reference/mcp-tools/) — full parameter documentation for all 27 tools
 - [Agent Capture guide](../agent-capture/) — how agents capture decisions automatically
-- [Install](../../getting-started/install/) — install the binary and run your own server
+- [Quickstart](../../getting-started/quickstart/) — install the binary, or run your own cell with Docker

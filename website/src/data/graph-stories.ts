@@ -1,9 +1,11 @@
 /*
- * The landing page's graphs (the "What it is useful for" section): the anatomy of a
- * decision, then seven stories of two or three steps each. Every node is placed by
- * hand in a 340-wide frame (the anatomy's wide variant is 1000 wide); graph.ts turns
- * them into SVG. Arrows run from the newer node to the older one, and the edge words
- * are the product's (docs/GRAPH_CONTRACT.md in hivemind).
+ * The site's graphs: the anatomy of a decision and four stories on the landing page
+ * (everything there works in v0.7.0), and three stories on the use cases page (the bet,
+ * the questions still waiting, the two lanes), which carry the parts that come next or
+ * are planned. A story has one to three steps. Every node is placed by hand in a
+ * 340-wide frame (the anatomy's wide variant is 1000 wide); graph.ts turns them into
+ * SVG. Arrows run from the newer node to the older one, and the edge words are the
+ * product's (docs/GRAPH_CONTRACT.md in hivemind).
  *
  * Status, as CLAIMS.md at the repo root records it: solid parts work in v0.7.0; parts
  * marked COMING NEXT are merged, not yet released; dashed parts marked PLANNED are
@@ -206,7 +208,7 @@ export const storyRevise: Story = {
     {
       label: 'After',
       caption:
-        'The verdict, 12 to 0 for not guilty, replaces the first vote. The old vote stays, greyed and reading superseded. Nothing is deleted.',
+        'The verdict, 12 to 0 for not guilty, replaces the first vote, which stays and reads superseded.',
       alt: 'A new decision, "The verdict: not guilty, 12 to 0", replaces the first vote. The first vote stays, greyed and marked superseded, still linked to its two options and to the refuted assumption, and the three pieces of evidence are still there.',
       frame: {
         w: W,
@@ -229,57 +231,49 @@ export const storyRevise: Story = {
   ],
   demo: {
     href: 'demo/decisions/the-jury-finds-the-defendant-guilty/',
-    text: 'The guilty verdict reads superseded by not guilty, with the chain from one to the other.',
+    text: 'the guilty verdict, superseded by not guilty.',
   },
 };
 
-// ── 6. Who decided: coloured by who made the call (two steps) ───────────────
+// ── 6. Who decided: coloured by who made the call (one drawing) ─────────────
 
 const whoNodes: GNode[] = [
-  { id: 'd4', kind: 'decision', x: 8, y: 90, w: 100, lines: ['Store data in', 'Postgres'], sub: ['you decided'] },
-  { id: 'd1', kind: 'decision', x: 178, y: 12, w: 154, lines: ['Pool of 20', 'connections'], sub: ['you decided'] },
-  { id: 'd3', kind: 'decision', x: 178, y: 86, w: 154, lines: ['Log as JSON'], sub: ['an agent, within what', 'you handed it'] },
-  { id: 'd2', kind: 'decision', x: 178, y: 160, w: 154, lines: ['Retry a failed call', '3 times'], sub: ['an agent, on its own'] },
+  { id: 'd4', kind: 'decision', x: 8, y: 90, w: 100, lines: ['Store data in', 'Postgres'], sub: ['you decided'], who: 'you' },
+  { id: 'd1', kind: 'decision', x: 178, y: 12, w: 154, lines: ['Pool of 20', 'connections'], sub: ['you decided'], who: 'you' },
+  { id: 'd3', kind: 'decision', x: 178, y: 86, w: 154, lines: ['Log as JSON'], sub: ['an agent, within what', 'you handed it'], who: 'delegated' },
+  {
+    id: 'd2',
+    kind: 'decision',
+    x: 178,
+    y: 160,
+    w: 154,
+    lines: ['Retry a failed call', '3 times'],
+    sub: ['an agent, on its own'],
+    who: 'agent',
+    state: 'lit',
+  },
 ];
 const whoEdges: GEdge[] = [
   { from: 'd1', to: 'd4', label: 'follows from', toOff: -14 },
   { from: 'd3', to: 'd4', label: 'follows from', toOff: 0 },
   { from: 'd2', to: 'd4', label: 'follows from', toOff: 14 },
 ];
-const whoColours: Record<string, Partial<GNode>> = {
-  d4: { who: 'you' },
-  d1: { who: 'you' },
-  d3: { who: 'delegated' },
-  d2: { who: 'agent' },
-};
 
 export const storyWho: Story = {
   id: 'story-who',
   title: 'Drawn: who decided what',
   steps: [
     {
-      label: 'This week',
-      caption:
-        'Four decisions about one service. Each records who decided it, apart from who wrote it down: you, an agent within what you handed it, or an agent on its own.',
-      alt: 'A graph of four decisions. "Pool of 20 connections", "Log as JSON" and "Retry a failed call 3 times" each follow from "Store data in Postgres". You decided the pool size and Postgres; an agent decided the logging within what you handed it; an agent decided the retries on its own.',
-      frame: { w: W, h: 230, nodes: whoNodes, edges: whoEdges },
-    },
-    {
       label: 'Coloured by who decided',
       caption:
-        'Painted by who made each call, the retry count stands out: an agent picked it on its own while you were at lunch. Look it over, then accept it, dispute it or replace it.',
-      alt: 'The same four decisions, coloured by who decided: the two you decided in blue, the one an agent decided within what you handed it in teal, and "Retry a failed call 3 times", which an agent decided on its own, in violet with a heavier outline.',
-      frame: {
-        w: W,
-        h: 230,
-        nodes: patch(whoNodes, { ...whoColours, d2: { who: 'agent', state: 'lit' } }),
-        edges: whoEdges,
-      },
+        'Four decisions about one service, coloured by who made each call. The retry count stands out: an agent picked it on its own. Look it over, then accept, dispute or replace it.',
+      alt: 'A graph of four decisions about one service. "Pool of 20 connections", "Log as JSON" and "Retry a failed call 3 times" each follow from "Store data in Postgres". Coloured by who decided: the pool size and Postgres, which you decided, in blue; the logging, which an agent decided within what you handed it, in teal; the retries, which an agent decided on its own, in violet with a heavier outline.',
+      frame: { w: W, h: 230, nodes: whoNodes, edges: whoEdges },
     },
   ],
   demo: {
     href: 'demo/decisions/retry-a-failed-location-ping-upload-up-to-5-times-with/',
-    text: 'The location upload retries read "decided by an agent": Ridewell\'s mobile agent chose them on its own.',
+    text: 'retries an agent chose on its own.',
   },
 };
 
@@ -316,14 +310,14 @@ export const storyAssumption: Story = {
     {
       label: 'Before',
       caption:
-        'You run a café. Opening at 6:30 and baking all the bread by 5 both rest on one assumption: most customers come before 10. Hiring a barista for the early shift follows from the opening time.',
+        'You run a café. Opening at 6:30 and baking all the bread by 5 rest on one assumption: most customers come before 10.',
       alt: 'A graph. "Open at 6:30" and "Bake all the bread by 5 am" both rest on the assumption "Most customers come before 10". "Hire a barista for the early shift" follows from "Open at 6:30".',
       frame: { w: W, h: 272, nodes: cafeNodes, edges: cafeEdges },
     },
     {
       label: 'What happened',
       caption:
-        "In October, 60% of sales came after noon. That evidence refutes the assumption, and both decisions resting on it now read: assumption refuted.",
+        'In October, 60% of sales came after noon. That refutes the assumption, and both decisions resting on it read: assumption refuted.',
       alt: "Evidence is added: 60% of sales come after noon, seen in October's sales. It refutes the assumption, which is marked refuted. Both decisions resting on it are marked assumption refuted. The barista decision is not marked yet.",
       frame: {
         w: W,
@@ -338,7 +332,7 @@ export const storyAssumption: Story = {
     {
       label: 'After',
       caption:
-        'You move the opening to 8, replacing 6:30. The barista decision followed from the old time, so it now reads stale too. The baking decision still waits for a look.',
+        'You move the opening to 8. Hiring the early barista followed from 6:30, so it reads stale too. The baking still waits for a look.',
       alt: 'A new decision, "Open at 8", replaces "Open at 6:30", which is greyed and marked superseded. "Hire a barista for the early shift", which follows from it, is marked stale. "Bake all the bread by 5 am" is still marked assumption refuted.',
       frame: {
         w: W,
@@ -366,7 +360,7 @@ export const storyAssumption: Story = {
   ],
   demo: {
     href: 'demo/decisions/cache-driver-profiles-in-memory-keyed-by-the-drivers-numeric/',
-    text: 'The API caches driver profiles by numeric id, resting on "Driver ids … never change"; a platform migration refutes it.',
+    text: 'a cache resting on "driver ids never change", which a migration refutes.',
   },
 };
 
@@ -461,13 +455,13 @@ export const storyLostOption: Story = {
     {
       label: 'Last month',
       caption:
-        'You ruled out an ORM because it hid the slow queries, and write the SQL by hand. The option that lost keeps its reason.',
+        'You ruled out an ORM because it hid the slow queries. The option that lost keeps its reason.',
       alt: 'A graph. The decision "No ORM: write SQL by hand", which you decided, chose the option SQL by hand and weighs the option Use an ORM, which lost because it hid the slow queries.',
       frame: { w: W, h: 214, nodes: ormNodes, edges: ormEdges },
     },
     {
       label: 'Today',
-      caption: 'A fresh session, with no chat history, suggests adding an ORM: the option you ruled out.',
+      caption: 'A fresh session, with no chat history, suggests the option you ruled out.',
       alt: 'The same graph, and a speech bubble from a fresh session: "Shall we add an ORM?" It points at the option that lost.',
       frame: {
         w: W,
@@ -480,7 +474,7 @@ export const storyLostOption: Story = {
     {
       label: 'You ask why',
       caption:
-        'The answer comes from the graph: you decided, the ORM lost because it hid the slow queries, and nothing has replaced the decision.',
+        'The answer comes from the record: you decided, and nothing has replaced it.',
       alt: 'The same graph with the decision marked still holds and the option that lost highlighted, and the answer in a speech bubble: "You ruled the ORM out: it hid the slow queries. Nothing has replaced that."',
       frame: {
         w: W,
@@ -497,7 +491,7 @@ export const storyLostOption: Story = {
   ],
   demo: {
     href: 'demo/decisions/the-jury-finds-the-defendant-not-guilty/',
-    text: 'The jury\'s verdict keeps both options, not guilty (chosen) and guilty, with the reason.',
+    text: 'the jury\'s verdict and the option that lost.',
   },
 };
 

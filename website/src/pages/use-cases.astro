@@ -1,18 +1,32 @@
 ---
 // Use cases and roadmap: one card per thing HiveMind does, marked works today,
 // coming next or planned, with the command or tool call behind each one that
-// works today. The same header, footer, cards and status tags as the landing
-// page, on the app's design tokens, so the page follows the colour scheme like
-// every other page. Every claim here is listed with its evidence in CLAIMS.md.
+// works today. Since 2026-10-02 the one home for what comes next and what is
+// planned: the landing page shows only what works today, and the drawings of
+// the bet, the questions still waiting and the drifting projects moved here,
+// each told once. The same header, footer, cards and graphs as the landing
+// page, on the app's design tokens. Every claim here is listed with its
+// evidence in CLAIMS.md.
 import '../styles/global.css';
+import '../styles/graphs.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ThemeInit from '../components/ThemeInit.astro';
+import Story from '../components/graphs/Story.astro';
+import { storyBet, storyDrift, storyWaiting, type Story as StoryData } from '../data/graph-stories';
 const base = import.meta.env.BASE_URL;
 
 // A card's text is trusted HTML (bold, code and the command's parts); icon is
-// the inside of a 24x24 lucide-style SVG.
-type Card = { title: string; badge?: string; who?: string; body: string; cmd?: string; icon: string };
+// the inside of a 24x24 lucide-style SVG. A card with a story spans the row.
+type Card = {
+  title: string;
+  badge?: string;
+  who?: string;
+  body: string;
+  cmd?: string;
+  icon: string;
+  story?: StoryData;
+};
 
 const today: Card[] = [
   {
@@ -118,6 +132,18 @@ const next: Card[] = [
     body: 'Your sessions with your agents are read as they happen and the decisions in them are recorded, with their options, reasons and who decided, so nobody has to say "record this". The pieces are in the current release; the setup that makes it one step is not.',
     icon: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
   },
+  {
+    title: 'An honest bet, called out',
+    body: 'With nothing yet to rest a decision on, name a bet and a date to check it. Calling it out is expected, not blame. The drawing marks the one part that is coming next; the rest works today.',
+    icon: '<path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="5"/>',
+    story: storyBet,
+  },
+  {
+    title: 'Questions nobody has decided yet',
+    body: 'Ask a question before anything answers it, and it waits, with its age, until a decision answers it. Planned: the same list beside what is contested and what changed.',
+    icon: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><path d="M12 17h.01"/>',
+    story: storyWaiting,
+  },
 ];
 
 const planned: Card[] = [
@@ -127,19 +153,20 @@ const planned: Card[] = [
     icon: '<path d="M12 4v16"/><path d="M12 8l-5 3M12 8l5 3"/><circle cx="7" cy="13" r="2"/><circle cx="17" cy="13" r="2"/><path d="M7 15v4M17 15v4"/>',
   },
   {
-    title: 'Two tracks of your work, quietly diverging',
-    body: 'Your agents work the API and the mobile client in parallel, and one replaces a decision the other is building on. Today, a decision that rests on a replaced premise already reads stale, also across linked projects. Planned: catching two tracks that contradict each other with <b class="font-semibold text-foreground">no recorded link</b> between them.',
-    icon: '<path d="M4 6h6c4 0 4 6 10 6"/><path d="M4 18h6c4 0 4-6 10-6"/><path d="m17 9 3 3-3 3"/>',
-  },
-  {
     title: 'Speed, consistency and flexibility',
-    body: 'Across your decisions with your agents: how fast you get from question to decision, how often a new decision stays in line with standing ones, and how often you change your mind when evidence arrives. Shown side by side, never as one number, never as a ranking. A fast reversal on new evidence reads as a strength.',
+    body: 'Across your decisions with your agents: how fast you get from question to decision, how often a new decision agrees with the ones already in place, and how often you change your mind when evidence arrives. Shown side by side, never as one number, never as a ranking. A fast reversal on new evidence reads as a strength.',
     icon: '<path d="M3 20h18"/><path d="M5 16l4-5 4 3 6-8"/>',
   },
   {
     title: 'With and without HiveMind, side by side',
     body: 'The same engineering task run twice by a coding agent: once with a hand-kept decisions file, once with HiveMind. Recorded, reproducible, and the site will say what it shows and no more.',
     icon: '<rect x="3" y="5" width="8" height="14" rx="1.5"/><rect x="13" y="5" width="8" height="14" rx="1.5"/><path d="M5 9h4M5 12h4M15 9h4M15 12h4M15 15h2"/>',
+  },
+  {
+    title: 'Two projects, drifting apart',
+    body: 'Your agents work several projects, and one replaces a decision another rests on. Today the decision resting on it reads <b class="font-semibold text-foreground">stale</b>, also across linked projects, and "what should I know?" looks in the project it depends on. The drawing marks what is planned: catching a contradiction with <b class="font-semibold text-foreground">no recorded link</b>, and a count of the links that still hold.',
+    icon: '<path d="M4 6h6c4 0 4 6 10 6"/><path d="M4 18h6c4 0 4-6 10-6"/><path d="m17 9 3 3-3 3"/>',
+    story: storyDrift,
   },
 ];
 
@@ -212,13 +239,21 @@ const sections = [
       </h1>
       <p class="text-md sm:text-lg text-foreground max-w-2xl leading-relaxed mb-8">
         Concrete ways one person and their agents put HiveMind to work: what works today, what is coming next,
-        and what is planned. Nothing here is a mock-up; every card for today shows the actual command or tool call.
+        and what is planned. Every card for today shows the actual command or tool call; the drawings are made-up
+        examples.
       </p>
-      <!-- The legend, in one line, as on the landing page. -->
+      <!-- The legend: the site's only one, since the landing page shows only what works today. The second
+           line is the key to the drawings' marks. -->
       <p class="text-sm text-muted-foreground flex flex-wrap gap-x-6 gap-y-2">
         <span class="inline-flex items-center gap-2"><span class="badge bg-success-soft text-success-foreground">Works today</span> in v0.7.0 (25 Sep 2026)</span>
         <span class="inline-flex items-center gap-2"><span class="badge badge-warning">Coming next</span> merged or under way, not yet released</span>
         <span class="inline-flex items-center gap-2"><span class="badge badge-outline">Planned</span> decided, not built</span>
+      </p>
+      <p class="text-sm text-muted-foreground flex flex-wrap items-center gap-x-5 gap-y-2 mt-3">
+        <span>In the drawings:</span>
+        <span class="inline-flex items-center gap-2"><span class="hg-key" aria-hidden="true"></span> works today</span>
+        <span class="inline-flex items-center gap-2"><span class="font-mono text-2xs tracking-wide">COMING NEXT</span> not yet released</span>
+        <span class="inline-flex items-center gap-2"><span class="hg-key hg-key--dashed" aria-hidden="true"></span><span class="font-mono text-2xs tracking-wide">PLANNED</span> not built</span>
       </p>
     </section>
 
@@ -232,7 +267,7 @@ const sections = [
           <p class="text-base text-muted-foreground leading-relaxed max-w-2xl mb-10" set:html={s.note} />
           <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {s.cards.map((c) => (
-              <article class:list={['rounded-lg p-6 flex flex-col gap-3 min-w-0', s.cardClass]}>
+              <article class:list={['rounded-lg p-6 flex flex-col gap-3 min-w-0', s.cardClass, c.story && 'md:col-span-2 lg:col-span-3']}>
                 <div class="flex items-center justify-between gap-3">
                   <span class="inline-flex size-9 shrink-0 items-center justify-center rounded-md bg-muted text-foreground">
                     <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={c.icon} />
@@ -241,8 +276,9 @@ const sections = [
                 </div>
                 <h3 class="text-md font-semibold text-foreground">{c.title}</h3>
                 {c.who && <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground">{c.who}</p>}
-                <p class="text-base text-muted-foreground leading-relaxed flex-1" set:html={c.body} />
+                <p class:list={['text-base text-muted-foreground leading-relaxed flex-1', c.story && 'max-w-3xl']} set:html={c.body} />
                 {c.cmd && <pre class="code-block px-3 py-2 break-normal break-words"><code set:html={c.cmd} /></pre>}
+                {c.story && <Story story={c.story} />}
               </article>
             ))}
           </div>

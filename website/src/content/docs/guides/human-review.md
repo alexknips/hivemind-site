@@ -5,7 +5,7 @@ description: Review, accept, reject, or supersede agent decisions.
 
 HiveMind lets humans review agent decisions and imported documents using the
 same write primitives they use for their own choices. Review events are
-explicit, traceable writes — not a separate approval workflow bolted on top.
+explicit, traceable writes — not a separate approval workflow added on top.
 
 All agent captures (`emit decision.capture`) and all document imports
 (`import documents`) land in the ledger as **unreviewed** (proposed, not

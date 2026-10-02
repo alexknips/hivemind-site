@@ -3,12 +3,12 @@ title: Architecture
 description: The three-layer design that keeps HiveMind trustworthy at scale.
 ---
 
-HiveMind has three layers. Each does exactly one job. None of them bleed into each other.
+HiveMind has three layers. Each does exactly one job. None of them does another's job.
 This boundary is not a diagram in a doc — it is a property of the codebase.
 
 ## Layer 1: Write
 
-The write layer validates invariants and appends events to the ledger. It is intentionally dumb.
+The write layer validates invariants and appends events to the ledger. It is kept simple on purpose.
 
 **What it does:**
 - Validates actor format (no anonymous writes)

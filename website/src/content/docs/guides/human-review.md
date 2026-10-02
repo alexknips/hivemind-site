@@ -1,85 +1,57 @@
 ---
 title: Human Review
-description: Review, accept, reject, or supersede agent decisions.
+description: Look over what your agents decided, and approve, disagree with or replace each decision, in the terminal.
 ---
 
-HiveMind lets humans review agent decisions and imported documents using the
-same write primitives they use for their own choices. Review events are
-explicit, traceable writes — not a separate approval workflow added on top.
+Your agents record decisions as they work. `hivemind review` lets you look over them afterwards, one by
+one, in the terminal: no need to watch the agents live or read their transcripts.
 
-All agent captures (`emit decision.capture`) and all document imports
-(`import documents`) land in the ledger as **unreviewed** (proposed, not
-auto-accepted). They flow through the same review step — there is no separate
-process for document-sourced decisions.
-
-## Review flow
+## Look over a week of agent decisions
 
 ```bash
-hivemind --actor human:lead --hivemind-dir ./hivemind review \
-  --actor 'agent:*' \
-  --since 7d \
-  --unreviewed-only
+hivemind review --actor 'agent:*' --since 7d --unreviewed-only
 ```
 
-This opens an interactive terminal flow that reads candidate decisions through
-the deterministic `query recent` path, then presents each one for a decision:
+`--unreviewed-only` leaves out what you have already approved, disagreed with or replaced. You are
+recorded as the reviewer ([Setting the actor](../../getting-started/quickstart/#setting-the-actor)).
+Each decision is shown with its reason, options and what it rests on, and you choose:
 
-| Action | What HiveMind writes |
-|--------|---------------------|
-| **Approve** | `decision.accepted` by the reviewer |
-| **Disagree** | `decision.rejected` with the reason |
-| **Supersede** | `decision.proposed` (replacement) + `decision.superseded` |
-| **Skip** | Nothing — no write, no implicit approval |
+| Key | Verb | What it records |
+|-----|------|-----------------|
+| `a` | approve | You accept the decision. |
+| `d` | disagree | You dispute it, with a reason. A decision someone accepted now reads **contested**, with both sides kept. |
+| `s` | supersede | You replace it: a new title, the reason, and the options. The old one reads **superseded** and points to the new one. |
+| `n` | next | Nothing. It stays unreviewed. |
+| `q` | quit | Stop here. |
 
-Reviewed/unreviewed state is derived from the presence of explicit accept, reject,
-or supersede events from reviewer-authored actors. There is no separate review flag
-or review event type.
+A decision your agent records with a chosen option is accepted at once, by whoever decided it. Reviewing
+it is still yours to do. Decisions imported from documents start as proposed until you approve them.
 
-## Disagreement
+## The same verbs, outside the review
 
-When a reviewer disagrees with an agent decision, HiveMind does not overwrite or
-delete the agent's decision. Both positions stay in the graph:
-
-- The agent's original decision exists with its `proposed` status
-- The reviewer's `decision.rejected` event creates a `REJECTED_BY` edge
-- Queries now surface the decision as `contested`
-- `contested` is a first-class status — not an error, not a fallback
-
-To resolve a contested decision, explicitly supersede with a new decision:
+You can disagree with or replace any decision at any time. Describe it instead of quoting an id:
 
 ```bash
-hivemind --actor human:lead --hivemind-dir ./hivemind emit decision.proposed \
-  --title "Use Postgres instead of SQLite for shared backend" \
-  --rationale "Agent decision assumed single-node; requirements changed" \
-  --supersedes decision:abc123 \
-  --topic-keys architecture,storage \
-  --options postgres,sqlite \
-  --chose postgres
+hivemind disagree "sqlite for the ledger" --reason "Two people will write to it from their laptops"
+
+hivemind supersede "sqlite for the ledger" \
+  --title "Use Postgres for the ledger" \
+  --rationale "Two people write to it from their laptops, so one file on one machine no longer works" \
+  --topic-keys storage --options postgres,sqlite --chose postgres \
+  --rests-on-evidence "Two people write to the ledger from their laptops" --evidence-source "team chat, 2 Oct"
 ```
 
-## Finding unreviewed agent decisions
+A description that matches more than one decision lists the candidates, numbered, and writes nothing;
+pick one with `--pick <n>`. Like a new decision, a replacement must say what it rests on. Nothing is
+edited or deleted: the old decision stays in the record, and `hivemind query chain` follows the
+replacements back to the first one.
+
+## Find what needs a look
 
 ```bash
-# All unreviewed agent decisions in the last 7 days
-hivemind --hivemind-dir ./hivemind query recent \
-  --actor 'agent:*' \
-  --since 7d \
-  --unreviewed-only
+# What your agents decided this week, one line each
+hivemind query recent --actor 'agent:*' --since 7d --summary
 
-# Search by topic
-hivemind --hivemind-dir ./hivemind query search_decisions \
-  --topic architecture \
-  --actor 'agent:*'
+# Every disputed decision
+hivemind query search_decisions --status contested --summary
 ```
-
-## Governance at scale
-
-The governing principle: humans retain governance over agentic work because they can
-see, query, and contest every agent decision after the fact — at the speed of a query,
-not the speed of reading a transcript.
-
-This means:
-- You do not need to watch agents work in real time
-- You do not need to read agent transcripts to understand what was decided
-- You can query by topic, time window, or actor pattern
-- Disagreement, once expressed, stays in the graph and propagates to dependent decisions

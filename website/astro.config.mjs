@@ -8,6 +8,13 @@ const base = '/hivemind-site/';
 export default defineConfig({
   site: 'https://alexknips.github.io',
   base,
+  // Pages merged away on 2026-10-02: Install went into the Quickstart, Architecture and Auth Model
+  // into How it works. Old links land on the page that holds their content now.
+  redirects: {
+    '/getting-started/install': `${base}getting-started/quickstart/`,
+    '/concepts/architecture': `${base}concepts/how-it-works/`,
+    '/concepts/auth-model': `${base}concepts/how-it-works/`,
+  },
   integrations: [
     starlight({
       title: 'HiveMind',
@@ -22,7 +29,6 @@ export default defineConfig({
           label: 'Getting Started',
           items: [
             { label: 'Quickstart', slug: 'getting-started/quickstart' },
-            { label: 'Install', slug: 'getting-started/install' },
           ],
         },
         {
@@ -36,8 +42,7 @@ export default defineConfig({
         {
           label: 'Concepts',
           items: [
-            { label: 'Architecture', slug: 'concepts/architecture' },
-            { label: 'Auth Model', slug: 'concepts/auth-model' },
+            { label: 'How it works', slug: 'concepts/how-it-works' },
             { label: 'Decision Graph', slug: 'concepts/decision-graph' },
           ],
         },

@@ -1,169 +1,191 @@
 ---
 title: Quickstart
-description: Connect your coding agent or capture your first decision in under five minutes.
+description: From nothing to a first recorded decision. Install HiveMind, connect your agent, record a decision and ask why, or run your own cell with Docker.
 ---
 
 import { Steps } from '@astrojs/starlight/components';
 
 HiveMind records the decisions you make with your agents: what was decided, the options that lost and
 why, and who decided, you or the agent. It is not only for engineering; any decision a person makes with
-an agent fits. Running it today takes a developer's setup: you install a binary or self-host a server,
-and connect an MCP client such as Claude Code, Codex or Cursor, or use the CLI.
-
-Choose your path:
-
-- **[Connect your agent via MCP](#connect-via-mcp)** — the primary onboarding. No CLI needed.
-- **[Use the CLI](#cli-quickstart)** — for self-hosters who prefer the terminal.
-
----
-
-## Connect via MCP
+an agent fits. Running it today takes a developer's setup: a binary you run from the terminal, or a server
+in Docker, and an agent that connects over MCP. Your instance, your data, nothing phones home.
 
 <Steps>
 
-1. **Add HiveMind to your MCP client**
+1. **Install HiveMind**
 
-   For Claude Code, [install the binary](../install/#install-the-binary), then add to `.mcp.json`
-   in your project root (local stdio):
+   Linux (x86_64, ARM64) and Apple Silicon Macs. The script downloads the latest release, checks its
+   SHA-256 and puts `hivemind` in `~/.local/bin`:
 
-   ```json
-   {
-     "mcpServers": {
-       "hivemind": {
-         "command": "hivemind",
-         "args": ["mcp", "--agent-tool", "claude"],
-         "env": { "HIVEMIND_DIR": "./hivemind/" }
-       }
-     }
-   }
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/alexknips/hivemind/master/scripts/install.sh | sh
+   hivemind --version
    ```
 
-   `--agent-tool claude` files your agent's captures under Claude Code. Or connect to your
-   self-hosted cell over HTTP — see [MCP Setup](../../guides/mcp-setup/) for the config and
-   bearer-token setup.
+2. **Connect your agent**
 
-2. **Reload your MCP client**
+   In your project, for Claude Code:
 
-   Claude Code picks up `.mcp.json` changes on restart. A server from a project `.mcp.json`
-   shows as "Pending approval" in `claude mcp list` (seen in Claude Code 2.1.284 and 2.1.286) until
-   you start `claude` in the project and approve it. Then the HiveMind tools appear in your agent's
-   tool list.
+   ```bash
+   claude mcp add hivemind -- hivemind mcp --agent-tool claude
+   ```
 
-3. **Start capturing decisions**
+   Decisions go to `./hivemind/`, a SQLite ledger in your project. `--agent-tool claude` files your
+   agent's captures under Claude Code; without it they are filed under Codex. For Codex, Cursor,
+   Claude Desktop or a shared `.mcp.json`, see [MCP Setup](../../guides/mcp-setup/).
 
-   Ask your agent: *"Capture a decision: we chose SQLite for the MVP ledger because it
-   has zero infra overhead. We considered Postgres and rejected it: more than we need for now. It rests
-   on the assumption that one node is enough for the MVP."*
+3. **Record a decision**
 
-   The agent calls `capture_decision`, passing that assumption as the decision's `grounding`,
-   and the decision lands in your ledger. Every capture must say what the decision rests on —
-   a decision already made, something observed, an assumption, or a declared bet when there is
-   nothing yet — and HiveMind refuses one that names nothing, so that it can tell you later
+   Start `claude` in the project and say: *"Record a decision: we use SQLite for the ledger. We
+   considered Postgres and rejected it: more than we need for now. It rests on the assumption that one
+   machine is enough."*
+
+   Your agent records the decision with its options, the reason, what it rests on and who decided.
+   Every decision must say what it rests on: an earlier decision, something observed, an assumption, or
+   a bet with a date to check. HiveMind refuses one that names nothing, so that it can tell you later
    whether the decision still holds.
 
-4. **Query what's been decided**
+4. **Ask why**
 
-   Ask your agent: *"What architecture decisions have we made about the database?"*
-
-   The agent calls `search_decisions` or `get_relevant_decisions` and returns the structured
-   decision graph — who decided, when, what options were weighed.
+   In a fresh session: *"Why did we pick SQLite, and what did we rule out?"* Your agent answers from the
+   record: the reason, the option that lost, who decided, and whether the decision still holds.
 
 </Steps>
 
+### If `hivemind` is not found
+
+If `hivemind --version` says `hivemind: not found`, your shell does not have `~/.local/bin` on its PATH
+yet. Add it, for this shell and in your shell's startup file (`~/.bashrc` or `~/.zshrc`):
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Without it, `claude mcp add` still succeeds, but Claude Code cannot start HiveMind.
+
+On other platforms, build it from source:
+
+```bash
+cargo install --git https://github.com/alexknips/hivemind --locked hivemind
+```
+
 ---
 
-## CLI quickstart
+## Without an agent: the CLI
 
-First [install the binary](../install/#install-the-binary) and check that `hivemind --version` answers.
-
-The fastest first run uses an isolated temporary ledger:
+Try it in a temporary ledger first. This records a sample decision, asks for it back and leaves no files
+behind:
 
 ```bash
 hivemind --actor human:alice quickstart
 ```
 
-This creates a temp ledger, records a sample decision, queries it back, and prints the result.
-No files are left behind.
+Then, in your project, the same decision as in step 3, and the question from step 4:
 
-### Step by step
+```bash
+export HIVEMIND_ACTOR=human:alice
+hivemind emit decision.capture --source human \
+  --title "Use SQLite for the ledger" \
+  --rationale "One file next to the app is all we need; Postgres is a server to run and back up" \
+  --topic-keys storage --options sqlite,postgres --chose sqlite \
+  --rests-on-assumption "One machine is enough"
+hivemind query why "sqlite for the ledger" --summary
+```
 
-<Steps>
+The ledger is `./hivemind/ledger.sqlite`, created on the first write. `query recent --since 24h --summary`
+lists what was decided today, one line each. The [CLI Reference](../../reference/cli/) has every command.
 
-1. **Capture a decision**
+### Setting the actor
 
-   ```bash
-   hivemind --actor human:alice --hivemind-dir ./hivemind emit decision.proposed \
-     --title "Use HiveMind for architecture decisions" \
-     --rationale "We need a durable record of what was decided, why, and by whom" \
-     --topic-keys onboarding,architecture \
-     --options hivemind,notes \
-     --chose hivemind
-   ```
+Every write says who made it, and HiveMind refuses an anonymous one. An actor is `human:<name>`
+(`human:alice`, `human:alice@example.com`), `agent:<tool>:<name>` or `system:<name>`.
 
-   Every write requires `--actor`. Use `human:<id>` for humans, `agent:<tool>:<name>` for agents.
-   `--hivemind-dir` sets the ledger location; it is created on first write.
+- **In the terminal**, set `HIVEMIND_ACTOR=human:<you>` once, as above, or pass `--actor human:<you>`
+  before the command (`hivemind --actor human:alice disagree …`). Without either, HiveMind uses
+  `human:<your git email>`, then `human:<your user name>`. `emit decision.capture` reads
+  `HIVEMIND_ACTOR` with `--source human`, or `--actor-id`, not `--actor`.
+- **Over MCP**, the server records your agent as `agent:<tool>:<id>`, with the tool from
+  `--agent-tool`. When the agent records a call you made, it can record you as the one who decided.
 
-   `decision.proposed` records the decision as stated. Its grounded form,
-   [`emit decision.capture`](../../reference/cli/#emit-decisioncapture), also asks what the
-   decision rests on (`--rests-on-decision`, `--rests-on-evidence`, `--rests-on-assumption`, or
-   `--bet` when there is nothing yet) and refuses a capture that names nothing — the same rule
-   your agent meets over MCP.
+---
 
-2. **Query it back**
+## Run a cell with Docker
 
-   ```bash
-   hivemind --hivemind-dir ./hivemind query search_decisions \
-     --topic onboarding \
-     --limit 5
-   ```
+To share one decision record across several machines, run a self-hosted cell: HiveMind with Postgres in
+Docker Compose, on any machine with Docker, in about five minutes.
 
-3. **Record evidence**
+**Prerequisites:** Docker 24+ with Compose v2 (`docker compose version`). Port 8080 must be available.
 
-   ```bash
-   hivemind --actor human:alice --hivemind-dir ./hivemind emit evidence.recorded \
-     --content "Alternatives considered: shared docs wiki, Notion, plain git notes"
-   ```
+```bash
+# 1. Fetch the compose cell
+git clone https://github.com/alexknips/hivemind && cd hivemind
 
-4. **Record a hypothesis (still in flight)**
+# 2. Create your config and set strong secrets
+cp .env.example .env
+# Linux:
+sed -i "s/change-me-before-production/$(openssl rand -hex 32)/g" .env
+# macOS: sed -i '' "s/change-me-before-production/$(openssl rand -hex 32)/g" .env
 
-   ```bash
-   hivemind --actor human:alice --hivemind-dir ./hivemind emit hypothesis.recorded \
-     --statement "HiveMind will reduce decision-reconstruction time by 80%"
-   ```
+# 3. Start (builds the image on first run, ~5 minutes)
+docker compose up --build -d
+```
 
-5. **Review all recent decisions**
+Confirm the cell is healthy:
 
-   ```bash
-   hivemind --hivemind-dir ./hivemind query recent --since 24h --limit 10
-   ```
+```bash
+docker compose ps
+```
 
-   `--since` is required: a duration like `24h`, or an RFC 3339 timestamp. Add `--summary` for
-   one line per decision instead of JSON.
+```
+NAME        STATUS                   PORTS
+hivemind    Up (healthy)             127.0.0.1:8080->8080/tcp
+postgres    Up (healthy)
+```
 
-</Steps>
+The port is published on `127.0.0.1`, so only this machine can reach the cell; to expose it deliberately, set `HIVEMIND_PUBLISH_ADDR` in `.env` to the interface address to publish on, or put a TLS reverse proxy in front (see [Exposing the cell deliberately](https://github.com/alexknips/hivemind/blob/master/docs/SELF_HOSTING.md#exposing-the-cell-deliberately)).
 
-### What just happened
+### Connect your agent to the cell
 
-- An append-only **event ledger** was created at `./hivemind/ledger.sqlite`.
-- Each `emit` command appended a typed event with actor provenance, a UUID, and a timestamp.
-- The `query` commands derived the current status from graph edges without touching the write path.
-- Status (`proposed`, `accepted`, `contested`, `superseded`) is never stored — it is always derived.
+Provision a tenant to get your bearer token (shown once — save it):
 
-### Actor format
+```bash
+ADMIN_KEY=$(grep HIVEMIND_ADMIN_KEY .env | cut -d= -f2)
+curl -s -X POST http://localhost:8080/v1/tenants \
+  -H "Authorization: Bearer $ADMIN_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"tenant_id": "me", "display_name": "My Team"}'
+```
 
-| Context | Actor format |
-|---------|-------------|
-| Human (named) | `human:alice` or `human:alice@example.com` |
-| Agent (Claude Code) | `agent:claude:<session-id>` |
-| Agent (Codex) | `agent:codex:<session-id>` |
-| System | `system:ci` |
+The response includes `token_secret` — a value starting with `hm_tk_...`. Copy it now.
 
-If `--actor` is omitted, HiveMind falls back to `HIVEMIND_ACTOR`, then `human:<git config user.email>`.
+Add HiveMind to Claude Code by pasting this into `.mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "hivemind": {
+      "url": "http://localhost:8080/mcp",
+      "headers": {
+        "Authorization": "Bearer hm_tk_..."
+      }
+    }
+  }
+}
+```
+
+Reload Claude Code. The HiveMind tools appear in your agent's tool list. The other clients are in
+[MCP Setup](../../guides/mcp-setup/).
+
+Without Docker, `HIVEMIND_DIR=./hivemind hivemind serve --port 8080` serves the same HTTP API and `/mcp`;
+set `HIVEMIND_API_KEY` to require a bearer token. The
+[self-hosting runbook](https://github.com/alexknips/hivemind/blob/master/docs/SELF_HOSTING.md) covers
+production settings, TLS, upgrades and troubleshooting.
 
 ---
 
 ## Next steps
 
-- [MCP Setup](../../guides/mcp-setup/) — full remote and local MCP configuration for all clients
-- [Agent Capture](../../guides/agent-capture/) — how agents capture decisions automatically
-- [Architecture](../../concepts/architecture/) — understand the three-layer design
+- [MCP Setup](../../guides/mcp-setup/) — Codex, Cursor, Claude Desktop, and the cell over HTTP
+- [Agent Capture](../../guides/agent-capture/) — the capture plugin, and what your agent should record
+- [Human Review](../../guides/human-review/) — look over what your agents decided
+- [How it works](../../concepts/how-it-works/) — the record, its status, and where your data lives

@@ -33,8 +33,8 @@ export interface GNode {
   planned?: boolean;
   /** "Planned" or "Coming next", in the page's eyebrow type above the node. */
   status?: string;
-  /** Story 6: painted by who decided instead of by kind. */
-  who?: 'you' | 'delegated' | 'agent';
+  /** Story 6: painted by who decided instead of by kind (claude and codex: the deck's variant). */
+  who?: 'you' | 'delegated' | 'agent' | 'claude' | 'codex';
   /** Faded back, so the rest of the frame reads first. */
   faded?: boolean;
   /** The anatomy's hover parts (space-separated). */

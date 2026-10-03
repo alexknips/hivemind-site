@@ -1,9 +1,28 @@
 ---
 // The deck: one slide per screen, left to right; on a phone the slides stack.
 // Static markup with its own layout and script, painted from the site's tokens.
+// Since 2026-10-03 (the founder's call): eight slides that say the value and who it is for,
+// no install commands, and the site's graphs where the "did it hold up?" screenshot was.
+// A story with steps plays in one frame: the arrow key steps it first, then moves on.
 import '@fontsource-variable/inter';
 import '../../styles/tokens.css';
+import '../../styles/graphs.css';
 import ThemeInit from '../../components/ThemeInit.astro';
+import Frame from '../../components/graphs/Frame.astro';
+import {
+  anatomyAlt,
+  anatomyNarrow,
+  anatomyParts,
+  anatomyWide,
+  storyAssumption,
+  storyWhoAgents,
+} from '../../data/graph-stories';
+
+const base = import.meta.env.BASE_URL;
+const partLines = JSON.stringify(Object.fromEntries(anatomyParts.map((p) => [p.id, p.line])));
+const who = storyWhoAgents.steps[0];
+// The café stops before the opening moves: a wrong assumption and what rested on it, nothing replaced.
+const cafe = storyAssumption.steps.slice(0, 2);
 ---
 <!doctype html>
 <html lang="en">
@@ -177,6 +196,80 @@ import ThemeInit from '../../components/ThemeInit.astro';
   .status b{color:var(--foreground); font-weight:600}
   .links{margin:18px 0 0; display:flex; flex-wrap:wrap; gap:10px 22px; font-family:var(--font-mono); font-size:.86rem}
 
+  /* a smaller headline on slides that carry a picture */
+  .claim.mid{font-size:clamp(1.6rem,2.9vw,2.4rem)}
+
+  /* what you get: the anatomy of a decision, then three values under it */
+  .anat{margin:22px 0 0}
+  .anat .hg{max-height:calc(100svh - 470px)}
+  .anat-narrow{display:none; max-width:26rem}
+  .anat-line{margin:10px 0 0; min-height:1.5em; font-size:.92rem; line-height:1.5; color:var(--muted-foreground)}
+  .values{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px 28px; margin:18px 0 0}
+  .values li{border-top:2px solid var(--link); padding-top:10px}
+  .values h3{margin:0 0 4px; font-family:var(--font-mono); font-size:.98rem}
+  .values p{margin:0; color:var(--muted-foreground); line-height:1.5; font-size:.98rem}
+  .values + .kick{margin-top:22px}
+
+  /* Claude Code: two real sessions side by side, each cut to the part that carries the point;
+     both start at the prompt, under Claude Code's banner (y 180 of 1160 wide). The link opens all of it. */
+  .twoshots{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(18px,2.4vw,32px); margin:22px 0 0; align-items:start}
+  .twoshots figure{margin:0; min-width:0; width:min(100%, calc((100svh - 400px) * 1160 / 1140))}
+  .twoshots figcaption{margin:12px 0 0; font-size:clamp(.95rem,1.3vw,1.04rem); line-height:1.5; color:var(--muted-foreground)}
+  .twoshots figcaption b{color:var(--foreground); font-weight:600}
+  .crop{display:block; overflow:hidden}
+  .term .crop img{width:100%; max-width:none; max-height:none; margin-top:-15.5%}
+  .crop--capture{aspect-ratio:1160/770}
+  .crop--why{aspect-ratio:1160/1140}
+  .twoshots + .note{max-width:none}
+
+  /* graph stories: the words on the left, the drawing large on the right */
+  .story{display:grid; grid-template-columns:minmax(280px,420px) minmax(0,1fr); gap:clamp(28px,4vw,60px); align-items:center}
+  .story .lede{font-size:clamp(1rem,1.45vw,1.12rem); margin-top:18px}
+  .story-stage{min-width:0; margin:0}
+  .story-stage .hg{max-height:calc(100svh - 250px)}
+  .story-stage figcaption{margin:12px 0 0; font-size:clamp(.95rem,1.3vw,1.04rem); line-height:1.5; color:var(--muted-foreground)}
+  .key{margin:18px 0 0; display:flex; flex-wrap:wrap; gap:8px 18px; font-size:.92rem}
+  .key span{display:inline-flex; align-items:center; gap:8px}
+  /* a story's steps sit in one frame; a step that has passed stays under the next one */
+  .steps-stage{display:grid}
+  .steps-stage .step{grid-area:1/1; margin:0; min-width:0; opacity:0; transition:opacity .45s ease}
+  .steps-stage .step.is-on, .steps-stage .step.is-past{opacity:1}
+  .steps-stage .step.is-past figcaption{opacity:0}
+  .step-label{display:none; margin:0 0 8px; font-family:var(--font-mono); font-size:12px; color:var(--muted-foreground)}
+  .stepper{display:flex; flex-wrap:wrap; gap:8px; margin:22px 0 0}
+  .stepper button{
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.06em; color:var(--foreground);
+    background:var(--muted); border:var(--edge); border-radius:2px; padding:7px 10px; cursor:pointer;
+  }
+  .stepper button[aria-pressed="true"]{background:var(--primary); border-color:var(--primary); color:var(--primary-foreground)}
+  .stepper + .tnav{margin:10px 0 0; font-family:var(--font-mono); font-size:12px; color:var(--muted-foreground)}
+
+  /* lighting up: what a step changes flashes once as it arrives */
+  @keyframes hg-flash{30%{stroke-width:7}}
+  @keyframes hg-in{from{opacity:0}}
+  .step.is-on .hg-node.is-look .hg-shape,
+  .step.is-on .hg-node.is-refuted .hg-shape,
+  .slide.is-here .hg-node.hg-who--claude .hg-shape,
+  .slide.is-here .hg-node.hg-who--codex .hg-shape{animation:hg-flash 1.3s ease-out .35s}
+  .step.is-on .hg-badge, .step.is-on .hg-node.is-lit{animation:hg-in .5s ease .2s backwards}
+  .steps-stage .step:first-child .hg-node.is-lit{animation:none}
+
+  /* who it is for */
+  .traits{margin:28px 0 0; display:grid; max-width:960px}
+  .traits li{
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.3fr); gap:4px 28px; align-items:baseline;
+    padding:13px 0; border-top:var(--edge); font-size:clamp(.98rem,1.5vw,1.08rem); line-height:1.5;
+  }
+  .traits li:last-child{border-bottom:var(--edge)}
+  .traits b{font-weight:600}
+  .traits span{color:var(--muted-foreground)}
+  .steps .go{margin:10px 0 0; font-family:var(--font-mono); font-size:.9rem}
+
+  @media (prefers-reduced-motion:reduce){
+    .steps-stage .step{transition:none}
+    .deck .hg-shape, .deck .hg-badge, .deck .hg-node, .deck .step{animation:none !important}
+  }
+
   /* ---- nav ---- */
   .nav{
     position:fixed; inset:auto 0 0 0; height:56px; z-index:30;
@@ -224,6 +317,19 @@ import ThemeInit from '../../components/ThemeInit.astro';
     .ledger li{grid-template-columns:1fr; gap:4px}
     .steps li{grid-template-columns:1fr; gap:6px}
     .tnav{display:none}
+    .anat-wide{display:none}
+    .anat-narrow{display:block}
+    .anat .hg, .story-stage .hg{max-height:none}
+    .values{grid-template-columns:1fr}
+    .twoshots{grid-template-columns:1fr; gap:28px}
+    .twoshots figure{width:100%}
+    .story{grid-template-columns:1fr; gap:22px}
+    .steps-stage{gap:26px}
+    .steps-stage .step{grid-area:auto; opacity:1}
+    .steps-stage .step figcaption{opacity:1}
+    .step-label{display:block}
+    .stepper{display:none}
+    .traits li{grid-template-columns:1fr; gap:2px}
   }
 </style>
 </head>
@@ -254,125 +360,146 @@ import ThemeInit from '../../components/ThemeInit.astro';
     </div>
   </section>
 
-  <!-- 01 the problem, in plain words (as on the landing page since 2026-09-29); the engineers' words in one line -->
+  <!-- 01 the problem, in plain words (as on the landing page since 2026-09-29), with "your agents" plural
+       since 2026-10-03; under it one engineer's own words (dev.to, 9 Sep 2026) -->
   <section class="slide" aria-label="The problem">
     <div class="wrap">
       <p class="eyebrow">The problem</p>
-      <h2 class="claim">Your agent forgets<br>what you <span class="hl">decided.</span></h2>
+      <h2 class="claim">Your agents forget<br>what you <span class="hl">decided.</span></h2>
       <ul class="ledger">
-        <li><span class="k">It undid it</span><span class="v">You ruled an option out, for a reason. A fresh session never heard about it and suggests it again, with confidence.</span></li>
+        <li><span class="k">It undid it</span><span class="v">You ruled an option out, for a reason. A fresh session, or your other agent, never heard about it and suggests it again, with confidence.</span></li>
         <li><span class="k">Nobody knows why</span><span class="v">You talked it through with your agent, and the chat was the meeting. Once it closes, the reasons are gone, and so is who made the call.</span></li>
         <li><span class="k">Did it hold up?</span><span class="v">Plans change. The notes still say the old thing, the agent follows it, and nobody can tell which decisions still stand.</span></li>
       </ul>
-      <p class="note">For engineers: the ORM you dropped comes back, <code>git blame</code> says who changed a line but not why, and the <code>DECISIONS.md</code> goes stale after a reversal.</p>
+      <p class="note">“It rediscovered the same ‘improvement’ every few weeks, like a groundhog day of well-intentioned regressions.” <a href="https://dev.to/yureki_lab/how-i-taught-my-ai-coding-agent-to-stop-undoing-my-design-decisions-2o38">An engineer on dev.to</a>, September 2026</p>
     </div>
   </section>
 
-  <!-- 02 what it is: "What it is" and "What you get" in one slide (2026-10-02); the two cards carry the
-       sentences of the 2026-09-22 paragraph, the line under them who it is for -->
-  <section class="slide" aria-label="What it is">
+  <!-- 02 what you get: the anatomy of a decision (the landing page's drawing; hover or tap a part),
+       then the three things it is worth to you -->
+  <section class="slide" aria-label="What you get">
     <div class="wrap">
-      <p class="eyebrow">What it is</p>
-      <h2 class="claim">HiveMind is memory<br>for <span class="hl">decisions.</span></h2>
-      <p class="lede">When an agent forgets, you look for a fix under memory. HiveMind keeps two things that memory tools don't.</p>
-      <div class="pair">
-        <div class="card">
-          <h3>The why</h3>
-          <p>Your agents record what was decided, which options lost and why, and who decided: you or the agent. The next session can ask why, and does not bring back what you dropped.</p>
-        </div>
-        <div class="card">
-          <h3>Whether it held up</h3>
-          <p>When a decision is contested or replaced, its status says so. Nothing goes quietly stale, and the old entry is never edited or deleted.</p>
-        </div>
+      <p class="eyebrow">What you get</p>
+      <h2 class="claim mid">Decide once. Every agent can <span class="hl">ask why.</span></h2>
+      <div class="anat hg-anatomy" data-anatomy data-lines={partLines}>
+        <div class="anat-wide"><Frame frame={anatomyWide} alt={anatomyAlt} /></div>
+        <div class="anat-narrow"><Frame frame={anatomyNarrow} alt={anatomyAlt} /></div>
+        <p class="anat-line" data-part-line aria-live="polite">One decision and its parts: here, a café changes its coffee supplier. Hover or tap a part to read what it is.</p>
       </div>
-      <p class="kick">One person and their agents. Not only for engineering: any decision you make with an agent fits. Running it today takes a developer's setup.</p>
-    </div>
-  </section>
-
-  <!-- 03 screenshot: capture -->
-  <section class="slide" aria-label="In Claude Code: recording a decision">
-    <div class="wrap shot">
-      <div>
-        <p class="eyebrow">In Claude Code <span class="dim">/ 1 of 3</span></p>
-        <h2 class="claim">You make the call. The agent <span class="hl">writes it down.</span></h2>
-        <p class="lede">Say what you decided and why. The agent records the options that lost, the reasons, and that <b>you</b> decided, not the agent.</p>
-        <p class="note">A real session in pantry, a small demo app. HiveMind built from main on 24&nbsp;Sep&nbsp;2026; everything shown is in v0.7.0.</p>
-      </div>
-      <figure class="term">
-        <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>~/code/pantry</span></div>
-        <a href="img/capture.png"><img src="img/capture.png" width="1160" height="1158"
-          alt="Claude Code session in ~/code/pantry. The user writes: We need real storage for pantry. My call: SQLite, one file next to the app. Postgres is overkill for a one-person app, it's a server to run and back up. The JSON file we have now loses writes when two requests land at once. Record the decision in HiveMind. The agent calls HiveMind once and replies: I saved the decision in HiveMind and marked it accepted. Chosen: SQLite, as a single file next to the app. Also listed: Postgres, turned down as overkill because it's a server to run and back up; keeping the JSON file, turned down because it loses writes when two requests arrive at once. Decided by: human:you@example.com. Your own words are attached as the quote. Topics: pantry, storage, database."></a>
-      </figure>
-    </div>
-  </section>
-
-  <!-- 04 screenshot: why -->
-  <section class="slide" aria-label="In Claude Code: why was this decided?">
-    <div class="wrap shot">
-      <div>
-        <p class="eyebrow">In Claude Code <span class="dim">/ 2 of 3</span></p>
-        <h2 class="claim">A new session asks <span class="hl">why.</span></h2>
-        <p class="lede">No chat history, only the record. The answer has your own words, the options you ruled out, and the fact that nothing has replaced the decision.</p>
-        <p class="note">The same project, a fresh Claude Code session, after the agent moved the code to SQLite.</p>
-      </div>
-      <figure class="term">
-        <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>~/code/pantry</span></div>
-        <a href="img/why.png"><img src="img/why.png" width="1160" height="1816"
-          alt="A fresh Claude Code session. The user asks: Why is pantry on SQLite and not Postgres? What did we rule out? The agent calls HiveMind and replies: It was your decision, recorded in HiveMind as Use SQLite (single file next to the app) for pantry storage. Its status is accepted and nothing has replaced it. It quotes the user's own words, lists the options ruled out (Postgres: too much for a one-person app, another server to run and back up; keeping the JSON file: it was losing writes), explains why SQLite, and notes that no evidence is attached to the decision."></a>
-      </figure>
-    </div>
-  </section>
-
-  <!-- 05 screenshot: did it hold up? -->
-  <section class="slide" aria-label="In Claude Code: did it hold up?">
-    <div class="wrap shot">
-      <div>
-        <p class="eyebrow">In Claude Code <span class="dim">/ 3 of 3</span></p>
-        <h2 class="claim">Did it <span class="hl">hold up?</span></h2>
-        <p class="lede">Then the plan changed. Pantry had to work from a phone as well, so Postgres replaced SQLite. Nobody edited the old entry. It now reads <b>superseded</b>, and the answer says what changed.</p>
-        <p class="note">Another fresh session. In an earlier one the agent recorded the Postgres decision as replacing the SQLite one.</p>
-      </div>
-      <figure class="term">
-        <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>~/code/pantry</span></div>
-        <a href="img/held-up.png"><img src="img/held-up.png" width="1160" height="1776"
-          alt="A fresh Claude Code session. The user asks: Did the SQLite storage decision hold up? The agent calls HiveMind four times and replies: No. According to HiveMind, the SQLite decision has been replaced, though the replacement isn't finished yet. It restates the original decision and why Postgres was rejected, then: Why it didn't hold: it's marked superseded by Use Postgres on the home server for pantry storage, because pantry must work from a phone and a laptop and one SQLite file can't be shared. The concurrency reasoning was sound; the one device, one user assumption is what changed. It adds that the Postgres decision is still proposed, that the code still uses SQLite, and that neither decision has evidence attached."></a>
-      </figure>
-    </div>
-  </section>
-
-  <!-- 06 today and next -->
-  <section class="slide" aria-label="Where it is today and what is next">
-    <div class="wrap">
-      <p class="eyebrow">Where it is</p>
-      <h2 class="claim">Early, and <span class="hl">self-hosted.</span></h2>
-      <ul class="ledger">
-        <li><span class="k">Works today</span><span class="v">Claude Code, Codex and Cursor connect over MCP. Your agent records decisions with the options, the reasons and who decided, and answers why and whether it held up. There's a CLI for the same.</span></li>
-        <li><span class="k">Runs on</span><span class="v">One binary for Linux and Apple Silicon Macs, with a SQLite ledger in your project. AGPL-3.0. No hosted version.</span></li>
-        <li><span class="k">Next</span><span class="v">A much simpler, decision-first UI. The redesign is under way.</span></li>
-        <li><span class="k">Then</span><span class="v">The same agent work with and without HiveMind, side by side, to show whether it helps.</span></li>
+      <ul class="values">
+        <li><h3>No re-explaining</h3><p>Each decision keeps the options that lost and why. A new session, or a different agent, asks the record, not you.</p></li>
+        <li><h3>Your calls stay yours</h3><p>Each record says who decided: you, or the agent.</p></li>
+        <li><h3>What rests on what</h3><p>Each decision shows the evidence and the assumptions under it.</p></li>
       </ul>
+      <p class="kick">Claude Code, Codex and Cursor share one record in your project. Any decision you make with an agent fits, not only code. Running it today takes a developer's setup.</p>
     </div>
   </section>
 
-  <!-- 07 the ask -->
+  <!-- 03 two real Claude Code sessions on one slide: recording a decision, then a fresh session asking why -->
+  <section class="slide" aria-label="In Claude Code: say it once, ask any time">
+    <div class="wrap">
+      <p class="eyebrow">In Claude Code</p>
+      <h2 class="claim mid">Say it once. <span class="hl">Ask any time.</span></h2>
+      <div class="twoshots">
+        <figure>
+          <div class="term">
+            <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>~/code/pantry</span></div>
+            <a class="crop crop--capture" href="img/capture.png"><img src="img/capture.png" width="1160" height="1158"
+              alt="Claude Code session in ~/code/pantry. The user writes: We need real storage for pantry. My call: SQLite, one file next to the app. Postgres is overkill for a one-person app, it's a server to run and back up. The JSON file we have now loses writes when two requests land at once. Record the decision in HiveMind. The agent calls HiveMind once and replies: I saved the decision in HiveMind and marked it accepted. Chosen: SQLite, as a single file next to the app. Also listed: Postgres, turned down as overkill because it's a server to run and back up; keeping the JSON file, turned down because it loses writes when two requests arrive at once. Decided by: human:you@example.com. Your own words are attached as the quote. Topics: pantry, storage, database."></a>
+          </div>
+          <figcaption>You make the call. The agent writes it down: the options that lost, the reasons, and that <b>you</b> decided.</figcaption>
+        </figure>
+        <figure>
+          <div class="term">
+            <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>~/code/pantry</span></div>
+            <a class="crop crop--why" href="img/why.png"><img src="img/why.png" width="1160" height="1816"
+              alt="A fresh Claude Code session. The user asks: Why is pantry on SQLite and not Postgres? What did we rule out? The agent calls HiveMind and replies: It was your decision, recorded in HiveMind as Use SQLite (single file next to the app) for pantry storage. Its status is accepted and nothing has replaced it. It quotes the user's own words, lists the options ruled out (Postgres: too much for a one-person app, another server to run and back up; keeping the JSON file: it was losing writes), explains why SQLite, and notes that no evidence is attached to the decision."></a>
+          </div>
+          <figcaption>A fresh session asks why. The answer comes from the record: your words, what you ruled out, and that nothing replaced it.</figcaption>
+        </figure>
+      </div>
+      <p class="note">A real session in pantry, a small demo app. Everything shown is in v0.7.0. Open a screenshot to read all of it.</p>
+    </div>
+  </section>
+
+  <!-- 04 who decided: the landing's drawing with two agents at work, coloured by which one made the call -->
+  <section class="slide" aria-label="Who decided">
+    <div class="wrap story">
+      <div>
+        <p class="eyebrow">Who decided</p>
+        <h2 class="claim mid">More than one agent, one record. You can see <span class="hl">whose call it was.</span></h2>
+        <p class="lede">{who.caption}</p>
+        <p class="key">
+          <span><i class="hg-swatch hg-swatch--you" aria-hidden="true"></i> you decided</span>
+          <span><i class="hg-swatch hg-swatch--claude" aria-hidden="true"></i> Claude, on its own</span>
+          <span><i class="hg-swatch hg-swatch--codex" aria-hidden="true"></i> Codex, on its own</span>
+        </p>
+        <p class="note">The record holds who decided, down to the agent. The colours are this drawing's.</p>
+      </div>
+      <figure class="story-stage"><Frame frame={who.frame} alt={who.alt} /></figure>
+    </div>
+  </section>
+
+  <!-- 05 when you were wrong: the café, two steps in one frame; it stops before anything is replaced -->
+  <section class="slide" aria-label="When you were wrong">
+    <div class="wrap story">
+      <div>
+        <p class="eyebrow">When you were wrong</p>
+        <h2 class="claim mid">One wrong assumption, and everything that rested on it, <span class="hl">in view.</span></h2>
+        <div class="stepper" role="group" aria-label="Steps of the story">
+          {cafe.map((step, n) => (
+            <button type="button" data-step-btn={n} aria-pressed={n === 0 ? 'true' : 'false'}>{n + 1} · {step.label}</button>
+          ))}
+        </div>
+        <p class="tnav">→ steps through the story, then moves on</p>
+        <p class="kick">The wrong assumption stays on the record, as evidence for the next call.</p>
+      </div>
+      <div class="story-stage steps-stage">
+        {cafe.map((step, n) => (
+          <figure class:list={['step', n === 0 && 'is-on']} data-step={n}>
+            <p class="step-label">{n + 1} · {step.label}</p>
+            <Frame frame={step.frame} alt={step.alt} />
+            <figcaption>{step.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 who it is for: the person, described by what they value (the founder's words, 2026-10-03) -->
+  <section class="slide" aria-label="Who it is for">
+    <div class="wrap">
+      <p class="eyebrow">Who it is for</p>
+      <h2 class="claim">For people who treat a mistake <span class="hl">as evidence.</span></h2>
+      <ul class="traits">
+        <li><b>You want the truth, even when it's awkward.</b><span>You'd rather see the assumption that was wrong than a tidy document that hides it.</span></li>
+        <li><b>You learn from being wrong.</b><span>A wrong call is the most useful thing you learned. You keep it, with the reason.</span></li>
+        <li><b>You don't make a mistake twice.</b><span>And you don't want your agents to repeat the one you already paid for.</span></li>
+        <li><b>You run more than one agent.</b><span>Claude Code in one terminal, Codex in another, and you're the only thing they share.</span></li>
+        <li><b>You make the calls.</b><span>Your agents do the work. The judgment is yours.</span></li>
+      </ul>
+      <p class="kick">It isn't for watching anyone else. It's for people who check their own work.</p>
+    </div>
+  </section>
+
+  <!-- 07 the ask: no install commands on the slide since 2026-10-03; the Quickstart has them -->
   <section class="slide" aria-label="One ask">
     <div class="wrap">
       <p class="eyebrow">One ask</p>
       <h2 class="claim ask">Try it on one project, or tell me how you <span class="hl">do this today.</span></h2>
       <ul class="steps">
         <li><span class="k">Try it</span><div>
-          <pre>curl -fsSL https://raw.githubusercontent.com/alexknips/hivemind/master/scripts/install.sh | sh</pre>
-          <pre>claude mcp add hivemind -- hivemind mcp --agent-tool claude</pre>
-          <p>Run the second one in your project. Then record the next thing you and your agent decide, ask why a week later, and tell me where it breaks.</p>
+          <p>Record the next thing you and your agent decide. A week later, ask why from a fresh session, and tell me where it breaks.</p>
+          <p class="go"><a href={`${base}getting-started/quickstart/`}>The Quickstart →</a></p>
         </div></li>
         <li><span class="k">Or talk</span><div>
-          <p>Twenty minutes on how you stop your agents from undoing what you decided. Reply to whoever sent you this, or open an issue on GitHub.</p>
+          <p>Twenty minutes on how you keep your agents from repeating your mistakes. Reply to whoever sent you this, or open an issue on GitHub.</p>
         </div></li>
       </ul>
-      <p class="status"><span><b>Status:</b> early</span><span>self-hosted only</span><span>no hosted version, no sign-up</span><span>AGPL-3.0</span></p>
+      <p class="status"><span><b>Status:</b> early</span><span>self-hosted only, Linux and Apple Silicon Macs</span><span>no hosted version, no sign-up</span><span>AGPL-3.0</span></p>
       <p class="links">
-        <a href="/hivemind-site/#self-host">Self-host guide</a>
-        <a href="/hivemind-site/getting-started/quickstart/">Docs</a>
+        <a href={`${base}#self-host`}>Self-host guide</a>
+        <a href={`${base}getting-started/quickstart/`}>Docs</a>
         <a href="https://github.com/alexknips/hivemind">GitHub</a>
       </p>
     </div>
@@ -407,27 +534,58 @@ import ThemeInit from '../../components/ThemeInit.astro';
   });
   const dots=[...dotsWrap.children];
 
+  // A slide with a story in steps: the arrow keys step it first, then move to the next slide.
+  const stories=slides.map(s=>{
+    const steps=[...s.querySelectorAll('.step')];
+    if(steps.length<2) return null;
+    const st={steps,btns:[...s.querySelectorAll('[data-step-btn]')],k:0};
+    st.btns.forEach((b,n)=>b.addEventListener('click',()=>{step(st,n); paint();}));
+    return st;
+  });
+  function step(st,k){
+    st.k=k;
+    st.steps.forEach((el,n)=>{
+      el.classList.toggle('is-on',n===k); el.classList.toggle('is-past',n<k);
+      if(stacked.matches) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden',String(n!==k));
+    });
+    st.btns.forEach((b,n)=>b.setAttribute('aria-pressed',String(n===k)));
+  }
+  stories.forEach(st=>st&&step(st,0));
+  function forward(){
+    const st=stories[i];
+    if(st&&!stacked.matches&&st.k<st.steps.length-1) step(st,st.k+1); else go(i+1);
+  }
+  function back(){
+    const st=stories[i];
+    if(st&&!stacked.matches&&st.k>0) step(st,st.k-1); else go(i-1);
+  }
+
   function pad(n){return String(n).padStart(2,'0')}
   function paint(){
     cur.textContent=pad(i);
     railnum.textContent=pad(i)+' / '+last;
     railbar.style.width=(N<2?100:(i/(N-1))*100)+'%';
     dots.forEach((d,n)=>d.setAttribute('aria-current',n===i?'true':'false'));
-    prev.disabled=i===0; next.disabled=i===N-1;
+    const st=stories[i];
+    prev.disabled=i===0&&!(st&&st.k>0); next.disabled=i===N-1&&!(st&&st.k<st.steps.length-1);
+    slides.forEach((s,n)=>s.classList.toggle('is-here',n===i));
   }
   function go(n){
-    i=Math.max(0,Math.min(N-1,n));
+    n=Math.max(0,Math.min(N-1,n));
+    // Coming into a story from before it starts it at the beginning; coming back, at its end.
+    if(n!==i&&stories[n]) step(stories[n],n>i?0:stories[n].steps.length-1);
+    i=n;
     slides[i].scrollIntoView({behavior:'smooth',inline:'start',block:stacked.matches?'start':'nearest'});
     paint();
   }
 
-  next.addEventListener('click',()=>go(i+1));
-  prev.addEventListener('click',()=>go(i-1));
+  next.addEventListener('click',()=>{forward(); paint();});
+  prev.addEventListener('click',()=>{back(); paint();});
 
   addEventListener('keydown',e=>{
     if(stacked.matches) return;
-    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(i+1);}
-    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1);}
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();forward();paint();}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();back();paint();}
     else if(e.key==='Home'){e.preventDefault();go(0);}
     else if(e.key==='End'){e.preventDefault();go(N-1);}
   });
@@ -438,6 +596,25 @@ import ThemeInit from '../../components/ThemeInit.astro';
       if(n!==i){ i=n; paint(); }
     },90);
   },{passive:true});
+
+  // The anatomy: hover or tap a part of the graph to read one line about it; tap again to let go.
+  for(const root of document.querySelectorAll('[data-anatomy]')){
+    const line=root.querySelector('[data-part-line]'), idle=line.textContent, lines=JSON.parse(root.dataset.lines);
+    const parts=[...root.querySelectorAll('.hg [data-part]')];
+    let pinned=null;
+    const show=part=>{
+      if(!part){ delete root.dataset.on; parts.forEach(el=>el.classList.remove('is-on')); line.textContent=idle; return; }
+      root.dataset.on=part;
+      parts.forEach(el=>el.classList.toggle('is-on',(el.dataset.part||'').split(' ').includes(part)));
+      line.textContent=lines[part]||idle;
+    };
+    for(const el of parts){
+      const part=(el.dataset.part||'').split(' ')[0];
+      el.addEventListener('click',()=>{ pinned=pinned===part?null:part; show(pinned); });
+      el.addEventListener('pointerenter',e=>{ if(e.pointerType==='mouse') show(part); });
+      el.addEventListener('pointerleave',e=>{ if(e.pointerType==='mouse') show(pinned); });
+    }
+  }
 
   if(!stacked.matches) deck.focus({preventScroll:true});
   paint();

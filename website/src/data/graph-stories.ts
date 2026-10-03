@@ -231,7 +231,7 @@ export const storyRevise: Story = {
   ],
   demo: {
     href: 'demo/decisions/the-jury-finds-the-defendant-guilty/',
-    text: 'the guilty verdict, superseded by not guilty.',
+    text: 'the guilty verdict: juror 8 rejected it, and not guilty superseded it.',
   },
 };
 
@@ -272,7 +272,7 @@ export const storyWho: Story = {
     },
   ],
   demo: {
-    href: 'demo/decisions/retry-a-failed-location-ping-upload-up-to-5-times-with/',
+    href: 'demo/decisions/retry-a-failed-location-ping-upload-up-to-5-times-with-expon/',
     text: 'retries an agent chose on its own.',
   },
 };
@@ -359,7 +359,7 @@ export const storyAssumption: Story = {
     },
   ],
   demo: {
-    href: 'demo/decisions/cache-driver-profiles-in-memory-keyed-by-the-drivers-numeric/',
+    href: 'demo/decisions/cache-driver-profiles-in-memory-keyed-by-the-driver-s-numeri/',
     text: 'a cache resting on "driver ids never change", which a migration refutes.',
   },
 };

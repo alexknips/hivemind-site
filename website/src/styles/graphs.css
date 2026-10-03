@@ -128,6 +128,15 @@
   fill: color-mix(in oklab, var(--node-hypothesis) 24%, var(--background));
   stroke: var(--node-hypothesis);
 }
+/* The deck's variant: which agent made the call. */
+.hg-who--claude .hg-shape {
+  fill: color-mix(in oklab, var(--node-hypothesis) 24%, var(--background));
+  stroke: var(--node-hypothesis);
+}
+.hg-who--codex .hg-shape {
+  fill: color-mix(in oklab, var(--node-actor) 28%, var(--background));
+  stroke: var(--node-actor);
+}
 .hg-swatch {
   display: inline-block;
   width: 0.875rem;
@@ -144,9 +153,14 @@
   background: color-mix(in oklab, var(--node-actor) 28%, var(--background));
   border-color: var(--node-actor);
 }
-.hg-swatch--agent {
+.hg-swatch--agent,
+.hg-swatch--claude {
   background: color-mix(in oklab, var(--node-hypothesis) 24%, var(--background));
   border-color: var(--node-hypothesis);
+}
+.hg-swatch--codex {
+  background: color-mix(in oklab, var(--node-actor) 28%, var(--background));
+  border-color: var(--node-actor);
 }
 
 /* ── Edges ─────────────────────────────────────────────────────────────── */

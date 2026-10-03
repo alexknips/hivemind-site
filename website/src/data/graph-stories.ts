@@ -277,6 +277,30 @@ export const storyWho: Story = {
   },
 };
 
+// The deck's variant (/pitch/): the same service with two agents at work, coloured by which
+// one made the call. The record names the agent that decided (agent:claude:…, agent:codex:…);
+// the colours are the drawing's.
+const whoAgentNodes: GNode[] = [
+  { id: 'd4', kind: 'decision', x: 8, y: 90, w: 100, lines: ['Store data in', 'Postgres'], sub: ['you decided'], who: 'you' },
+  { id: 'd1', kind: 'decision', x: 178, y: 12, w: 154, lines: ['Pool of 20', 'connections'], sub: ['you decided'], who: 'you' },
+  { id: 'd3', kind: 'decision', x: 178, y: 86, w: 154, lines: ['Cache profiles for', '5 minutes'], sub: ['Codex, on its own'], who: 'codex', state: 'lit' },
+  { id: 'd2', kind: 'decision', x: 178, y: 160, w: 154, lines: ['Retry a failed call', '3 times'], sub: ['Claude, on its own'], who: 'claude', state: 'lit' },
+];
+
+export const storyWhoAgents: Story = {
+  id: 'story-who-agents',
+  title: 'Drawn: who decided what, with two agents',
+  steps: [
+    {
+      label: 'Coloured by who decided',
+      caption:
+        'Four decisions about one service. Two are yours. Claude picked the retry count on its own, Codex the cache. Look over what an agent decided alone, then accept it, dispute it or replace it.',
+      alt: 'A graph of four decisions about one service. "Pool of 20 connections", "Cache profiles for 5 minutes" and "Retry a failed call 3 times" each follow from "Store data in Postgres". Coloured by who decided: Postgres and the pool size, which you decided, in blue; the cache, which Codex decided on its own, in teal; the retries, which Claude decided on its own, in violet. Both agent decisions have a heavier outline.',
+      frame: { w: W, h: 230, nodes: whoAgentNodes, edges: whoEdges },
+    },
+  ],
+};
+
 // ── 5. One assumption falls: a café ─────────────────────────────────────────
 
 const cafeNodes: GNode[] = [

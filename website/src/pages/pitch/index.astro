@@ -232,13 +232,13 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
         </div>
       </section>
 
-      <section class="slide architecture" id="slide-3" aria-label="3. Trace decisions and reasoning">
+      <section class="slide architecture" id="slide-3" aria-label="3. Track and analyze decision making">
         <p class="eyebrow">How it works</p>
-        <h2>Trace decisions and reasoning from start to finish</h2>
+        <h2>Track and analyze decision making.</h2>
         <figure class="decision-flow" tabindex="0" aria-label="Decision flow. Scroll horizontally on narrow screens.">
           <svg viewBox="0 0 1400 470" role="img" aria-labelledby="flow-title flow-description">
-            <title id="flow-title">Trace a decision through exploration, evidence, and human approval</title>
-            <desc id="flow-description">Agent Red, Agent Blue, and Agent Yellow explore three options. Each produces an evidence artifact: didn’t work, mixed results, or promising. The artifacts contribute to a decision ratified by you and your team.</desc>
+            <title id="flow-title">Track a decision back through its evidence and explored options</title>
+            <desc id="flow-description">Arrows trace a decision ratified by you and your team back to three evidence artifacts, then to the options explored by Agent Red, Agent Blue, and Agent Yellow. The illustrative artifact outcomes are didn’t work, mixed results, and promising.</desc>
             <defs><marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></marker></defs>
             <g class="flow-stages">
               <text x="0" y="28"><tspan class="flow-step">01</tspan><tspan dx="15">Divide work</tspan></text>
@@ -247,10 +247,10 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
             </g>
             <path class="flow-rule" d="M0 54H1400" />
             <g class="flow-links" marker-end="url(#flow-arrow)">
-              <path d="M360 142H507" /><path d="M360 264H507" /><path d="M360 386H507" />
-              <path d="M870 142C965 142 965 242 1057 242" />
-              <path d="M870 264H1057" />
-              <path d="M870 386C965 386 965 286 1057 286" />
+              <path d="M510 142H363" /><path d="M510 264H363" /><path d="M510 386H363" />
+              <path d="M1060 242C965 242 965 142 873 142" />
+              <path d="M1060 264H873" />
+              <path d="M1060 286C965 286 965 386 873 386" />
             </g>
             <g class="flow-option" transform="translate(0 94)">
               <rect rx="8" width="360" height="96" /><path class="flow-accent red" d="M2 8Q2 2 8 2H352Q358 2 358 8" />

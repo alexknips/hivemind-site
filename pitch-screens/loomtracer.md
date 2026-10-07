@@ -22,7 +22,7 @@ The presenter script and source notes are intentionally shareable. Private conve
 
 The supplied Loomtracer stacked SVG is unchanged. Palette: Ink #332B32, Ivory #FDF8F4, Blue #1D90CD, Orange-red #E25432, Yellow #F3BA1E. Fraunces 600 headlines; Source Sans 3 400/600 body and subheads. Font licenses are in `website/public/pitch/fonts/`.
 
-The illustrative diagram has three stages: Divide work, Evidence, and Ratify decisions. Three options produce Artifact 1, Artifact 2, and Artifact 3; people ratify the resulting decision. It does not claim automatic orchestration or measured outcomes.
+The illustrative diagram has three stages: Divide work, Evidence, and Ratify decisions. Three options produce Artifact 1, Artifact 2, and Artifact 3; people ratify the resulting decision. The headline is “Track and analyze decision making.” Arrows trace the decision back through its evidence to the explored options. It does not claim automatic orchestration or measured outcomes.
 
 The displayed URL and QR code both target `https://www.loomtracer.ai`, a user-supplied placeholder. The SVG QR was generated with qrcode 1.5.4, error correction Q, a four-module quiet zone, and the brand Ink/Ivory palette. Independent raster decoding verified the exact payload. This does not verify that the website is live.
 

@@ -14,13 +14,13 @@ export const notes = [
     ]
   },
   {
-    "title": "Trace decisions and reasoning from start to finish",
+    "title": "Track and analyze decision making.",
     "timing": "23–37 seconds",
     "paragraphs": [
       "Agents explore different options through MCP and record the evidence. Loomtracer connects those artifacts to a decision. You and your team approve the direction."
     ],
     "sources": [
-      "Illustrative workflow: agents explore options and produce evidence artifacts; people ratify a decision. Divide work is a workflow stage, not a claim that Loomtracer automatically assigns or orchestrates agents. Artifact outcome labels are illustrative, not measured product performance."
+      "Illustrative workflow: agents explore options and produce evidence artifacts; people ratify a decision. Arrows trace the ratified decision back to its supporting artifacts and explored options. Divide work is a workflow stage, not a claim that Loomtracer automatically assigns or orchestrates agents. Artifact outcome labels are illustrative, not measured product performance."
     ]
   },
   {

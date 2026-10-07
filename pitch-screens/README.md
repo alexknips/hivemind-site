@@ -1,17 +1,17 @@
 # The deck's screenshots
 
-The three terminal screenshots in `website/public/pitch/img/` are real Claude Code sessions, not
-mock-ups. Since 2026-10-06 the deck at `/pitch/` shows one of them, `capture.png`. This folder keeps the raw terminal captures and the two scripts that turn
-them into PNGs (plus `deck.mjs`, which prints the Loomtracer deck to PDF and its contact sheet; see [loomtracer.md](loomtracer.md)), so anyone can check that a screenshot shows what the session printed.
+The three terminal screenshots on `/pitch/` (`website/public/pitch/img/`) are real Claude Code
+sessions, not mock-ups. This folder keeps the raw terminal captures and the two scripts that turn
+them into PNGs, so anyone can check that a screenshot shows what the session printed.
 
 ## How they were made (2026-09-24)
 
 - **Project:** `~/code/pantry`, a small Flask demo app that stores its items in a JSON file.
-  Its `CLAUDE.md` gives the owner's `hivemind` identity as `human:you@example.com`, so no real
+  Its `CLAUDE.md` gives the owner's HiveMind identity as `human:you@example.com`, so no real
   address appears in the frames.
 - **Agent:** Claude Code 2.1.281, Opus 5.5, in a 64-column tmux pane. The only MCP server was
-  `hivemind` (Loomtracer's tool), and Bash was turned off so the agent reached it only through MCP.
-- **hivemind:** built from `main` at `881412f` (`0.6.0+881412f`), with a fresh local ledger.
+  HiveMind, and Bash was turned off so the agent reached HiveMind only through MCP.
+- **HiveMind:** built from `main` at `881412f` (`0.6.0+881412f`), with a fresh local ledger.
 - **Sessions:** each one is a new Claude Code process, so there's no chat history between them.
   Only the ledger carries over.
   1. `capture.ansi`: the owner states the decision (SQLite, not Postgres or the JSON file)

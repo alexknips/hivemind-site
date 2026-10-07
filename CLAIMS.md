@@ -25,8 +25,8 @@ assets and install script. The capture plugins are the one exception: no release
 marketplace installs them from hivemind `master`, so what that plugin does with the `v0.7.0` binary,
 tested as a stranger would install it, counts as works today. "Coming next" and "planned" items
 rest on the product plan as of 2026-09-26; the deck at `/pitch/` (2026-09-24) says the same things
-where it covers them. The deck was rewritten as Loomtracer's pitch on 2026-10-06 (site PR #24) and
-has six slides since 2026-10-07; rows below that name a deck slide refer to the deck before that.
+where it covers them. The deck was rewritten as Loomtracer's pitch on 2026-10-06 (site PR #24, by Jeff Miao, who owns
+the deck); rows below that name a deck slide refer to the deck before that.
 
 Last checked: 2026-10-02, against `v0.7.0` (still the latest release on that day) and hivemind master for
 what is "coming next".

@@ -3,10 +3,7 @@
 // Presentation sizing/spacing is scoped design judgment, approved 2026-10-06.
 import '@fontsource-variable/fraunces';
 import '@fontsource-variable/source-sans-3';
-import { decisionRecord as record } from '../../data/loomtracer-pitch';
 const base = `${import.meta.env.BASE_URL}pitch/`;
-// Slide 4: one square per decision in our own record, a person's first, then an agent's.
-const units = Array.from({ length: record.decisions }, (_, n) => (n < record.byPerson ? 'person' : 'agent'));
 ---
 <!doctype html>
 <html lang="en">
@@ -107,22 +104,6 @@ const units = Array.from({ length: record.decisions }, (_, n) => (n < record.byP
     .screenshots h2 .availability{font-family:var(--body);font-size:2.3cqw;letter-spacing:0;white-space:nowrap}
     .screen-caption{font-size:1.05cqw;line-height:1.35;margin-top:.7cqw}
     .screenshots .screen-note{font-size:1.45cqw;line-height:1.3;margin-top:1.3cqw}
-    .metrics{display:flex;flex-direction:column}
-    .metrics h2{font-size:3.8cqw;margin-top:1.5cqw}
-    .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:2.2cqw;margin-top:3.4cqw}
-    .stat{border-top:.3cqw solid var(--ink);padding-top:1.1cqw}
-    .stat.person{border-color:var(--blue)}.stat.agent{border-color:var(--orange)}
-    .stat-num{font-family:var(--headline);font-size:6.2cqw;font-weight:600;line-height:1;letter-spacing:-.03em}
-    .stat-label{font-size:1.75cqw;font-weight:600;line-height:1.2;margin-top:.8cqw}
-    .stat-note{font-size:1.3cqw;line-height:1.3;margin-top:.35cqw}
-    .units{display:flex;gap:.3cqw;margin-top:2.8cqw}
-    .unit{flex:1;height:1.5cqw;border-radius:.2cqw}
-    .unit.person{background:var(--blue)}.unit.agent{background:var(--orange)}
-    .why{font-family:var(--headline);font-size:2.7cqw;font-weight:600;line-height:1.2;letter-spacing:-.02em;margin-top:2.8cqw;max-width:44ch}
-    .why::before{content:'';display:inline-block;width:.75cqw;height:.75cqw;border-radius:50%;background:var(--yellow);margin-right:.9cqw;vertical-align:.35cqw}
-    .metrics-bottom{display:flex;justify-content:space-between;align-items:center;gap:3cqw;margin-top:auto;border-top:1px solid var(--ink);padding-top:1.2cqw;font-size:1.35cqw;line-height:1.3}
-    .coming{display:flex;align-items:center;gap:.8cqw;font-weight:600}
-    .coming span{font-weight:400;border:1px dashed var(--ink);padding:.25cqw .8cqw}
     .closing{display:flex;flex-direction:column}
     .closing-main{display:grid;grid-template-columns:55cqw 1fr;gap:4cqw;align-items:center;flex:1;padding-top:2.5cqw}
     .closing h2{font-size:5.4cqw}
@@ -199,16 +180,6 @@ const units = Array.from({ length: record.decisions }, (_, n) => (n < record.byP
       .screen-title{font-size:25px;margin-bottom:12px}.screen-frame{height:auto;min-height:180px;border-radius:6px}
       .screen-frame img{height:auto}.screenshots h2 .availability{display:block;font-size:25px;margin-top:9px}
       .screen-caption{font-size:15px;margin-top:10px}.screenshots .screen-note{font-size:20px;margin-top:24px}
-      .metrics{display:block}
-      .metrics h2{font-size:38px;margin-top:24px}
-      .stats{grid-template-columns:1fr 1fr;gap:22px 20px;margin-top:30px}
-      .stat{border-top-width:4px;padding-top:12px}
-      .stat-num{font-size:48px}.stat-label{font-size:20px;margin-top:8px}.stat-note{font-size:16px;margin-top:4px}
-      .units{gap:3px;margin-top:28px}.unit{height:14px;border-radius:2px}
-      .why{font-size:26px;margin-top:28px}
-      .why::before{width:9px;height:9px;margin-right:8px;vertical-align:4px}
-      .metrics-bottom{display:block;margin-top:30px;padding-top:16px;font-size:16px}
-      .coming{flex-wrap:wrap;gap:8px;margin-top:12px}.coming span{padding:3px 10px}
       .closing-main{grid-template-columns:1fr;gap:42px;padding:0;margin-top:42px}
       .closing h2{font-size:48px}
       .closing .trial-question{font-size:32px;margin-top:28px}
@@ -322,34 +293,14 @@ const units = Array.from({ length: record.decisions }, (_, n) => (n < record.byP
         <p class="flow-scroll-hint">Scroll to follow the full flow →</p>
       </section>
 
-      <section class="slide metrics" id="slide-4" aria-label="4. Decisions by a person or an agent">
-        <p class="eyebrow">Decision metrics</p>
-        <h2>Who decided: a person or an agent</h2>
-        <div class="stats">
-          <div class="stat"><p class="stat-num">{record.decisions}</p><p class="stat-label">Decisions</p></div>
-          <div class="stat person"><p class="stat-num">{record.byPerson}</p><p class="stat-label">By a person</p></div>
-          <div class="stat agent"><p class="stat-num">{record.byAgent}</p><p class="stat-label">By an agent</p><p class="stat-note">{record.agentReviewedByPerson === 0 ? 'none reviewed by a person' : `${record.agentReviewedByPerson} reviewed by a person`}</p></div>
-          <div class="stat"><p class="stat-num">{record.contested}</p><p class="stat-label">Disagreed with</p><p class="stat-note">contested</p></div>
-          <div class="stat"><p class="stat-num">{record.superseded}</p><p class="stat-label">Replaced</p><p class="stat-note">superseded</p></div>
-        </div>
-        <div class="units" role="img" aria-label={`${record.decisions} decisions: ${record.byPerson} by a person, ${record.byAgent} by an agent`}>
-          {units.map((who) => <span class={`unit ${who}`}></span>)}
-        </div>
-        <p class="why">You can see which choices a person made and which an agent made, so you know what to review.</p>
-        <div class="metrics-bottom">
-          <p>Our own project’s decision record, {record.date}</p>
-          <p class="coming">Coming <span>Speed</span><span>Consistency</span><span>Flexibility</span></p>
-        </div>
-      </section>
-
-      <section class="slide screenshots" id="slide-5" aria-label="5. Self-hosted and hosted interfaces">
+      <section class="slide screenshots" id="slide-4" aria-label="4. Self-hosted and hosted interfaces">
         <p class="eyebrow">The product</p>
         <h2>Self-Hosted or Hosted <span class="availability">(coming soon)</span></h2>
         <div class="screen-grid">
           <figure>
             <figcaption class="screen-title">Self-Hosted</figcaption>
-            <div class="screen-frame claude"><img src={`${base}img/capture.png`} width="1160" height="1158" alt="Alex’s original Claude Code screenshot: a human chooses SQLite for a pantry demo app, and Loomtracer’s hivemind tool records the decision, reasoning, alternatives, and human attribution." /></div>
-            <p class="screen-caption">Claude Code + Loomtracer’s hivemind tool · Alex’s original demo.</p>
+            <div class="screen-frame claude"><img src={`${base}img/capture.png`} width="1160" height="1158" alt="Alex’s original Claude Code screenshot: a human chooses SQLite for a pantry demo app, and HiveMind records the decision, reasoning, alternatives, and human attribution." /></div>
+            <p class="screen-caption">Claude Code + HiveMind · Alex’s original demo.</p>
           </figure>
           <figure>
             <figcaption class="screen-title">Decision Graph</figcaption>
@@ -359,7 +310,7 @@ const units = Array.from({ length: record.decisions }, (_, n) => (n < record.byP
         </div>
       </section>
 
-      <section class="slide closing" id="slide-6" aria-label="6. Thank You">
+      <section class="slide closing" id="slide-5" aria-label="5. Thank You">
         <p class="eyebrow">Outro</p>
         <div class="closing-main">
           <div class="closing-message">
@@ -381,14 +332,13 @@ const units = Array.from({ length: record.decisions }, (_, n) => (n < record.byP
       </section>
     </main>
     <nav class="controls" aria-label="Presentation controls">
-      <span class="count" aria-live="polite"><strong id="current">01</strong> / 06</span>
+      <span class="count" aria-live="polite"><strong id="current">01</strong> / 05</span>
       <div class="dots" aria-label="Choose a slide">
         <button data-slide="0" aria-label="Go to slide 1" aria-current="true"></button>
         <button data-slide="1" aria-label="Go to slide 2" aria-current="false"></button>
         <button data-slide="2" aria-label="Go to slide 3" aria-current="false"></button>
         <button data-slide="3" aria-label="Go to slide 4" aria-current="false"></button>
         <button data-slide="4" aria-label="Go to slide 5" aria-current="false"></button>
-        <button data-slide="5" aria-label="Go to slide 6" aria-current="false"></button>
       </div>
       <div class="actions">
         <a class="notes-link" href={`${base}presenter/`} target="loomtracer-presenter">Presenter notes</a>
@@ -406,7 +356,7 @@ const units = Array.from({ length: record.decisions }, (_, n) => (n < record.byP
     const next=document.querySelector<HTMLButtonElement>('#next')!;
     const stacked=matchMedia('(max-width:760px)');
     const channel=typeof BroadcastChannel!=='undefined'?new BroadcastChannel('loomtracer-pitch'):null;
-    const hashIndex=Number(location.hash.match(/^#slide-([1-6])$/)?.[1]||1)-1;
+    const hashIndex=Number(location.hash.match(/^#slide-([1-5])$/)?.[1]||1)-1;
     let current=hashIndex;
     function paint(){
       document.querySelector('#current')!.textContent=String(current+1).padStart(2,'0');
@@ -470,7 +420,7 @@ const units = Array.from({ length: record.decisions }, (_, n) => (n < record.byP
       if(event.data?.type==='navigate'&&Number.isInteger(event.data.index))go(event.data.index);
       if(event.data?.type==='request-state')channel.postMessage({type:'slide',index:current});
     });
-    window.addEventListener('hashchange',()=>{const n=Number(location.hash.match(/^#slide-([1-6])$/)?.[1]||1)-1;go(n);});
+    window.addEventListener('hashchange',()=>{const n=Number(location.hash.match(/^#slide-([1-5])$/)?.[1]||1)-1;go(n);});
     if(!stacked.matches)go(current);else paint();
   </script>
 </body>

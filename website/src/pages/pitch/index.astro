@@ -12,7 +12,7 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light" />
   <title>Loomtracer — B4SF One-Minute Pitch</title>
-  <meta name="description" content="Threaded project memory for you, your team, and your AI agents." />
+  <meta name="description" content="Threaded memory for you, your team, and your AI agents." />
   <style is:global>
     :root {
       --ink:#332B32; --ivory:#FDF8F4; --blue:#1D90CD; --orange:#E25432; --yellow:#F3BA1E;
@@ -110,7 +110,9 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
     .closing-brand{display:flex;flex-direction:column;align-items:center;text-align:center}
     .closing .trial-question{font-family:var(--headline);font-size:3.1cqw;font-weight:600;line-height:1.2;letter-spacing:-.025em;margin-top:2cqw}
     .closing .invite{font-family:var(--headline);font-weight:600;font-size:2.6cqw;line-height:1.2;color:var(--orange);margin-top:1.25cqw;letter-spacing:-.025em}
-    .closing .question{font-size:1.95cqw;line-height:1.3;margin-top:1.5cqw}
+    .closing .question{font-size:1.95cqw;line-height:1.3;margin-top:1cqw}
+    .closing-qr-link{display:block;margin-top:.6cqw}
+    .closing-qr{display:block;width:10.5cqw;height:10.5cqw}
     .closing-bottom{margin-top:auto}
     .founders{display:flex;gap:4.6cqw;padding-top:1.4cqw;border-top:1px solid var(--ink);width:55cqw}
     .founder-name{font-size:1.75cqw;line-height:1.2;font-weight:600}
@@ -189,6 +191,9 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
       .founders{display:grid;gap:24px;width:100%;padding-top:24px}
       .founder-name{font-size:23px}.founder-role{font-size:20px;margin-top:5px}
       .closing-logo{width:224px}
+      .closing-qr-link{margin-top:14px}
+      .closing-qr{width:148px;height:148px}
+      .metrics{min-height:260px}
       .controls{position:static;padding:20px 24px;display:flex;font-size:14px}
       .count,.dots,.arrow,.fullscreen{display:none}
       .actions{gap:0}.notes-link{margin:0}
@@ -207,11 +212,11 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
 <body>
   <div class="stage" id="stage">
     <main class="deck" id="deck" tabindex="0" aria-label="Loomtracer one-minute pitch. Use left and right arrow keys to change slides.">
-      <section class="slide cover" id="slide-1" aria-label="1. Loomtracer threaded project memory">
+      <section class="slide cover" id="slide-1" aria-label="1. Loomtracer threaded memory">
         <p class="eyebrow">B4SF Pitch Night</p>
         <div class="cover-grid">
           <img class="logo cover-logo" src={`${base}brand/loomtracer-color.svg`} width="214" height="169" alt="Loomtracer" />
-          <h1>Threaded project memory for you, your team, and your AI agents.</h1>
+          <h1>Threaded memory for you, your team, and your AI agents.</h1>
         </div>
       </section>
 
@@ -220,94 +225,72 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
         <div class="problem-body">
           <h2>Context gets<br />left behind</h2>
           <div class="pain-points">
-            <div class="pain"><h3>Findings are buried over time.</h3></div>
+            <div class="pain"><h3>Findings get buried over time.</h3></div>
             <div class="pain"><h3>Decisions separate from reasoning.</h3></div>
             <div class="pain"><h3>It’s up to you to connect lost threads.</h3></div>
           </div>
         </div>
       </section>
 
-      <section class="slide architecture" id="slide-3" aria-label="3. Trace decisions and reasoning">
+      <section class="slide architecture" id="slide-3" aria-label="3. Track and analyze decision making">
         <p class="eyebrow">How it works</p>
-        <h2>Trace decisions and reasoning from start to finish</h2>
+        <h2>Track and analyze decision making.</h2>
         <figure class="decision-flow" tabindex="0" aria-label="Decision flow. Scroll horizontally on narrow screens.">
           <svg viewBox="0 0 1400 470" role="img" aria-labelledby="flow-title flow-description">
-            <title id="flow-title">Trace a decision through exploration, findings, and human approval</title>
-            <desc id="flow-description">Decision A branches into three options explored by Agent Red, Agent Blue, and Agent Yellow. Their findings—didn’t work, mixed results, and promising—contribute to Decision B, approved by you and your team.</desc>
+            <title id="flow-title">Track a decision back through its evidence and explored options</title>
+            <desc id="flow-description">Arrows trace a decision ratified by you and your team back to three evidence artifacts, then to the options explored by Agent Red, Agent Blue, and Agent Yellow. The illustrative artifact outcomes are didn’t work, mixed results, and promising.</desc>
             <defs><marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></marker></defs>
             <g class="flow-stages">
-              <text x="0" y="28"><tspan class="flow-step">01</tspan><tspan dx="15">Start task</tspan></text>
-              <text x="370" y="28"><tspan class="flow-step">02</tspan><tspan dx="15">Divide work</tspan></text>
-              <text x="740" y="28"><tspan class="flow-step">03</tspan><tspan dx="15">Outcomes</tspan></text>
-              <text x="1140" y="28"><tspan class="flow-step">04</tspan><tspan dx="15">Ratify decisions</tspan></text>
+              <text x="0" y="28"><tspan class="flow-step">01</tspan><tspan dx="15">Divide work</tspan></text>
+              <text x="510" y="28"><tspan class="flow-step">02</tspan><tspan dx="15">Evidence</tspan></text>
+              <text x="1060" y="28"><tspan class="flow-step">03</tspan><tspan dx="15">Ratify decisions</tspan></text>
             </g>
             <path class="flow-rule" d="M0 54H1400" />
             <g class="flow-links" marker-end="url(#flow-arrow)">
-              <path d="M230 264C300 264 300 142 367 142" />
-              <path d="M230 264H367" />
-              <path d="M230 264C300 264 300 386 367 386" />
-              <path d="M650 142H737" /><path d="M650 264H737" /><path d="M650 386H737" />
-              <path d="M1020 142C1080 142 1080 242 1137 242" />
-              <path d="M1020 264H1137" />
-              <path d="M1020 386C1080 386 1080 286 1137 286" />
+              <path d="M510 142H363" /><path d="M510 264H363" /><path d="M510 386H363" />
+              <path d="M1060 242C965 242 965 142 873 142" />
+              <path d="M1060 264H873" />
+              <path d="M1060 286C965 286 965 386 873 386" />
             </g>
-            <g class="flow-decision">
-              <rect rx="8" x="0" y="216" width="230" height="96" />
-              <text class="flow-decision-title" x="24" y="256">Decision A</text>
-              <text class="flow-decision-note" x="24" y="287">Starting direction</text>
-            </g>
-            <g class="flow-option" transform="translate(370 94)">
-              <rect rx="8" width="280" height="96" /><path class="flow-accent red" d="M2 8Q2 2 8 2H272Q278 2 278 8" />
+            <g class="flow-option" transform="translate(0 94)">
+              <rect rx="8" width="360" height="96" /><path class="flow-accent red" d="M2 8Q2 2 8 2H352Q358 2 358 8" />
               <circle class="red-fill" cx="25" cy="29" r="5" /><text class="flow-agent" x="41" y="36">Agent Red</text>
               <text class="flow-node-title" x="24" y="74">Option 1</text>
             </g>
-            <g class="flow-option" transform="translate(370 216)">
-              <rect rx="8" width="280" height="96" /><path class="flow-accent blue" d="M2 8Q2 2 8 2H272Q278 2 278 8" />
+            <g class="flow-option" transform="translate(0 216)">
+              <rect rx="8" width="360" height="96" /><path class="flow-accent blue" d="M2 8Q2 2 8 2H352Q358 2 358 8" />
               <circle class="blue-fill" cx="25" cy="29" r="5" /><text class="flow-agent" x="41" y="36">Agent Blue</text>
               <text class="flow-node-title" x="24" y="74">Option 2</text>
             </g>
-            <g class="flow-option" transform="translate(370 338)">
-              <rect rx="8" width="280" height="96" /><path class="flow-accent yellow" d="M2 8Q2 2 8 2H272Q278 2 278 8" />
+            <g class="flow-option" transform="translate(0 338)">
+              <rect rx="8" width="360" height="96" /><path class="flow-accent yellow" d="M2 8Q2 2 8 2H352Q358 2 358 8" />
               <circle class="yellow-fill" cx="25" cy="29" r="5" /><text class="flow-agent" x="41" y="36">Agent Yellow</text>
               <text class="flow-node-title" x="24" y="74">Option 3</text>
             </g>
-            <g class="flow-finding" transform="translate(740 94)">
-              <rect rx="8" width="280" height="96" /><text class="flow-node-title" x="24" y="40">Finding 1</text><text class="flow-outcome" x="24" y="73">Didn’t work</text>
+            <g class="flow-finding" transform="translate(510 94)">
+              <rect rx="8" width="360" height="96" /><text class="flow-node-title" x="24" y="40">Artifact 1</text><text class="flow-outcome" x="24" y="73">Didn’t work</text>
             </g>
-            <g class="flow-finding" transform="translate(740 216)">
-              <rect rx="8" width="280" height="96" /><text class="flow-node-title" x="24" y="40">Finding 2</text><text class="flow-outcome" x="24" y="73">Mixed results</text>
+            <g class="flow-finding" transform="translate(510 216)">
+              <rect rx="8" width="360" height="96" /><text class="flow-node-title" x="24" y="40">Artifact 2</text><text class="flow-outcome" x="24" y="73">Mixed results</text>
             </g>
-            <g class="flow-finding" transform="translate(740 338)">
-              <rect rx="8" width="280" height="96" /><text class="flow-node-title" x="24" y="40">Finding 3</text><text class="flow-outcome" x="24" y="73">Promising</text>
+            <g class="flow-finding" transform="translate(510 338)">
+              <rect rx="8" width="360" height="96" /><text class="flow-node-title" x="24" y="40">Artifact 3</text><text class="flow-outcome" x="24" y="73">Promising</text>
             </g>
             <g class="flow-decision">
-              <rect rx="8" x="1140" y="202" width="260" height="124" />
-              <circle class="red-fill" cx="1169" cy="225" r="5" /><circle class="blue-fill" cx="1187" cy="225" r="5" /><circle class="yellow-fill" cx="1205" cy="225" r="5" />
-              <text class="flow-decision-title" x="1164" y="266">Decision B</text>
-              <text class="flow-decision-note" x="1164" y="300">You + your team approve</text>
+              <rect rx="8" x="1060" y="202" width="340" height="124" />
+              <circle class="red-fill" cx="1089" cy="225" r="5" /><circle class="blue-fill" cx="1107" cy="225" r="5" /><circle class="yellow-fill" cx="1125" cy="225" r="5" />
+              <text class="flow-decision-title" x="1084" y="266">Decision</text>
+              <text class="flow-decision-note" x="1084" y="300">Ratified</text>
             </g>
-            <circle class="yellow-fill flow-review-bullet" cx="1148" cy="373" r="5" />
-            <text class="flow-review" x="1164" y="381"><tspan x="1164">You and your team</tspan><tspan x="1164" dy="29">approve the direction.</tspan></text>
+            <circle class="yellow-fill flow-review-bullet" cx="1068" cy="373" r="5" />
+            <text class="flow-review" x="1084" y="381"><tspan x="1084">You and your team</tspan><tspan x="1084" dy="29">approve the direction.</tspan></text>
           </svg>
         </figure>
         <p class="flow-scroll-hint">Scroll to follow the full flow →</p>
       </section>
 
-      <section class="slide screenshots" id="slide-4" aria-label="4. Self-hosted and hosted interfaces">
-        <p class="eyebrow">The product</p>
-        <h2>Self-Hosted or Hosted <span class="availability">(coming soon)</span></h2>
-        <div class="screen-grid">
-          <figure>
-            <figcaption class="screen-title">Self-Hosted</figcaption>
-            <div class="screen-frame claude"><img src={`${base}img/capture.png`} width="1160" height="1158" alt="Alex’s original Claude Code screenshot: a human chooses SQLite for a pantry demo app, and HiveMind records the decision, reasoning, alternatives, and human attribution." /></div>
-            <p class="screen-caption">Claude Code + HiveMind · Alex’s original demo.</p>
-          </figure>
-          <figure>
-            <figcaption class="screen-title">Decision Graph</figcaption>
-            <div class="screen-frame"><img src={`${base}img/hosted-graph.png`} width="2480" height="1716" alt="Hosted graph demo showing connected findings, a proposed decision, and its reasons. Fictional sample data, separate from private workspaces." /></div>
-            <p class="screen-caption">Hosted UI demo with fictional sample data.</p>
-          </figure>
-        </div>
+      <section class="slide metrics" id="slide-4" aria-label="4. Decision Metrics">
+        <p class="eyebrow">Decision Metrics</p>
       </section>
 
       <section class="slide closing" id="slide-5" aria-label="5. Thank You">
@@ -321,6 +304,7 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
           <div class="closing-brand">
             <img class="logo closing-logo" src={`${base}brand/loomtracer-color.svg`} width="214" height="169" alt="Loomtracer" />
             <p class="question" title="Placeholder URL — not yet a live destination">www.loomtracer.ai</p>
+            <a class="closing-qr-link" href="https://www.loomtracer.ai" target="_blank" rel="noopener noreferrer" aria-label="Open www.loomtracer.ai" title="QR destination: https://www.loomtracer.ai (placeholder URL)"><img class="closing-qr" src={`${base}brand/loomtracer-qr.svg`} width="370" height="370" alt="QR code for https://www.loomtracer.ai" /></a>
           </div>
         </div>
         <div class="closing-bottom">

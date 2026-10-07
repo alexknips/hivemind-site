@@ -1,12 +1,17 @@
 /*
  * Loomtracer design tokens, for the site.
  *
- * The colour blocks below are a copy of the app's token file
- * (hivemind-ui, src/styles/tokens.css, hu-65k.2, main at bc5231a), so the
- * site and the app are painted from the same values: shadcn-named neutrals,
- * one link accent, one hue per signal, light by default and dark following
- * the OS (or `<html data-theme="dark">`, which Starlight sets on the docs).
- * When the app's palette changes, copy the colour section over again.
+ * Since 2026-10-07 the site wears Loomtracer's brand, from Jeff Miao's deck
+ * (src/pages/pitch/index.astro): ink #332B32, ivory #FDF8F4, blue #1D90CD,
+ * orange #E25432, yellow #F3BA1E; Fraunces for headings, Source Sans 3 for
+ * text. The token names are still the app's (hivemind-ui, src/styles/tokens.css:
+ * shadcn-named neutrals, one link accent, one hue per signal), so every
+ * utility and component keeps working; only the values are the brand's. The
+ * neutrals are ink mixed into ivory (and ivory into a deeper ink for dark);
+ * the link is the brand blue, darker on ivory and lighter on ink so it reads
+ * as text (at least 4.5:1). The node hues stay the app's graph language.
+ * Light by default; dark follows the OS (or `<html data-theme="dark">`, which
+ * Starlight sets on the docs).
  *
  * The app exposes type, spacing, radii and shadows to Tailwind v4 through
  * `@theme`. The site runs Tailwind v3, so the same steps are plain custom
@@ -19,46 +24,46 @@
 :root {
   color-scheme: light;
 
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.21 0.006 285.9);
-  --card: oklch(1 0 0);
+  --background: #FDF8F4;
+  --foreground: #332B32;
+  --card: #FFFCF9;
   --card-foreground: var(--foreground);
-  --popover: oklch(1 0 0);
+  --popover: #FFFCF9;
   --popover-foreground: var(--foreground);
-  --primary: oklch(0.21 0.006 285.9);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.4);
+  --primary: #332B32;
+  --primary-foreground: #FDF8F4;
+  --secondary: #F2EDE9;
   --secondary-foreground: var(--foreground);
-  --muted: oklch(0.967 0.001 286.4);
-  --muted-foreground: oklch(0.52 0.016 285.9);
-  --accent: oklch(0.955 0.003 286.3);
+  --muted: #F2EDE9;
+  --muted-foreground: #686064;
+  --accent: #EDE8E4;
   --accent-foreground: var(--foreground);
-  --border: oklch(0.92 0.004 286.3);
-  --input: oklch(0.87 0.006 286.3);
-  --ring: oklch(0.55 0.15 255);
-  --overlay: oklch(0.21 0.006 285.9 / 0.45);
-  --shadow-color: oklch(0.21 0.006 285.9);
+  --border: #E3DDDB;
+  --input: #D1CBC9;
+  --ring: #1D90CD;
+  --overlay: rgb(51 43 50 / 0.45);
+  --shadow-color: #332B32;
 
-  --sidebar: oklch(0.985 0.001 286.4);
+  --sidebar: #F7F2EE;
   --sidebar-foreground: var(--foreground);
-  --sidebar-accent: oklch(0.945 0.004 286.3);
+  --sidebar-accent: #EDE8E4;
   --sidebar-border: var(--border);
 
-  /* Links, ids and the one accent the UI allows itself. */
-  --link: oklch(0.5 0.16 255);
+  /* Links and ids: the brand blue, darkened to read as text on ivory. */
+  --link: #106A98;
 
   /* Signals. `--x` is the hue; `--x-foreground` reads on the page and on
      `--x-soft`, the tinted background for badges and notices. */
   --success: oklch(0.6 0.13 155);
   --success-foreground: oklch(0.44 0.1 155);
-  --warning: oklch(0.72 0.15 70);
-  --warning-foreground: oklch(0.47 0.11 60);
-  --destructive: oklch(0.577 0.215 27.3);
-  --destructive-foreground: oklch(0.47 0.17 27.3);
-  --info: oklch(0.55 0.15 255);
-  --info-foreground: oklch(0.45 0.14 255);
-  --neutral: oklch(0.6 0.02 270);
-  --neutral-foreground: oklch(0.45 0.02 270);
+  --warning: #F3BA1E;
+  --warning-foreground: #7A5300;
+  --destructive: #E25432;
+  --destructive-foreground: #A8361A;
+  --info: #1D90CD;
+  --info-foreground: #106A98;
+  --neutral: #988F93;
+  --neutral-foreground: #686064;
 
   /* Node types: one hue each, as in the app's graph. */
   --node-decision: oklch(0.575 0.123 246.5);
@@ -85,33 +90,33 @@
   :root:not([data-theme="light"]) {
     color-scheme: dark;
 
-    --background: oklch(0.16 0.005 285.8);
-    --foreground: oklch(0.96 0.002 286);
-    --card: oklch(0.19 0.006 285.9);
-    --popover: oklch(0.21 0.006 285.9);
-    --primary: oklch(0.93 0.004 286.3);
-    --primary-foreground: oklch(0.21 0.006 285.9);
-    --secondary: oklch(0.27 0.006 286);
-    --muted: oklch(0.24 0.006 286);
-    --muted-foreground: oklch(0.72 0.015 286);
-    --accent: oklch(0.27 0.006 286);
-    --border: oklch(1 0 0 / 0.1);
-    --input: oklch(1 0 0 / 0.16);
-    --ring: oklch(0.68 0.13 255);
-    --overlay: oklch(0 0 0 / 0.6);
-    --shadow-color: oklch(0 0 0);
+    --background: #221C21;
+    --foreground: #FDF8F4;
+    --card: #2B2529;
+    --popover: #312B30;
+    --primary: #FDF8F4;
+    --primary-foreground: #332B32;
+    --secondary: #312B30;
+    --muted: #312B30;
+    --muted-foreground: #B7B2B0;
+    --accent: #383236;
+    --border: #3C363A;
+    --input: #494447;
+    --ring: #4FAEE0;
+    --overlay: rgb(0 0 0 / 0.6);
+    --shadow-color: #000;
 
-    --sidebar: oklch(0.18 0.006 285.9);
-    --sidebar-accent: oklch(0.26 0.006 286);
+    --sidebar: #262025;
+    --sidebar-accent: #383236;
 
-    --link: oklch(0.74 0.12 255);
+    --link: #5AB4E5;
 
     --success-foreground: oklch(0.78 0.13 155);
-    --warning-foreground: oklch(0.83 0.13 75);
-    --destructive: oklch(0.65 0.2 22);
-    --destructive-foreground: oklch(0.78 0.14 22);
-    --info-foreground: oklch(0.76 0.12 255);
-    --neutral-foreground: oklch(0.75 0.02 270);
+    --warning-foreground: #F3BA1E;
+    --destructive: #E25432;
+    --destructive-foreground: #F07A5C;
+    --info-foreground: #5AB4E5;
+    --neutral-foreground: #B7B2B0;
 
     --tint: 20%;
     --shade: 55%;
@@ -121,33 +126,33 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --background: oklch(0.16 0.005 285.8);
-  --foreground: oklch(0.96 0.002 286);
-  --card: oklch(0.19 0.006 285.9);
-  --popover: oklch(0.21 0.006 285.9);
-  --primary: oklch(0.93 0.004 286.3);
-  --primary-foreground: oklch(0.21 0.006 285.9);
-  --secondary: oklch(0.27 0.006 286);
-  --muted: oklch(0.24 0.006 286);
-  --muted-foreground: oklch(0.72 0.015 286);
-  --accent: oklch(0.27 0.006 286);
-  --border: oklch(1 0 0 / 0.1);
-  --input: oklch(1 0 0 / 0.16);
-  --ring: oklch(0.68 0.13 255);
-  --overlay: oklch(0 0 0 / 0.6);
-  --shadow-color: oklch(0 0 0);
+  --background: #221C21;
+  --foreground: #FDF8F4;
+  --card: #2B2529;
+  --popover: #312B30;
+  --primary: #FDF8F4;
+  --primary-foreground: #332B32;
+  --secondary: #312B30;
+  --muted: #312B30;
+  --muted-foreground: #B7B2B0;
+  --accent: #383236;
+  --border: #3C363A;
+  --input: #494447;
+  --ring: #4FAEE0;
+  --overlay: rgb(0 0 0 / 0.6);
+  --shadow-color: #000;
 
-  --sidebar: oklch(0.18 0.006 285.9);
-  --sidebar-accent: oklch(0.26 0.006 286);
+  --sidebar: #262025;
+  --sidebar-accent: #383236;
 
-  --link: oklch(0.74 0.12 255);
+  --link: #5AB4E5;
 
   --success-foreground: oklch(0.78 0.13 155);
-  --warning-foreground: oklch(0.83 0.13 75);
-  --destructive: oklch(0.65 0.2 22);
-  --destructive-foreground: oklch(0.78 0.14 22);
-  --info-foreground: oklch(0.76 0.12 255);
-  --neutral-foreground: oklch(0.75 0.02 270);
+  --warning-foreground: #F3BA1E;
+  --destructive: #E25432;
+  --destructive-foreground: #F07A5C;
+  --info-foreground: #5AB4E5;
+  --neutral-foreground: #B7B2B0;
 
   --tint: 20%;
   --shade: 55%;
@@ -198,7 +203,8 @@
    only here, for the landing page's headings, and keep the same weights. */
 
 :root {
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Source Sans 3 Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   --text-2xs: 0.6875rem;

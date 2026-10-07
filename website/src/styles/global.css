@@ -1,7 +1,10 @@
-/* Landing page: the app's tokens (tokens.css) under Tailwind, plus the few
-   shared controls the app builds from shadcn/ui (button, badge), written as
-   classes here so the Astro markup reads like the app's component names. */
-@import '@fontsource-variable/inter';
+/* Landing page: the site's tokens (tokens.css, Loomtracer's brand on the
+   app's token names) under Tailwind, plus the few shared controls the app
+   builds from shadcn/ui (button, badge), written as classes here so the Astro
+   markup reads like the app's component names. Headings are set in Fraunces
+   and text in Source Sans 3, as in the deck. */
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/source-sans-3';
 @import './tokens.css';
 
 @tailwind base;
@@ -21,7 +24,12 @@
     font-size: var(--text-md);
     line-height: var(--text-md--line-height);
     -webkit-font-smoothing: antialiased;
-    font-feature-settings: "cv11";
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
   }
 
   :focus-visible {

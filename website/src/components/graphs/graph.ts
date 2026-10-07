@@ -116,7 +116,8 @@ export const T = {
   badge: 9,
 };
 
-/** A rough width for Inter at a size: enough to size a badge or a label's halo. */
+/** A rough width at a size, measured on Inter: enough to size a badge or a label's halo. The site's
+ *  Source Sans 3 is narrower, so it errs wide. */
 export function textWidth(s: string, size: number): number {
   let em = 0;
   for (const ch of s) {

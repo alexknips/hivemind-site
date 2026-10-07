@@ -24,8 +24,14 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Loomtracer',
-      // The app's wordmark: the "blocks" mark in the link colour, then the name.
-      logo: { light: './src/assets/mark-light.svg', dark: './src/assets/mark-dark.svg', alt: '' },
+      // Loomtracer's logo: the mark from the deck's logo (public/pitch/brand/loomtracer-color.svg)
+      // with its threads shortened to a square, beside the same wordmark; ink on light, ivory on dark.
+      logo: {
+        light: './src/assets/logo-light.svg',
+        dark: './src/assets/logo-dark.svg',
+        alt: 'Loomtracer',
+        replacesTitle: true,
+      },
       description: 'Memory for decisions: what you and your coding agents decided, and why.',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/alexknips/hivemind' },

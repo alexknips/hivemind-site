@@ -19,7 +19,9 @@ website/                  Astro + Starlight site
   src/components/         the header, footer and colour-scheme script the pages above share
   src/data/demo.ts        the demo's address: every link to the demo reads it
   src/data/founders.ts    the founders on the landing page and in the footer
-  src/styles/tokens.css   design tokens: a copy of the app's (hivemind-ui src/styles/tokens.css), so site and app look the same
+  src/styles/tokens.css   design tokens: Loomtracer's brand (the deck's ink, ivory, blue, orange, yellow; Fraunces and
+                          Source Sans 3) on the app's token names (hivemind-ui src/styles/tokens.css); graph hues are the app's
+  src/assets/logo-*.svg   the logo for light and dark (the deck's mark, threads shortened, beside its wordmark)
   src/content/docs/       the docs
   public/demo/            the demo: hivemind-ui's read-only snapshot build, never edited by hand
   src/demo-fallback.mjs   shows the demo, not the 404 page, at a missing path under /demo/

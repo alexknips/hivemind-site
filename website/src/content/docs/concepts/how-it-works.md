@@ -5,7 +5,7 @@ description: The record is never edited, status follows from later decisions, ev
 
 ## The record is never edited
 
-Everything HiveMind knows is a list of entries: a decision recorded, accepted, disputed or replaced, a
+Everything Loomtracer knows is a list of entries: a decision recorded, accepted, disputed or replaced, a
 piece of evidence, an assumption. Each entry is added once and never changed or deleted. To change your
 mind, you record a new decision that replaces the old one. The old one stays, and you can follow the
 chain of replacements back to the first decision.
@@ -34,7 +34,7 @@ dispute it or replace it, with the same verbs ([Human Review](../../guides/human
 ## Every decision says what it rests on
 
 A decision names at least one thing it rests on: an earlier decision, something observed (with where it
-was seen), an assumption, or a bet with a date to check. HiveMind refuses a decision that names nothing.
+was seen), an assumption, or a bet with a date to check. Loomtracer refuses a decision that names nothing.
 That is how it can tell you later whether the decision still holds: when evidence refutes an assumption,
 the decisions resting on it read "assumption refuted", and when an earlier decision is replaced, the
 decisions resting on it read stale.
@@ -43,7 +43,7 @@ decisions resting on it read stale.
 
 On your machine, the record is one SQLite file in your project, `./hivemind/ledger.sqlite`. There is no
 account and nothing phones home. A [self-hosted cell](../../getting-started/quickstart/#run-a-cell-with-docker)
-keeps it in its own Postgres, separately for each tenant. To read it without HiveMind, export it as
+keeps it in its own Postgres, separately for each tenant. To read it without Loomtracer, export it as
 Markdown files:
 
 ```bash

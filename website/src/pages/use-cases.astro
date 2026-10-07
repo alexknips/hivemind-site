@@ -1,5 +1,5 @@
 ---
-// Use cases and roadmap: one card per thing HiveMind does, marked works today,
+// Use cases and roadmap: one card per thing Loomtracer does, marked works today,
 // coming next or planned, with the command or tool call behind each one that
 // works today. Since 2026-10-02 the one home for what comes next and what is
 // planned: the landing page shows only what works today, and the drawings of
@@ -10,6 +10,7 @@
 import '../styles/global.css';
 import '../styles/graphs.css';
 import SiteHeader from '../components/SiteHeader.astro';
+import { DEMO_URL } from '../data/demo';
 import SiteFooter from '../components/SiteFooter.astro';
 import ThemeInit from '../components/ThemeInit.astro';
 import Story from '../components/graphs/Story.astro';
@@ -95,7 +96,7 @@ const today: Card[] = [
   {
     title: 'The decision log as Markdown',
     who: 'Human',
-    body: 'Export every decision as a tree of Markdown files grouped by project, an index first. Readable without HiveMind, and it can live in your repo.',
+    body: 'Export every decision as a tree of Markdown files grouped by project, an index first. Readable without Loomtracer, and it can live in your repo.',
     cmd: '<span class="text-muted-foreground">hivemind</span> <span class="font-medium">export</span> --format markdown --out ./decisions/',
     icon: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6m-3-3 3 3 3-3"/>',
   },
@@ -158,8 +159,8 @@ const planned: Card[] = [
     icon: '<path d="M3 20h18"/><path d="M5 16l4-5 4 3 6-8"/>',
   },
   {
-    title: 'With and without HiveMind, side by side',
-    body: 'The same engineering task run twice by a coding agent: once with a hand-kept decisions file, once with HiveMind. Recorded, reproducible, and the site will say what it shows and no more.',
+    title: 'With and without Loomtracer, side by side',
+    body: 'The same engineering task run twice by a coding agent: once with a hand-kept decisions file, once with Loomtracer. Recorded, reproducible, and the site will say what it shows and no more.',
     icon: '<rect x="3" y="5" width="8" height="14" rx="1.5"/><rect x="13" y="5" width="8" height="14" rx="1.5"/><path d="M5 9h4M5 12h4M15 9h4M15 12h4M15 15h2"/>',
   },
   {
@@ -214,15 +215,15 @@ const sections = [
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HiveMind — Use cases and roadmap</title>
-  <meta name="description" content="Concrete ways one person and their agents use HiveMind: record a decision with the options that lost, ask why later, keep disagreement, replace without erasing, see what a decision rests on. What works today in the current release, what is coming next, and what is planned." />
-  <meta property="og:title" content="HiveMind — use cases and roadmap" />
-  <meta property="og:description" content="What HiveMind does today for one person and their agents, what is coming next, and what is planned." />
+  <title>Loomtracer — Use cases and roadmap</title>
+  <meta name="description" content="Concrete ways one person and their agents use Loomtracer: record a decision with the options that lost, ask why later, keep disagreement, replace without erasing, see what a decision rests on. What works today in the current release, what is coming next, and what is planned." />
+  <meta property="og:title" content="Loomtracer — use cases and roadmap" />
+  <meta property="og:description" content="What Loomtracer does today for one person and their agents, what is coming next, and what is planned." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://alexknips.github.io/hivemind-site/use-cases/" />
+  <meta property="og:url" content={new URL(`${base}use-cases/`, Astro.site).href} />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="HiveMind — use cases and roadmap" />
-  <meta name="twitter:description" content="What HiveMind does today, what is coming next, and what is planned." />
+  <meta name="twitter:title" content="Loomtracer — use cases and roadmap" />
+  <meta name="twitter:description" content="What Loomtracer does today, what is coming next, and what is planned." />
   <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   <ThemeInit />
 </head>
@@ -235,12 +236,12 @@ const sections = [
     <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-14 sm:pb-16">
       <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-3">Use cases and roadmap</p>
       <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground max-w-3xl mb-6">
-        Point your coding agent at HiveMind, <span class="text-muted-foreground">and it records the why as it works.</span>
+        Point your coding agent at Loomtracer, <span class="text-muted-foreground">and it records the why as it works.</span>
       </h1>
       <p class="text-md sm:text-lg text-foreground max-w-2xl leading-relaxed mb-8">
-        Concrete ways one person and their agents put HiveMind to work: what works today, what is coming next,
-        and what is planned. Every card for today shows the actual command or tool call; the drawings are made-up
-        examples.
+        Concrete ways one person and their agents put Loomtracer to work: what works today, what is coming next,
+        and what is planned. Every card for today shows the actual command of Loomtracer&rsquo;s command-line tool,
+        <code class="code">hivemind</code>, or the tool call; the drawings are made-up examples.
       </p>
       <!-- The legend: the site's only one, since the landing page shows only what works today. The second
            line is the key to the drawings' marks. -->
@@ -291,13 +292,13 @@ const sections = [
       <div class="max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-24 text-center">
         <h2 class="text-xl font-semibold tracking-tight text-foreground mb-3">Start with one decision</h2>
         <p class="text-md text-muted-foreground mb-10 max-w-lg mx-auto">
-          Point Claude Code, Codex or Cursor at your self-hosted HiveMind, as a local binary or in a container.
+          Point Claude Code, Codex or Cursor at your self-hosted Loomtracer, as a local binary or in a container.
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <a href={`${base}guides/mcp-setup/`} class="btn btn-primary btn-lg">
             Connect your agent &rarr;
           </a>
-          <a href={`${base}demo/`} class="btn btn-outline btn-lg">
+          <a href={DEMO_URL} class="btn btn-outline btn-lg">
             Open the demo &rarr;
           </a>
           <a href={`${base}getting-started/quickstart/`} class="btn btn-outline btn-lg">

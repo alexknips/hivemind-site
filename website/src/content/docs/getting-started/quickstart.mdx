@@ -1,18 +1,18 @@
 ---
 title: Quickstart
-description: From nothing to a first recorded decision. Install HiveMind, connect your agent, record a decision and ask why, or run your own cell with Docker.
+description: From nothing to a first recorded decision. Install Loomtracer's command-line tool, connect your agent, record a decision and ask why, or run your own cell with Docker.
 ---
 
 import { Steps } from '@astrojs/starlight/components';
 
-HiveMind records the decisions you make with your agents: what was decided, the options that lost and
+Loomtracer records the decisions you make with your agents: what was decided, the options that lost and
 why, and who decided, you or the agent. It is not only for engineering; any decision a person makes with
 an agent fits. Running it today takes a developer's setup: a binary you run from the terminal, or a server
 in Docker, and an agent that connects over MCP. Your instance, your data, nothing phones home.
 
 <Steps>
 
-1. **Install HiveMind**
+1. **Install Loomtracer's command-line tool, `hivemind`**
 
    Linux (x86_64, ARM64) and Apple Silicon Macs. The script downloads the latest release, checks its
    SHA-256 and puts `hivemind` in `~/.local/bin`:
@@ -42,7 +42,7 @@ in Docker, and an agent that connects over MCP. Your instance, your data, nothin
 
    Your agent records the decision with its options, the reason, what it rests on and who decided.
    Every decision must say what it rests on: an earlier decision, something observed, an assumption, or
-   a bet with a date to check. HiveMind refuses one that names nothing, so that it can tell you later
+   a bet with a date to check. Loomtracer refuses one that names nothing, so that it can tell you later
    whether the decision still holds.
 
 4. **Ask why**
@@ -61,7 +61,7 @@ yet. Add it, for this shell and in your shell's startup file (`~/.bashrc` or `~/
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-Without it, `claude mcp add` still succeeds, but Claude Code cannot start HiveMind.
+Without it, `claude mcp add` still succeeds, but Claude Code cannot start `hivemind`.
 
 On other platforms, build it from source:
 
@@ -97,11 +97,11 @@ lists what was decided today, one line each. The [CLI Reference](../../reference
 
 ### Setting the actor
 
-Every write says who made it, and HiveMind refuses an anonymous one. An actor is `human:<name>`
+Every write says who made it, and Loomtracer refuses an anonymous one. An actor is `human:<name>`
 (`human:alice`, `human:alice@example.com`), `agent:<tool>:<name>` or `system:<name>`.
 
 - **In the terminal**, set `HIVEMIND_ACTOR=human:<you>` once, as above, or pass `--actor human:<you>`
-  before the command (`hivemind --actor human:alice disagree …`). Without either, HiveMind uses
+  before the command (`hivemind --actor human:alice disagree …`). Without either, `hivemind` uses
   `human:<your git email>`, then `human:<your user name>`. `emit decision.capture` reads
   `HIVEMIND_ACTOR` with `--source human`, or `--actor-id`, not `--actor`.
 - **Over MCP**, the server records your agent as `agent:<tool>:<id>`, with the tool from
@@ -111,7 +111,7 @@ Every write says who made it, and HiveMind refuses an anonymous one. An actor is
 
 ## Run a cell with Docker
 
-To share one decision record across several machines, run a self-hosted cell: HiveMind with Postgres in
+To share one decision record across several machines, run a self-hosted cell: the `hivemind` server with Postgres in
 Docker Compose, on any machine with Docker, in about five minutes.
 
 **Prerequisites:** Docker 24+ with Compose v2 (`docker compose version`). Port 8080 must be available.
@@ -158,7 +158,7 @@ curl -s -X POST http://localhost:8080/v1/tenants \
 
 The response includes `token_secret` — a value starting with `hm_tk_...`. Copy it now.
 
-Add HiveMind to Claude Code by pasting this into `.mcp.json` in your project root:
+Add the cell to Claude Code by pasting this into `.mcp.json` in your project root:
 
 ```json
 {
@@ -173,7 +173,7 @@ Add HiveMind to Claude Code by pasting this into `.mcp.json` in your project roo
 }
 ```
 
-Reload Claude Code. The HiveMind tools appear in your agent's tool list. The other clients are in
+Reload Claude Code. The `hivemind` tools appear in your agent's tool list. The other clients are in
 [MCP Setup](../../guides/mcp-setup/).
 
 Without Docker, `HIVEMIND_DIR=./hivemind hivemind serve --port 8080` serves the same HTTP API and `/mcp`;

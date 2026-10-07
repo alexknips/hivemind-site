@@ -1,9 +1,9 @@
 ---
 title: MCP Setup
-description: Connect Claude Code, Codex, Cursor, or any MCP client to your self-hosted HiveMind.
+description: Connect Claude Code, Codex, Cursor, or any MCP client to your self-hosted Loomtracer.
 ---
 
-HiveMind exposes its full decision-graph surface as an MCP server. Connect your agents
+Loomtracer's command-line tool, `hivemind`, exposes its full decision-graph surface as an MCP server. Connect your agents
 to your **self-hosted cell** over HTTP (a shared, team-wide decision graph), or run the
 **local stdio server** yourself for single-user use.
 
@@ -41,7 +41,7 @@ claude mcp add --transport http hivemind http://localhost:8080/mcp \
   --header "Authorization: Bearer hm_tk_..."
 ```
 
-Reload Claude Code and all HiveMind tools are available.
+Reload Claude Code and all `hivemind` tools are available.
 
 ### Claude Desktop
 
@@ -180,7 +180,7 @@ args = ["mcp", "--agent-tool", "codex"]
 
 ## Available tools
 
-The HiveMind MCP server exposes 27 tools. See [MCP Tools reference](../../reference/mcp-tools/)
+The `hivemind` MCP server exposes 27 tools. See [MCP Tools reference](../../reference/mcp-tools/)
 for full parameter documentation.
 
 | Tool | Type | Description |

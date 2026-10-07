@@ -3,7 +3,7 @@ title: Decision Graph
 description: The four node types, typed edges, and how status is derived.
 ---
 
-HiveMind's ledger is projected into a graph. The graph has four content node types and several
+Loomtracer's ledger is projected into a graph. The graph has four content node types and several
 typed edge kinds. Status is always derived from edges — never stored, never overwritten.
 
 ## Node types

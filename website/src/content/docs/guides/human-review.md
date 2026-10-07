@@ -3,8 +3,9 @@ title: Human Review
 description: Look over what your agents decided, and approve, disagree with or replace each decision, in the terminal.
 ---
 
-Your agents record decisions as they work. `hivemind review` lets you look over them afterwards, one by
-one, in the terminal: no need to watch the agents live or read their transcripts.
+Your agents record decisions as they work. `hivemind review`, in Loomtracer's command-line tool, lets
+you look over them afterwards, one by one, in the terminal: no need to watch the agents live or read
+their transcripts.
 
 ## Look over a week of agent decisions
 

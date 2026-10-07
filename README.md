@@ -1,12 +1,13 @@
 # hivemind-site
 
-The HiveMind website: the landing page, the docs, the pitch deck (`/pitch/`), the use cases
+The Loomtracer website: the landing page, the docs, the pitch deck (`/pitch/`), the use cases
 (`/use-cases/`) and the demo (`/demo/`): the app itself, read-only, over made-up example data.
 
 **Live:** https://alexknips.github.io/hivemind-site/
 
-The product's code lives in [alexknips/hivemind](https://github.com/alexknips/hivemind). This
-repo holds only the site. It moves again when the product is renamed.
+The product is Loomtracer. Its code lives in [alexknips/hivemind](https://github.com/alexknips/hivemind),
+and its command-line tool is still called `hivemind`: the site keeps that name in every command,
+install step and tool name. This repo holds only the site and keeps its name for now.
 
 ## Layout
 
@@ -16,6 +17,8 @@ website/                  Astro + Starlight site
   src/pages/use-cases.astro  use cases, on the landing page's header, footer and cards
   src/pages/pitch/        Loomtracer pitch deck and presenter script (own layout and brand); assets in public/pitch/
   src/components/         the header, footer and colour-scheme script the pages above share
+  src/data/demo.ts        the demo's address: every link to the demo reads it
+  src/data/founders.ts    the founders on the landing page and in the footer
   src/styles/tokens.css   design tokens: a copy of the app's (hivemind-ui src/styles/tokens.css), so site and app look the same
   src/content/docs/       the docs
   public/demo/            the demo: hivemind-ui's read-only snapshot build, never edited by hand
@@ -75,7 +78,22 @@ To regenerate locally, with hivemind checked out next to this repo at the releas
 cargo run --manifest-path ../hivemind/Cargo.toml --bin generate-reference
 ```
 
+## The address
+
+The site is served at https://alexknips.github.io/hivemind-site/. One line sets that: `siteUrl` in
+`website/astro.config.mjs`. Every internal link reads the base path from it, and so does
+`scripts/rebuild-demo.sh`. To serve the site at www.loomtracer.ai once its DNS points at GitHub
+Pages, change that line to `https://www.loomtracer.ai/` and set the custom domain in the
+repository's Pages settings. The static demo is built for the base it had, so rebuild it at the
+same time, or point the demo links at the hosted demo first (below).
+
 ## The demo
+
+Every link on the site to the demo reads one constant, `DEMO_URL` in `website/src/data/demo.ts`.
+Today it is the static copy described here. When the hosted demo on Vercel is up, set `DEMO_URL` to
+its address and delete the static copy: `website/public/demo/`, `website/public/demo-preview/`,
+`scripts/rebuild-demo.sh`, `scripts/demo-routes.mjs` and `website/src/demo-fallback.mjs` with its
+`head` entry in `astro.config.mjs`.
 
 `website/public/demo/` is hivemind-ui's read-only snapshot build (`npm run build:demo`): the
 current app over made-up example data, labelled "Example data" on every screen, with no server,
@@ -90,7 +108,7 @@ scripts/rebuild-demo.sh <hivemind-ui repository> <ref>    # a branch, tag or com
 ```
 
 The repository is anything `git clone` takes, a path or a URL. The script builds the demo in a
-temporary clone with the base `/hivemind-site/demo/`, writes a page for every link the app
+temporary clone with the site's base plus `demo/` (`/hivemind-site/demo/` today), writes a page for every link the app
 makes (`scripts/demo-routes.mjs`), replaces `website/public/demo/`, records the UI commit in
 `website/public/demo/build.json`, and opens a pull request that lists the UI changes since the
 last build. Check it locally (`cd website && npm run build && npx astro preview`), then merge:
@@ -107,6 +125,13 @@ what the path names or says it has no such decision. Such a link still answers 4
 crawler. `/demo-preview/`, an older preview of the UI, now only points to `/demo/`. Old links such as
 `/demo/?view=graph&node=<id>` are `/demo/` itself; the app moves them to the new path.
 
+## Contact
+
+Loomtracer's founders, on GitHub:
+
+- **Jeff Miao**, Co-founder · Design: https://github.com/TheChairmanMiao
+- **Alex Knips**, Co-founder · Technology: https://github.com/alexknips
+
 ## License
 
-AGPL-3.0, the same as HiveMind. See [LICENSE](LICENSE).
+AGPL-3.0, the same as Loomtracer's code in alexknips/hivemind. See [LICENSE](LICENSE).

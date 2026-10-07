@@ -1,7 +1,7 @@
 /**
  * The demo's fallback on GitHub Pages.
  *
- * `public/demo/` is a build of the HiveMind app with a file for every page it links
+ * `public/demo/` is a build of the app (hivemind-ui) with a file for every page it links
  * to (`demo/decisions/<slug>/`, `demo/graph/<slug>/`, `demo/flow/`; written by
  * `scripts/rebuild-demo.sh`), so those links answer 200. Pages answers any other
  * missing path with the site's one `404.html`, which is Starlight's "not found"

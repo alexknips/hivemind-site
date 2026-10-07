@@ -10,7 +10,7 @@
  * Status, as CLAIMS.md at the repo root records it: solid parts work in v0.7.0; parts
  * marked COMING NEXT are merged, not yet released; dashed parts marked PLANNED are
  * decided, not built. The examples are made up; the café, the newsletter and the jury
- * room are there on purpose, since HiveMind is not only for engineering.
+ * room are there on purpose, since Loomtracer is not only for engineering.
  */
 import type { GEdge, GFrame, GNode } from '../components/graphs/graph';
 
@@ -25,7 +25,8 @@ export interface Story {
   id: string;
   title: string;
   steps: Step[];
-  demo?: { href: string; text: string };
+  /** A page of the demo (a path for demoHref in demo.ts) and a line saying what it shows. */
+  demo?: { path: string; text: string };
 }
 
 const W = 340;
@@ -230,7 +231,7 @@ export const storyRevise: Story = {
     },
   ],
   demo: {
-    href: 'demo/decisions/the-jury-finds-the-defendant-guilty/',
+    path: 'decisions/the-jury-finds-the-defendant-guilty/',
     text: 'the guilty verdict: juror 8 rejected it, and not guilty superseded it.',
   },
 };
@@ -272,7 +273,7 @@ export const storyWho: Story = {
     },
   ],
   demo: {
-    href: 'demo/decisions/retry-a-failed-location-ping-upload-up-to-5-times-with-expon/',
+    path: 'decisions/retry-a-failed-location-ping-upload-up-to-5-times-with-expon/',
     text: 'retries an agent chose on its own.',
   },
 };
@@ -359,7 +360,7 @@ export const storyAssumption: Story = {
     },
   ],
   demo: {
-    href: 'demo/decisions/cache-driver-profiles-in-memory-keyed-by-the-driver-s-numeri/',
+    path: 'decisions/cache-driver-profiles-in-memory-keyed-by-the-driver-s-numeri/',
     text: 'a cache resting on "driver ids never change", which a migration refutes.',
   },
 };
@@ -394,7 +395,7 @@ export const storyBet: Story = {
     {
       label: '1 November passes',
       caption:
-        'Nothing was recorded either way. Ask about the decision and the bet reads past its check date. Coming next: HiveMind lists it among what needs a look, without being asked.',
+        'Nothing was recorded either way. Ask about the decision and the bet reads past its check date. Coming next: Loomtracer lists it among what needs a look, without being asked.',
       alt: 'The same graph after 1 November. The bet is marked past its check date. The decision is marked needs a look, labelled coming next.',
       frame: {
         w: W,
@@ -490,7 +491,7 @@ export const storyLostOption: Story = {
     },
   ],
   demo: {
-    href: 'demo/decisions/the-jury-finds-the-defendant-not-guilty/',
+    path: 'decisions/the-jury-finds-the-defendant-not-guilty/',
     text: 'the jury\'s verdict and the option that lost.',
   },
 };

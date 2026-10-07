@@ -1,10 +1,11 @@
-/* The docs (Starlight) on the app's design tokens (tokens.css): the same
-   neutrals, link accent, signal hues, Inter, text steps and shadows as the
-   app and the landing page. Starlight paints everything from its --sl-*
+/* The docs (Starlight) on the site's tokens (tokens.css): the same brand
+   neutrals, link blue, signal hues, fonts (Fraunces headings, Source Sans 3
+   text), text steps and shadows as the landing page. Starlight paints everything from its --sl-*
    variables, so mapping those onto the tokens restyles it; the few rules
    below the variables are where Starlight's defaults differ from the app
    (a solid accent bar on the current sidebar item, bold strong text). */
-@import '@fontsource-variable/inter';
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/source-sans-3';
 @import './tokens.css';
 
 /* Tailwind utilities for Starlight pages: no base layer, to avoid conflicts. */
@@ -17,7 +18,7 @@
 :root,
 :root[data-theme='light'],
 [data-theme='light'] ::backdrop {
-  --sl-font: 'Inter Variable';
+  --sl-font: 'Source Sans 3 Variable';
   --sl-font-mono: var(--font-mono);
 
   /* Neutrals, by the role each Starlight step plays. */
@@ -127,22 +128,21 @@
   background-color: var(--sidebar-accent);
 }
 
+/* Headings in Fraunces, as on the landing page and in the deck. */
+.sl-markdown-content :is(h1, h2, h3),
+h1#_top {
+  font-family: var(--font-display);
+}
+
 /* Three weights only (400, 500, 600), as in the app. */
 .sl-markdown-content strong,
 .sl-markdown-content b {
   font-weight: var(--font-weight-semibold);
 }
 
-/* The header: the app's wordmark (mark in the link colour, name in the
-   foreground), not Starlight's accent-coloured title. */
-.site-title {
-  gap: 0.5rem;
-  color: var(--foreground);
-  font-size: var(--text-md);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: -0.01em;
-}
+/* The header: Loomtracer's logo (the mark and the wordmark, ink or ivory by
+   theme; astro.config.mjs), at the landing page header's height. */
 .site-title img {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: auto;
+  height: 2rem;
 }

@@ -6,13 +6,13 @@
 // slot) in the next column. A one-step story has no step label: the title says it.
 import Frame from './Frame.astro';
 import type { Story } from '../../data/graph-stories';
+import { demoHref } from '../../data/demo';
 
 interface Props {
   story: Story;
 }
 
 const { story } = Astro.props;
-const base = import.meta.env.BASE_URL;
 const n = story.steps.length;
 const keyBeside = n < 3 && Astro.slots.has('default');
 const span = n === 1 ? 'lg:col-span-1 lg:grid-cols-1' : 'lg:col-span-2 lg:grid-cols-2';
@@ -40,7 +40,7 @@ const span = n === 1 ? 'lg:col-span-1 lg:grid-cols-1' : 'lg:col-span-2 lg:grid-c
   {!keyBeside && <slot />}
   {story.demo && (
     <p class="text-sm text-muted-foreground leading-relaxed mt-5">
-      <a href={`${base}${story.demo.href}`} class="link">Open it in the demo &rarr;</a>
+      <a href={demoHref(story.demo.path)} class="link">Open it in the demo &rarr;</a>
       <span class="ml-1">{story.demo.text}</span>
     </p>
   )}

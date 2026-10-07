@@ -3,7 +3,7 @@ title: Agent Capture
 description: Let Claude Code and Codex capture decisions automatically — no API key required on your server.
 ---
 
-HiveMind ships installable capture bundles for **Claude Code** and **Codex**. Agents
+Loomtracer ships installable capture bundles for **Claude Code** and **Codex**. Agents
 capture decisions directly into the local ledger or a self-hosted cell — no
 `ANTHROPIC_API_KEY` on the server is required.
 
@@ -48,8 +48,8 @@ so [install it](../../getting-started/quickstart/) first.
 
 ### Codex
 
-From a local HiveMind checkout: open `/plugins`, choose `HiveMind Plugins`, and
-install `HiveMind Capture`.
+From a local checkout of the `hivemind` repository: open `/plugins`, choose `HiveMind Plugins`, and
+install `HiveMind Capture` (the plugins still carry the tool's name).
 
 From another checkout or machine, add the repository as a marketplace, then install the bundle:
 
@@ -142,7 +142,7 @@ hivemind --hivemind-dir ./hivemind/ classify-queue submit --batch-id <id>
 
 Pass `--limit N` to cap the number of batches per run (default: 20).
 
-This means you can self-host HiveMind with zero external API keys and still get
+This means you can self-host Loomtracer with zero external API keys and still get
 fully classified decisions — you just run the classify command rather than
 relying on the server's background worker.
 

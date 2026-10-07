@@ -1,7 +1,9 @@
 ---
 title: CLI Reference
-description: Complete reference for the hivemind command-line interface.
+description: Complete reference for hivemind, Loomtracer's command-line tool.
 ---
+
+`hivemind` is Loomtracer's command-line tool. This page lists its flags and commands.
 
 ## Global flags
 
@@ -228,12 +230,12 @@ once the source conversation is gone.
 
 `--project <handle>` files the decision under a registered project. An unknown
 handle is refused with the [`project register`](#project-register) command to
-run, and nothing is written. HiveMind checks the handle; it never works out
+run, and nothing is written. `hivemind` checks the handle; it never works out
 the project for you, so pass the one you know. Without `--project` the decision
 is saved to the recorder's personal project (`personal:<actor>`, derived from
 the actor, never registered) and the reply says so. `--project-source` records
 how the handle was determined (default `stated`) and requires `--project`;
-`personal_fallback` and `moved` are recorded by HiveMind itself and cannot be
+`personal_fallback` and `moved` are recorded by `hivemind` itself and cannot be
 claimed.
 
 ### `emit decision.capture`
@@ -593,7 +595,7 @@ hivemind query scan_decision_quality
 
 Flags decisions carrying a caller-named "foreign" topic key — a decision
 tagged with another ledger's name most likely belongs there instead.
-Deterministic exact-match only, no LLM: HiveMind does not yet know which
+Deterministic exact-match only, no LLM: `hivemind` does not yet know which
 project a ledger belongs to, so the caller supplies the foreign keys.
 Read-only report — never moves a decision.
 

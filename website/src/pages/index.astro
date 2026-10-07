@@ -7,6 +7,8 @@ import '../styles/graphs.css';
 import Anatomy from '../components/graphs/Anatomy.astro';
 import Story from '../components/graphs/Story.astro';
 import { storyAssumption, storyLostOption, storyRevise, storyWho } from '../data/graph-stories';
+import { DEMO_URL } from '../data/demo';
+import { founders } from '../data/founders';
 const base = import.meta.env.BASE_URL;
 // The version check is part of step 1: on the landing path, `claude mcp add` succeeds without the
 // binary on PATH and Claude Code only fails later (ENOENT); the fix is in the Quickstart, linked here.
@@ -19,15 +21,17 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
 // The page tells the problem (the next session undoes it, nobody knows why, nobody can say if it
 // held up) once, in #problem, and goes straight on to what it is useful for (the founder's review of
 // 2026-09-30: too much duplication, too much text, get to the use cases sooner). Since 2026-10-02 it
-// keeps only what works today, about 1,000 words. The real Claude Code sessions live in the deck.
+// keeps only what works today, about 1,000 words. The real Claude Code session lives in the deck.
+// The product is Loomtracer since 2026-10-07; its command-line tool is still `hivemind`, so every
+// command keeps that name and step 1 says so once. The founders' block (#contact) closes the page.
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HiveMind — memory for decisions</title>
-  <meta name="description" content="HiveMind is memory for decisions. Your agents record what was decided, which options lost and why, and who decided, you or the agent. Local-first, AGPL-3.0, free to self-host." />
+  <title>Loomtracer — memory for decisions</title>
+  <meta name="description" content="Loomtracer is memory for decisions. Your agents record what was decided, which options lost and why, and who decided, you or the agent. Local-first, AGPL-3.0, free to self-host." />
   <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   <ThemeInit />
 </head>
@@ -45,17 +49,17 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
         v0.7.0 &middot; open source &middot; local-first
       </p>
       <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground mb-6">
-        HiveMind is memory<br class="hidden sm:inline" /> <span class="text-muted-foreground">for decisions.</span>
+        Loomtracer is memory<br class="hidden sm:inline" /> <span class="text-muted-foreground">for decisions.</span>
       </h1>
       <p class="text-md sm:text-lg text-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-        Your agent forgets what you decided together. HiveMind keeps it.
+        Your agent forgets what you decided together. Loomtracer keeps it.
       </p>
 
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
         <a href="#self-host" class="btn btn-primary btn-lg">
           Self-host it &rarr;
         </a>
-        <a href={`${base}demo/`} class="btn btn-outline btn-lg">
+        <a href={DEMO_URL} class="btn btn-outline btn-lg">
           Open the demo &rarr;
         </a>
       </div>
@@ -73,7 +77,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
               You ruled an option out, for a reason. A fresh session never heard of it and suggests it again.
             </p>
             <p class="text-base text-foreground leading-relaxed">
-              HiveMind keeps the options that lost, and why they lost.
+              Loomtracer keeps the options that lost, and why they lost.
             </p>
           </div>
           <div class="border-t border-border pt-5">
@@ -82,7 +86,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
               The chat was the meeting. Once it closes, nobody can say why, or who made the call.
             </p>
             <p class="text-base text-foreground leading-relaxed">
-              HiveMind keeps the reasons, the evidence and who decided: you or the agent.
+              Loomtracer keeps the reasons, the evidence and who decided: you or the agent.
             </p>
           </div>
           <div class="border-t border-border pt-5">
@@ -91,7 +95,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
               Plans change. The notes still say the old thing, and the agent follows them.
             </p>
             <p class="text-base text-foreground leading-relaxed">
-              In HiveMind a replaced decision reads <span class="badge badge-neutral">superseded</span> and a disputed one
+              In Loomtracer a replaced decision reads <span class="badge badge-neutral">superseded</span> and a disputed one
               <span class="badge badge-warning">contested</span>. Nobody has to remember to update it.
             </p>
             <p class="text-sm text-muted-foreground leading-relaxed mt-3">
@@ -199,8 +203,8 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
         </p>
         <h3 id="how-it-compares" class="text-md font-semibold text-foreground mt-10 mb-3 scroll-mt-20">Against what you do today</h3>
         <ul class="space-y-2 text-base text-muted-foreground leading-relaxed">
-          <li><span class="font-medium text-foreground">A hand-kept <code class="code">DECISIONS.md</code> or ADRs</span> are only as true as their last edit. In HiveMind the status follows from later decisions.</li>
-          <li><span class="font-medium text-foreground">Agent memory tools</span> remember facts and preferences. HiveMind remembers decisions: the options that lost, the evidence, who decided.</li>
+          <li><span class="font-medium text-foreground">A hand-kept <code class="code">DECISIONS.md</code> or ADRs</span> are only as true as their last edit. In Loomtracer the status follows from later decisions.</li>
+          <li><span class="font-medium text-foreground">Agent memory tools</span> remember facts and preferences. Loomtracer remembers decisions: the options that lost, the evidence, who decided.</li>
         </ul>
         <p id="where-it-is" class="text-sm text-muted-foreground leading-relaxed mt-6 scroll-mt-20">
           Not claimed yet: that it makes your decisions better (a side-by-side test is planned), that anyone outside
@@ -222,7 +226,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
           <li class="py-6 sm:py-7 flex gap-4 min-w-0">
             <span class="w-5 shrink-0 pt-1 text-xs font-mono text-muted-foreground">1</span>
             <div class="min-w-0 flex-1">
-              <h3 class="text-md font-semibold text-foreground mb-3">Install HiveMind</h3>
+              <h3 class="text-md font-semibold text-foreground mb-3">Install Loomtracer&rsquo;s command-line tool, <code class="code">hivemind</code></h3>
               <pre class="code-block mb-3"><code>{installCmd}</code></pre>
               <p class="text-base text-muted-foreground leading-relaxed">
                 Linux (x86_64, ARM64) and Apple Silicon Macs; the script checks the release&rsquo;s SHA-256. Other
@@ -252,7 +256,7 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
                 <p><span class="text-muted-foreground">Later:</span> Why did we pick SQLite, and what did we rule out?</p>
               </div>
               <p class="text-base text-muted-foreground leading-relaxed">
-                The <a href={`${base}pitch/`} class="link">deck</a> shows three real Claude Code sessions doing it.
+                The <a href={`${base}pitch/`} class="link">deck</a> shows a real Claude Code session recording one.
               </p>
             </div>
           </li>
@@ -260,8 +264,29 @@ const connectCmd = 'claude mcp add hivemind -- hivemind mcp --agent-tool claude'
 
         <p class="text-sm text-muted-foreground text-center mt-8">
           Prefer a server to a local file?
-          <a href={`${base}getting-started/quickstart/#run-a-cell-with-docker`} class="link">Run a HiveMind cell with Docker Compose</a>.
+          <a href={`${base}getting-started/quickstart/#run-a-cell-with-docker`} class="link">Run a Loomtracer cell with Docker Compose</a>.
         </p>
+      </div>
+    </section>
+
+    <!-- Contact: the founders, as the deck's last slide names them, with their GitHub profiles
+         (src/data/founders.ts; the footer lists them too). No email addresses. -->
+    <section id="contact" class="border-t border-border bg-sidebar scroll-mt-20">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <p class="text-xs font-mono uppercase tracking-wide text-muted-foreground text-center mb-3">Contact</p>
+        <h2 class="text-xl font-semibold tracking-tight text-foreground text-center mb-3">Talk to the founders</h2>
+        <p class="text-md text-muted-foreground text-center max-w-xl mx-auto mb-10">
+          Questions, ideas, or a place where Loomtracer could fit your work: find us on GitHub.
+        </p>
+        <ul class="grid sm:grid-cols-2 gap-4">
+          {founders.map((f) => (
+            <li class="rounded-lg border border-border bg-card shadow-xs p-5 min-w-0">
+              <p class="text-md font-semibold text-foreground">{f.name}</p>
+              <p class="text-sm text-muted-foreground mb-3">{f.role}</p>
+              <a href={`https://github.com/${f.github}`} class="link text-sm">github.com/{f.github}</a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
 

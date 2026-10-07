@@ -31,11 +31,16 @@ if [[ $# -lt 1 || $# -gt 2 ]]; then
 fi
 repo=$1
 ref=${2:-main}
-base=/hivemind-site/demo/
 
 site=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
 demo=website/public/demo
 cd "$site"
+
+# The demo sits under the site's base path, read from the siteUrl line in astro.config.mjs.
+site_url=$(sed -n "s|^const siteUrl = new URL('\(.*\)');\$|\1|p" website/astro.config.mjs)
+[[ -n $site_url ]] || { echo "rebuild-demo: no siteUrl line in website/astro.config.mjs" >&2; exit 1; }
+site_path=${site_url#*://*/}
+base=/${site_path}demo/
 
 if [[ $pr == 1 && -n $(git status --porcelain) ]]; then
   echo "rebuild-demo: the working tree has changes; commit them or set them aside first" >&2
@@ -93,5 +98,5 @@ UI changes since the last build:
 
 $changes
 
-Check it before merging: \`cd website && npm ci && npm run build && npx astro preview\`, then open http://localhost:4321/hivemind-site/demo/. Merging deploys it.
+Check it before merging: \`cd website && npm ci && npm run build && npx astro preview\`, then open http://localhost:4321${base}. Merging deploys it.
 EOF

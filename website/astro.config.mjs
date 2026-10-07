@@ -3,10 +3,16 @@ import starlight from '@astrojs/starlight';
 import tailwind from '@astrojs/tailwind';
 import { demoFallback } from './src/demo-fallback.mjs';
 
-const base = '/hivemind-site/';
+// Where the site is served: GitHub Pages at alexknips.github.io/hivemind-site/ today. Once
+// www.loomtracer.ai points at GitHub Pages, this line becomes 'https://www.loomtracer.ai/' and the
+// custom domain is set in the repository's Pages settings. Every internal link reads the base from
+// here (import.meta.env.BASE_URL), and so does scripts/rebuild-demo.sh. The static demo in
+// public/demo/ is built for the old base: rebuild it then, or point src/data/demo.ts at the hosted demo.
+const siteUrl = new URL('https://alexknips.github.io/hivemind-site/');
+const base = siteUrl.pathname;
 
 export default defineConfig({
-  site: 'https://alexknips.github.io',
+  site: siteUrl.origin,
   base,
   // Pages merged away on 2026-10-02: Install went into the Quickstart, Architecture and Auth Model
   // into How it works. Old links land on the page that holds their content now.
@@ -17,9 +23,15 @@ export default defineConfig({
   },
   integrations: [
     starlight({
-      title: 'HiveMind',
-      // The app's wordmark: the "blocks" mark in the link colour, then the name.
-      logo: { light: './src/assets/mark-light.svg', dark: './src/assets/mark-dark.svg', alt: '' },
+      title: 'Loomtracer',
+      // Loomtracer's logo: the mark from the deck's logo (public/pitch/brand/loomtracer-color.svg)
+      // with its threads shortened to a square, beside the same wordmark; ink on light, ivory on dark.
+      logo: {
+        light: './src/assets/logo-light.svg',
+        dark: './src/assets/logo-dark.svg',
+        alt: 'Loomtracer',
+        replacesTitle: true,
+      },
       description: 'Memory for decisions: what you and your coding agents decided, and why.',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/alexknips/hivemind' },

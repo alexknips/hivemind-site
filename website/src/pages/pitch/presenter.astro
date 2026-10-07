@@ -1,0 +1,71 @@
+---
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/source-sans-3';
+import { notes } from '../../data/loomtracer-pitch';
+const words=notes.flatMap(note=>note.paragraphs).join(' ').trim().split(/\s+/).length;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Loomtracer · Presenter notes</title>
+  <style>
+    :global(*){box-sizing:border-box}
+    :global(body){margin:0;background:#FDF8F4;color:#332B32;font-family:'Source Sans 3 Variable',sans-serif;font-size:20px;line-height:1.5}
+    main{max-width:1040px;margin:auto;padding:36px 32px 72px}
+    header{display:flex;justify-content:space-between;gap:20px;align-items:center;border-bottom:1px solid #332B32;padding-bottom:20px}
+    h1,h2{font-family:'Fraunces Variable',serif;font-weight:600;line-height:1.15}
+    h1{font-size:32px;margin:0}h2{font-size:32px;margin:12px 0 24px}
+    p{margin:0 0 18px}.intro{font-size:17px;margin:22px 0}
+    button{font:inherit;font-weight:600;border:1px solid #332B32;background:transparent;color:#332B32;cursor:pointer;padding:9px 16px}
+    button:focus-visible,a:focus-visible{outline:3px solid #1D90CD;outline-offset:3px}
+    button[aria-current="true"]{background:#332B32;color:#FDF8F4}
+    .tabs{display:flex;gap:10px;margin:24px 0}
+    .timing{font-size:18px;font-weight:600}.script{font-size:27px;line-height:1.5}
+    .timer{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+    output{font-variant-numeric:tabular-nums;font-size:30px;min-width:86px}
+    .timer button{font-size:17px}.limit{font-size:16px}
+    details summary{font-weight:600;cursor:pointer}details ul{padding-left:24px}
+    @media(max-width:680px){main{padding:24px 20px 48px}header{display:block}.timer{margin-top:20px}.script{font-size:23px}.tabs button{font-size:17px;padding:9px 12px}}
+    @media print{header .timer,.tabs,.intro{display:none}.note[hidden]{display:block!important}.note{break-inside:avoid}.script{font-size:18px}details{display:block}details>*{display:block}main{padding:0}}
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Loomtracer<br />Presenter notes</h1>
+      <div>
+        <div class="timer"><output id="timer" aria-label="Elapsed rehearsal time" aria-live="off">0:00</output><button id="start">Start rehearsal</button><button id="reset">Reset</button></div>
+        <p class="limit">Target: 55–58 seconds. Slides advance manually.</p>
+      </div>
+    </header>
+    <p class="intro">Keep this window on your own screen. {words} spoken words; timing is an estimate until you rehearse aloud. Notes follow slide changes in the deck.</p>
+    <nav class="tabs" aria-label="Speaker notes slides">{notes.map((note,index)=><button data-note={index} aria-current={index===0?'true':'false'}>Slide {index+1}</button>)}</nav>
+    {notes.map((note,index)=><section class="note" data-panel={index} hidden={index!==0}>
+      <p class="timing">{note.timing}</p>
+      <h2>{note.title}</h2>
+      <div class="script">{note.paragraphs.map(paragraph=><p>{paragraph}</p>)}</div>
+      {'sources' in note&&note.sources&&<details><summary>Sources and delivery notes</summary><ul>{note.sources.map(source=><li>{source}</li>)}</ul></details>}
+
+    </section>)}
+  </main>
+  <script>
+    const channel=typeof BroadcastChannel!=='undefined'?new BroadcastChannel('loomtracer-pitch'):null;
+    const tabs=Array.from(document.querySelectorAll<HTMLButtonElement>('[data-note]'));
+    const panels=Array.from(document.querySelectorAll<HTMLElement>('[data-panel]'));
+    function show(index:number){tabs.forEach((tab,n)=>tab.setAttribute('aria-current',String(n===index)));panels.forEach((panel,n)=>panel.hidden=n!==index);}
+    tabs.forEach((tab,index)=>tab.addEventListener('click',()=>{show(index);channel?.postMessage({type:'navigate',index});}));
+    channel?.addEventListener('message',event=>{if(event.data?.type==='slide'&&Number.isInteger(event.data.index))show(event.data.index);});
+    channel?.postMessage({type:'request-state'});
+    const start=document.querySelector<HTMLButtonElement>('#start')!,output=document.querySelector('#timer')!;
+    let running=false,elapsed=0,started=0;
+    function total(){return elapsed+(running?performance.now()-started:0);}
+    function render(){const seconds=Math.floor(total()/1000);output.textContent=`${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`;}
+    start.addEventListener('click',()=>{if(running){elapsed=total();running=false;start.textContent='Resume';}else{started=performance.now();running=true;start.textContent='Pause';}render();});
+    document.querySelector('#reset')!.addEventListener('click',()=>{elapsed=0;running=false;start.textContent='Start rehearsal';render();});
+    setInterval(render,200);
+  </script>
+</body>
+</html>

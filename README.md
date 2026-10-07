@@ -14,13 +14,13 @@ repo holds only the site. It moves again when the product is renamed.
 website/                  Astro + Starlight site
   src/pages/index.astro   landing page
   src/pages/use-cases.astro  use cases, on the landing page's header, footer and cards
-  src/pages/pitch/        pitch deck (its own layout and script, the site's tokens); its screenshots are in public/pitch/img/
+  src/pages/pitch/        Loomtracer pitch deck and presenter script (own layout and brand); assets in public/pitch/
   src/components/         the header, footer and colour-scheme script the pages above share
   src/styles/tokens.css   design tokens: a copy of the app's (hivemind-ui src/styles/tokens.css), so site and app look the same
   src/content/docs/       the docs
   public/demo/            the demo: hivemind-ui's read-only snapshot build, never edited by hand
   src/demo-fallback.mjs   shows the demo, not the 404 page, at a missing path under /demo/
-pitch-screens/            raw captures behind the deck's terminal screenshots, and how to re-render them
+pitch-screens/            source captures plus the Loomtracer PDF and contact-sheet preview
 scripts/
   rebuild-demo.sh         rebuild public/demo/ from hivemind-ui and open a pull request
   demo-routes.mjs         its helper: a page for every link the demo app makes

@@ -13,6 +13,8 @@ Six slides, adapted from Alex's original pitch and refined by Jeff for a one-min
 From `website/`, run `npm ci`, `npm run build`, then `npm run preview`.
 Open `/hivemind-site/pitch/` on the preview server. Presenter script and manual rehearsal timer are at `/hivemind-site/pitch/presenter/`.
 
+To regenerate `loomtracer-pitch.pdf` and `loomtracer-pitch.png` after a change, keep the preview running and run `node deck.mjs http://localhost:4321/hivemind-site/pitch/` from `pitch-screens/` (it needs `npm i playwright`; use the port and base the preview prints).
+
 Left/right arrows, Page Up/Down, Home/End and Space navigate on desktop; F requests full screen. Narrow screens stack the slides and allow horizontal scrolling inside the decision-flow diagram. Presenter selection synchronizes with the audience window; the timer never advances slides. The 124-word script targets 65-68 seconds, pending an aloud rehearsal.
 
 The presenter script and source notes are intentionally shareable. Private conversation prompts and follow-up tally templates are excluded. The presenter route is not access-controlled.

@@ -328,7 +328,7 @@ const units = Array.from({ length: record.decisions }, (_, n) => (n < record.byP
         <div class="stats">
           <div class="stat"><p class="stat-num">{record.decisions}</p><p class="stat-label">Decisions</p></div>
           <div class="stat person"><p class="stat-num">{record.byPerson}</p><p class="stat-label">By a person</p></div>
-          <div class="stat agent"><p class="stat-num">{record.byAgent}</p><p class="stat-label">By an agent</p><p class="stat-note">{record.agentReviewedByPerson === 0 ? 'none reviewed by a person yet' : `${record.agentReviewedByPerson} reviewed by a person`}</p></div>
+          <div class="stat agent"><p class="stat-num">{record.byAgent}</p><p class="stat-label">By an agent</p><p class="stat-note">{record.agentReviewedByPerson === 0 ? 'none reviewed by a person' : `${record.agentReviewedByPerson} reviewed by a person`}</p></div>
           <div class="stat"><p class="stat-num">{record.contested}</p><p class="stat-label">Disagreed with</p><p class="stat-note">contested</p></div>
           <div class="stat"><p class="stat-num">{record.superseded}</p><p class="stat-label">Replaced</p><p class="stat-note">superseded</p></div>
         </div>

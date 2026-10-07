@@ -2,7 +2,7 @@
 
 The three terminal screenshots in `website/public/pitch/img/` are real Claude Code sessions, not
 mock-ups. Since 2026-10-06 the deck at `/pitch/` shows one of them, `capture.png`. This folder keeps the raw terminal captures and the two scripts that turn
-them into PNGs, so anyone can check that a screenshot shows what the session printed.
+them into PNGs (plus `deck.mjs`, which prints the Loomtracer deck to PDF and its contact sheet; see [loomtracer.md](loomtracer.md)), so anyone can check that a screenshot shows what the session printed.
 
 ## How they were made (2026-09-24)
 

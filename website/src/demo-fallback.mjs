@@ -1,9 +1,9 @@
 /**
- * The demo's fallback on GitHub Pages.
+ * The demo's fallback for a missing path under demo/.
  *
  * `public/demo/` is a build of the app (hivemind-ui) with a file for every page it links
  * to (`demo/decisions/<slug>/`, `demo/graph/<slug>/`, `demo/flow/`; written by
- * `scripts/rebuild-demo.sh`), so those links answer 200. Pages answers any other
+ * `scripts/rebuild-demo.sh`), so those links answer 200. Vercel answers any other
  * missing path with the site's one `404.html`, which is Starlight's "not found"
  * page. This script sits in the head of every Starlight page and does nothing,
  * except on that page at a path under `demo/`: there it swaps the page for the app,

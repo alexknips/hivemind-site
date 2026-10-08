@@ -1,5 +1,5 @@
 // Writes a copy of the demo's index.html at every path the app links to, so each
-// link answers 200 on GitHub Pages instead of the site's 404 page. Run by
+// link answers 200 instead of the site's 404 page. Run by
 // scripts/rebuild-demo.sh from inside the hivemind-ui checkout (it imports that
 // checkout's Vite), after `npm run build:demo`:
 //

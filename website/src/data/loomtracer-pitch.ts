@@ -14,7 +14,7 @@ export const notes = [
     ]
   },
   {
-    "title": "Trace reasoning, not just facts.",
+    "title": "Track reasoning, not just facts.",
     "timing": "23–37 seconds",
     "paragraphs": [
       "Agents explore different options through MCP and record the evidence. Loomtracer connects those artifacts to a decision. You and your team approve the direction."

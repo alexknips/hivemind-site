@@ -7,14 +7,14 @@ export const notes = [
     ]
   },
   {
-    "title": "The problem",
+    "title": "Have you ever had to re-brief an agent on a decision another agent already made?",
     "timing": "11–23 seconds",
     "paragraphs": [
       "Across chats and accounts, findings get buried over time. Decisions separate from reasoning. It’s up to you to connect lost threads."
     ]
   },
   {
-    "title": "Track and analyze decision making.",
+    "title": "Trace reasoning, not just facts.",
     "timing": "23–37 seconds",
     "paragraphs": [
       "Agents explore different options through MCP and record the evidence. Loomtracer connects those artifacts to a decision. You and your team approve the direction."

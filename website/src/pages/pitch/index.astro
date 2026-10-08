@@ -61,7 +61,7 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
     .approval::before{content:'';display:inline-block;width:.75cqw;height:.75cqw;border-radius:50%;background:var(--yellow);margin-right:.7cqw}
     .problem{display:flex;flex-direction:column}
     .problem-body{display:flex;flex:1;flex-direction:column;justify-content:center}
-    .problem h2{font-size:4.65cqw;max-width:19ch}
+    .problem h2{font-size:4.25cqw;max-width:none;text-wrap:balance}
     .pain-points{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3cqw;margin-top:4.2cqw}
     .pain{border-top:.3cqw solid var(--blue);padding-top:1.3cqw}
     .pain:nth-child(2){border-color:var(--orange)}.pain:nth-child(3){border-color:var(--yellow)}
@@ -251,7 +251,7 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
       <section class="slide problem" id="slide-2" aria-label="2. The problem">
         <p class="eyebrow">The problem</p>
         <div class="problem-body">
-          <h2>Context gets<br />left behind</h2>
+          <h2>Have you ever had to re-brief an agent on a decision another agent already made?</h2>
           <div class="pain-points">
             <div class="pain"><h3>Findings get buried over time.</h3></div>
             <div class="pain"><h3>Decisions separate from reasoning.</h3></div>
@@ -260,9 +260,9 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
         </div>
       </section>
 
-      <section class="slide architecture" id="slide-3" aria-label="3. Track and analyze decision making">
+      <section class="slide architecture" id="slide-3" aria-label="3. Trace reasoning, not just facts">
         <p class="eyebrow">How it works</p>
-        <h2>Track and analyze decision making.</h2>
+        <h2>Trace reasoning, not just facts.</h2>
         <figure class="decision-flow" tabindex="0" aria-label="Decision flow. Scroll horizontally on narrow screens.">
           <svg viewBox="0 0 1400 470" role="img" aria-labelledby="flow-title flow-description">
             <title id="flow-title">Track a decision back through its evidence and explored options</title>
@@ -348,7 +348,7 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
         <div class="closing-main">
           <div class="closing-message">
             <h2>Thank You</h2>
-            <p class="trial-question">Do you want to try it for yourself?</p>
+            <p class="trial-question">Want to try it for yourself?</p>
             <p class="invite">We want to talk to you.</p>
           </div>
           <div class="closing-brand">

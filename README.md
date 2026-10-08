@@ -1,13 +1,13 @@
-# hivemind-site
+# loomtracer-site
 
 The Loomtracer website: the landing page, the docs, the pitch deck (`/pitch/`), the use cases
 (`/use-cases/`) and the demo (`/demo/`): the app itself, read-only, over made-up example data.
 
-**Live:** https://alexknips.github.io/hivemind-site/
+**Live:** https://loomtracer.ai, on Vercel
 
-The product is Loomtracer. Its code lives in [alexknips/hivemind](https://github.com/alexknips/hivemind),
+The product is Loomtracer. Its code lives in [alexknips/loomtracer](https://github.com/alexknips/loomtracer),
 and its command-line tool is still called `hivemind`: the site keeps that name in every command,
-install step and tool name. This repo holds only the site and keeps its name for now.
+install step and tool name. This repo, alexknips/loomtracer-site, holds only the site.
 
 ## Layout
 
@@ -31,9 +31,8 @@ scripts/
   demo-routes.mjs         its helper: a page for every link the demo app makes
 CLAIMS.md                 every claim on the landing and use cases pages, with its evidence (release, changelog section, plan)
 .github/workflows/
-  deploy.yml                  build and deploy to GitHub Pages on push to main
   reference-docs.yml          fail if the docs drift from the latest hivemind release
-  regenerate-reference.yml    regenerate the generated docs from that release, commit, deploy
+  regenerate-reference.yml    regenerate the generated docs from that release, commit
 .github/scripts/
   commit-generated-reference.sh   commits only what the generator owns
 ```
@@ -46,7 +45,7 @@ The site stays under `website/` because hivemind's reference generator reads
 ```sh
 cd website
 npm ci
-npm run dev        # http://localhost:4321/hivemind-site/
+npm run dev        # http://localhost:4321/
 npm run build      # static output in website/dist/
 ```
 
@@ -56,7 +55,7 @@ The site documents the latest hivemind **release**, not master: master's new fla
 would advertise what nobody can install yet.
 
 `reference-docs.yml` resolves the latest release tag
-(`gh api repos/alexknips/hivemind/releases/latest`), checks out `alexknips/hivemind` at it,
+(`gh api repos/alexknips/loomtracer/releases/latest`), checks out `alexknips/loomtracer` at it,
 builds its `generate-reference` binary and runs `--check` from this repo's root. It fails if
 `reference/mcp-tools.md`, the tool counts in `guides/mcp-setup.md` and on the homepage, the
 "Available tools" table in `guides/mcp-setup.md`, or the subcommand names in `reference/cli.md`
@@ -64,8 +63,8 @@ drift from that release. It runs on every push and pull request, and daily.
 
 `regenerate-reference.yml` regenerates the generated parts from the same tag every six hours
 and on manual dispatch (Actions -> "Regenerate reference docs" -> Run workflow, which is the
-thing to do right after a release), commits the change to `main`, then runs the Pages deploy
-and the check. It only ever commits what the generator writes: `reference/mcp-tools.md` as a
+thing to do right after a release), commits the change to `main`, then runs the check on the
+new `main`; Vercel deploys that push like any other. It only ever commits what the generator writes: `reference/mcp-tools.md` as a
 whole, and the digits of the "N tools" mentions in `guides/mcp-setup.md` and
 `src/pages/index.astro`. `.github/scripts/commit-generated-reference.sh` refuses anything else.
 
@@ -82,12 +81,15 @@ cargo run --manifest-path ../hivemind/Cargo.toml --bin generate-reference
 
 ## The address
 
-The site is served at https://alexknips.github.io/hivemind-site/. One line sets that: `siteUrl` in
-`website/astro.config.mjs`. Every internal link reads the base path from it, and so does
-`scripts/rebuild-demo.sh`. To serve the site at www.loomtracer.ai once its DNS points at GitHub
-Pages, change that line to `https://www.loomtracer.ai/` and set the custom domain in the
-repository's Pages settings. The static demo is built for the base it had, so rebuild it at the
-same time, or point the demo links at the hosted demo first (below).
+The site is served at https://loomtracer.ai/, on Vercel (www.loomtracer.ai redirects there). The
+Vercel project `loomtracer-site` (framework Astro, root directory `website`, production branch
+`main`) deploys every push to `main` and builds a preview of every pull request; Vercel's bot posts
+the preview URL on the pull request. No GitHub workflow deploys the site.
+
+One line sets the address: `siteUrl` in `website/astro.config.mjs`. Every internal link reads the
+base path from it, and so does `scripts/rebuild-demo.sh`. The static demo is built for the base it
+has (`/demo/`), so if that line ever changes, rebuild the demo at the same time, or point the demo
+links at the hosted demo first (below).
 
 ## The demo
 
@@ -110,11 +112,11 @@ scripts/rebuild-demo.sh <hivemind-ui repository> <ref>    # a branch, tag or com
 ```
 
 The repository is anything `git clone` takes, a path or a URL. The script builds the demo in a
-temporary clone with the site's base plus `demo/` (`/hivemind-site/demo/` today), writes a page for every link the app
+temporary clone with the site's base plus `demo/` (`/demo/` today), writes a page for every link the app
 makes (`scripts/demo-routes.mjs`), replaces `website/public/demo/`, records the UI commit in
 `website/public/demo/build.json`, and opens a pull request that lists the UI changes since the
-last build. Check it locally (`cd website && npm run build && npx astro preview`), then merge:
-`deploy.yml` publishes it. `--no-pr` only rebuilds the working tree. It needs git, Node, npm,
+last build. Check it on the pull request's Vercel preview, or locally (`cd website && npm run
+build && npx astro preview`), then merge: Vercel publishes it. `--no-pr` only rebuilds the working tree. It needs git, Node, npm,
 rsync, jq and a logged-in `gh`. hivemind-ui is not on GitHub, so no workflow here can build it;
 the script runs where a checkout of it is.
 
@@ -136,4 +138,4 @@ Loomtracer's founders, on GitHub:
 
 ## License
 
-AGPL-3.0, the same as Loomtracer's code in alexknips/hivemind. See [LICENSE](LICENSE).
+AGPL-3.0, the same as Loomtracer's code in alexknips/loomtracer. See [LICENSE](LICENSE).

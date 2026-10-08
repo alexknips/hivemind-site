@@ -10,7 +10,7 @@ Five slides adapted from Alex's original pitch and refined by Jeff: introduction
 
 ## Run and review
 
-From `website/`, run `npm ci`, `npm run build`, then `npm run preview`. Open `/hivemind-site/pitch/` on the preview server. The presenter script and manual rehearsal timer are at `/hivemind-site/pitch/presenter/`.
+From `website/`, run `npm ci`, `npm run build`, then `npm run preview`. Open `/pitch/` on the preview server. The presenter script and manual rehearsal timer are at `/pitch/presenter/`.
 
 Left/right arrows, Page Up/Down, Home/End and Space navigate on desktop; F requests full screen. Narrow screens stack the slides and allow horizontal scrolling inside the diagram. Presenter selection synchronizes with the audience window; the timer never advances slides.
 

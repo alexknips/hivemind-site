@@ -1,7 +1,7 @@
 # What the site claims, and the evidence
 
 Every claim on the landing page (`website/src/pages/index.astro`) and the use cases page
-(`website/src/pages/use-cases.astro`), with what it rests on. Kept next to the copy so that a
+(`website/src/pages/use-cases.astro`) of https://loomtracer.ai (on Vercel), with what it rests on. Kept next to the copy so that a
 change to either is a change to both.
 
 **The rules the copy follows.** Only what is in a release is said to work today. Anything merged
@@ -19,7 +19,7 @@ step, MCP server name and environment variable on the site keeps that name, and 
 names the tool says so once ("Loomtracer's command-line tool, `hivemind`").
 
 **Where the evidence comes from.** "Works today" claims cite the `v0.7.0` release of
-[alexknips/hivemind](https://github.com/alexknips/hivemind/releases/tag/v0.7.0) (published
+[alexknips/loomtracer](https://github.com/alexknips/loomtracer/releases/tag/v0.7.0) (published
 2026-09-25) and the section of its `CHANGELOG.md` that describes the behaviour, or the release
 assets and install script. The capture plugins are the one exception: no release ships them, the
 marketplace installs them from hivemind `master`, so what that plugin does with the `v0.7.0` binary,
@@ -67,7 +67,7 @@ link the Quickstart for `hivemind: not found` instead of explaining it.
 | Import decisions from existing notes; they land as unreviewed | cli.md `import documents` ("land in the ledger immediately as unreviewed"); in releases since v0.5.0 (CHANGELOG v0.5.0) |
 | Import decision candidates from a Google Doc or a git-tracked file, experimental; Google Docs only, no Confluence | `v0.7.0` `docs/INGESTION_CONNECTORS.md` (`hivemind import connector --url …`, Google Docs and git connectors; Confluence not supported) |
 | Runs on one binary for Linux (x86_64, ARM64) and Apple Silicon Macs, with a SQLite ledger in the project; or a server with Postgres in Docker Compose | Release assets of `v0.7.0`: `hivemind-linux-x86_64.tar.gz`, `hivemind-linux-arm64.tar.gz`, `hivemind-macos-arm64.tar.gz`; `scripts/install.sh` puts the binary in `~/.local/bin`; the [Quickstart](website/src/content/docs/getting-started/quickstart.mdx) ("Run a cell with Docker") for the Docker cell |
-| AGPL-3.0; no hosted version; no account; nothing phones home | `LICENSE` in alexknips/hivemind; CHANGELOG v0.7.0, Breaking: "the hosted open beta is gone", self-hosting is the only install path; the privacy review of 2026-09-25 found no telemetry in the v0.7.0 code |
+| AGPL-3.0; no hosted version; no account; nothing phones home | `LICENSE` in alexknips/loomtracer; CHANGELOG v0.7.0, Breaking: "the hosted open beta is gone", self-hosting is the only install path; the privacy review of 2026-09-25 found no telemetry in the v0.7.0 code |
 | The install and connect commands on the page | Verified against the v0.7.0 release binary in a throwaway home on 2026-09-25 (site PR #8). Re-checked on 2026-10-01 with the `v0.7.0` binary and Claude Code 2.1.286 in a throwaway home: `claude mcp add hivemind -- hivemind mcp --agent-tool claude` exits 0 and `claude mcp list` shows the server connected. The install step now ends with `hivemind --version`, because the install re-run of 2026-09-29 found that `claude mcp add` also exits 0 with no binary on PATH and Claude Code only fails later ("ENOENT: Executable not found in $PATH"); the PATH fix is in the Quickstart ("If `hivemind` is not found"), which step 1 links since 2026-10-02 |
 | `--agent-tool claude` files your agent's captures under Claude Code; without it they are filed under Codex (the Quickstart, MCP setup, the deck; the landing page's step 2 runs it) | `v0.7.0` `src/cli/args.rs`, `McpArgs`: `--agent-tool`, "Agent tool name used when MCP write calls omit actor_id"; `src/identity.rs` `default_agent_tool()` falls back to `codex`. Run on 2026-10-01 with the `v0.7.0` release binary over stdio, a capture with no `actor_id`: with the flag it is recorded as `agent:claude:mcp-<id>` in "claude agents' personal project"; without it, in `personal:agent:codex` (as the install re-run of 2026-09-29 found). `actor_id` is optional in the `capture_decision` schema. Codex 0.159.3 writes `args = ["mcp", "--agent-tool", "codex"]` for the MCP setup page's Codex line. A project `.mcp.json` server reads "Pending approval" in `claude mcp list` until approved (Claude Code 2.1.284 on 2026-09-29, 2.1.286 on 2026-10-01), as the Quickstart says |
 | The deck's Claude Code screenshot shows a real session, and what it shows is in v0.7.0 (the landing page links the deck from "How to start" since 2026-10-01; since 2026-10-06 the deck shows one session, the capture, where it showed three) | `pitch-screens/README.md`: `hivemind` built from commit `881412f` of 2026-09-23, which is an ancestor of the `v0.7.0` tag (`git merge-base --is-ancestor 881412f v0.7.0`); each session a fresh Claude Code process; raw captures in `pitch-screens/captures/` |
@@ -87,7 +87,7 @@ link the Quickstart for `hivemind: not found` instead of explaining it.
 | Claim | Evidence, as of 2026-09-26 |
 |---|---|
 | A much simpler, decision-first UI: a decision list, newest first, as the start page; one decision's neighbourhood as the graph; arrows newer to older | All five children of the UI redesign are merged in the UI repository (design tokens, browser-mode tests, React Flow graph, decision page, decision list front door); since 2026-09-28 the site's `/demo/` runs it, read-only, over made-up example data (`website/public/demo/build.json` names the UI commit); it is not part of a hivemind release. Deck slide "Where it is": "Next: a much simpler, decision-first UI. The redesign is under way." |
-| A quality profile on seven dimensions, each line naming the facts it was read from; not a grade | The dimensions are `docs/DECISION_SCORING.md` in alexknips/hivemind; the engine that computes the profile merged to master on 2026-09-25 and `score_decision` returning it over the CLI and MCP on 2026-09-26, both after the tag; not in a release |
+| A quality profile on seven dimensions, each line naming the facts it was read from; not a grade | The dimensions are `docs/DECISION_SCORING.md` in alexknips/loomtracer; the engine that computes the profile merged to master on 2026-09-25 and `score_decision` returning it over the CLI and MCP on 2026-09-26, both after the tag; not in a release |
 | Capture that runs all day inside the coding agent; pieces in the release, one-step setup not yet | CHANGELOG v0.7.0, Fixed: "Passive capture no longer drops the session"; Added: "Classification over HTTP and MCP" with a daily cap. The setup still takes the hook from the repository plus a classifier key or the keyless path; no single-step install exists |
 
 ## Planned (decided, not built)

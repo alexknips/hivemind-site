@@ -116,14 +116,14 @@ temporary clone with the site's base plus `demo/` (`/demo/` today), writes a pag
 makes (`scripts/demo-routes.mjs`), replaces `website/public/demo/`, records the UI commit in
 `website/public/demo/build.json`, and opens a pull request that lists the UI changes since the
 last build. Check it on the pull request's Vercel preview, or locally (`cd website && npm run
-build && npx astro preview`), then merge: Vercel publishes it. `--no-pr` only rebuilds the working tree. It needs git, Node, npm,
-rsync, jq and a logged-in `gh`. hivemind-ui is not on GitHub, so no workflow here can build it;
+build && npx astro preview`), then merge: Vercel publishes it. `--no-pr` only rebuilds the
+working tree. It needs git, Node, npm, rsync, jq and a logged-in `gh`. hivemind-ui is not on GitHub, so no workflow here can build it;
 the script runs where a checkout of it is.
 
 **Links.** The app gives each page its own path: `/demo/decisions/<slug>`, `/demo/graph/<slug>`,
 `/demo/flow`, `/demo/diagnostics`. Each of those is a real file (a copy of the app's
-`index.html`), so a pasted link answers 200 (once Pages has added the trailing slash) and
-unfurls. GitHub Pages answers any other missing path with the site's one `404.html`; under
+`index.html`), so a pasted link answers 200, with or without the trailing slash, and
+unfurls. Vercel answers any other missing path with the site's one `404.html`; under
 `/demo/` that page loads the app in its place (`website/src/demo-fallback.mjs`), which shows
 what the path names or says it has no such decision. Such a link still answers 404 to a
 crawler. `/demo-preview/`, an older preview of the UI, now only points to `/demo/`. Old links such as

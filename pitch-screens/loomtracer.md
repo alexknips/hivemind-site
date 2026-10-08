@@ -28,4 +28,4 @@ The displayed URL and QR code both target `https://www.loomtracer.ai`, a user-su
 
 The former product screenshots are no longer shown on slide 4. The original Claude Code capture remains in this repository with [its original provenance](README.md).
 
-Astro, the GitHub Pages base path, and deployment workflow are unchanged. A branch or PR does not deploy the update; Pages publishes after changes reach `main`.
+Astro is unchanged. Since 2026-10-08 the site is served from the root of https://loomtracer.ai, on Vercel: a pull request gets a Vercel preview, and the site publishes after changes reach `main`.

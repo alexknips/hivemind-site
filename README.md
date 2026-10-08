@@ -1,7 +1,8 @@
 # loomtracer-site
 
-The Loomtracer website: the landing page, the docs, the pitch deck (`/pitch/`), the use cases
-(`/use-cases/`) and the demo (`/demo/`): the app itself, read-only, over made-up example data.
+The Loomtracer website: the landing page, the docs, the pitch deck (`/pitch/`) and the use cases
+(`/use-cases/`). The demo is not here: every demo link goes to the hosted demo,
+https://loomtracer.vercel.app/demo.
 
 **Live:** https://loomtracer.ai, on Vercel
 
@@ -17,18 +18,14 @@ website/                  Astro + Starlight site
   src/pages/use-cases.astro  use cases, on the landing page's header, footer and cards
   src/pages/pitch/        Loomtracer pitch deck and presenter script (own layout and brand); assets in public/pitch/
   src/components/         the header, footer and colour-scheme script the pages above share
-  src/data/demo.ts        the demo's address: every link to the demo reads it
+  src/data/demo.ts        the hosted demo's address: every link to the demo reads it
   src/data/founders.ts    the founders on the landing page and in the footer
   src/styles/tokens.css   design tokens: Loomtracer's brand (the deck's ink, ivory, blue, orange, yellow; Fraunces and
                           Source Sans 3) on the app's token names (hivemind-ui src/styles/tokens.css); graph hues are the app's
   src/assets/logo-*.svg   the logo for light and dark (the deck's mark, threads shortened, beside its wordmark)
   src/content/docs/       the docs
-  public/demo/            the demo: hivemind-ui's read-only snapshot build, never edited by hand
-  src/demo-fallback.mjs   shows the demo, not the 404 page, at a missing path under /demo/
+  vercel.json             redirects: the old /demo/ links go to the hosted demo
 pitch-screens/            source captures plus the Loomtracer PDF and contact-sheet preview
-scripts/
-  rebuild-demo.sh         rebuild public/demo/ from hivemind-ui and open a pull request
-  demo-routes.mjs         its helper: a page for every link the demo app makes
 CLAIMS.md                 every claim on the landing and use cases pages, with its evidence (release, changelog section, plan)
 .github/workflows/
   reference-docs.yml          fail if the docs drift from the latest hivemind release
@@ -87,47 +84,19 @@ Vercel project `loomtracer-site` (framework Astro, root directory `website`, pro
 the preview URL on the pull request. No GitHub workflow deploys the site.
 
 One line sets the address: `siteUrl` in `website/astro.config.mjs`. Every internal link reads the
-base path from it, and so does `scripts/rebuild-demo.sh`. The static demo is built for the base it
-has (`/demo/`), so if that line ever changes, rebuild the demo at the same time, or point the demo
-links at the hosted demo first (below).
+base path from it.
 
 ## The demo
 
-Every link on the site to the demo reads one constant, `DEMO_URL` in `website/src/data/demo.ts`.
-Today it is the static copy described here. When the hosted demo on Vercel is up, set `DEMO_URL` to
-its address and delete the static copy: `website/public/demo/`, `website/public/demo-preview/`,
-`scripts/rebuild-demo.sh`, `scripts/demo-routes.mjs` and `website/src/demo-fallback.mjs` with its
-`head` entry in `astro.config.mjs`.
+The demo is Jeff's hosted demo, https://loomtracer.vercel.app/demo; this repo builds no demo of
+its own. Every link on the site to the demo reads one constant, `DEMO_URL` in
+`website/src/data/demo.ts`: the header, the footer, the buttons on the landing and use cases pages,
+and the "Try the demo" links under the graphs. The hosted demo shows its own example, none of the
+decisions the graphs draw, so every link goes to its start page and no link text says what it shows.
 
-`website/public/demo/` is hivemind-ui's read-only snapshot build (`npm run build:demo`): the
-current app over made-up example data, labelled "Example data" on every screen, with no server,
-no sign-in and nothing to write to. The example data is part of that build
-(`demo/public/snapshot/` in hivemind-ui), so new data arrives the same way as a new UI.
-
-Don't edit it by hand. To bring the demo up to date with hivemind-ui:
-
-```sh
-scripts/rebuild-demo.sh <hivemind-ui repository>          # builds main
-scripts/rebuild-demo.sh <hivemind-ui repository> <ref>    # a branch, tag or commit
-```
-
-The repository is anything `git clone` takes, a path or a URL. The script builds the demo in a
-temporary clone with the site's base plus `demo/` (`/demo/` today), writes a page for every link the app
-makes (`scripts/demo-routes.mjs`), replaces `website/public/demo/`, records the UI commit in
-`website/public/demo/build.json`, and opens a pull request that lists the UI changes since the
-last build. Check it on the pull request's Vercel preview, or locally (`cd website && npm run
-build && npx astro preview`), then merge: Vercel publishes it. `--no-pr` only rebuilds the
-working tree. It needs git, Node, npm, rsync, jq and a logged-in `gh`. hivemind-ui is not on GitHub, so no workflow here can build it;
-the script runs where a checkout of it is.
-
-**Links.** The app gives each page its own path: `/demo/decisions/<slug>`, `/demo/graph/<slug>`,
-`/demo/flow`, `/demo/diagnostics`. Each of those is a real file (a copy of the app's
-`index.html`), so a pasted link answers 200, with or without the trailing slash, and
-unfurls. Vercel answers any other missing path with the site's one `404.html`; under
-`/demo/` that page loads the app in its place (`website/src/demo-fallback.mjs`), which shows
-what the path names or says it has no such decision. Such a link still answers 404 to a
-crawler. `/demo-preview/`, an older preview of the UI, now only points to `/demo/`. Old links such as
-`/demo/?view=graph&node=<id>` are `/demo/` itself; the app moves them to the new path.
+Until 2026-10-08 the site served its own copy at `/demo/` (a read-only build of the app over
+made-up example data). `website/vercel.json` sends the old links, `/demo`, anything under `/demo/`
+and `/demo-preview/`, to the hosted demo with a permanent redirect.
 
 ## Contact
 

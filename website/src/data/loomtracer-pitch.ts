@@ -7,7 +7,7 @@ export const notes = [
     ]
   },
   {
-    "title": "Have you ever had to re-brief an agent on a decision another agent already made?",
+    "title": "Agents need more than knowledge and facts.",
     "timing": "11–23 seconds",
     "paragraphs": [
       "Across chats and accounts, findings get buried over time. Decisions separate from reasoning. It’s up to you to connect lost threads."

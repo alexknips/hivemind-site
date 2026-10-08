@@ -61,11 +61,12 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
     .approval::before{content:'';display:inline-block;width:.75cqw;height:.75cqw;border-radius:50%;background:var(--yellow);margin-right:.7cqw}
     .problem{display:flex;flex-direction:column;isolation:isolate;overflow:hidden}
     .problem-body{display:flex;flex:1;flex-direction:column;justify-content:center}
-    .problem-question{position:relative}
+    .problem-question{position:relative;min-height:9.265cqw}
     .problem .eyebrow,.problem h2{position:relative;z-index:1}
-    /* Anchor the supplied black strand endpoint (367.5, 380) above the question. */
-    .problem-tangle{position:absolute;z-index:0;left:50%;top:-2cqw;width:28cqw;height:auto;max-width:none;pointer-events:none;transform-origin:86.470588% 86.757991%;transform:translate(-86.470588%,-86.757991%) rotate(45deg)}
-    .problem h2{font-size:4.25cqw;max-width:none;text-wrap:balance}
+    /* Preserve the previous two-line headline area so the black endpoint stays fixed. */
+    /* Anchor the supplied black strand endpoint (367.5, 380) above the headline. */
+    .problem-tangle{position:absolute;z-index:0;left:50%;top:-2cqw;width:56cqw;height:auto;max-width:none;pointer-events:none;transform-origin:86.470588% 86.757991%;transform:translate(-86.470588%,-86.757991%) rotate(45deg)}
+    .problem h2{font-size:4.25cqw;max-width:none;text-wrap:balance;text-align:center}
     .pain-points{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3cqw;margin-top:4.2cqw}
     .pain{border-top:.3cqw solid var(--blue);padding-top:1.3cqw}
     .pain:nth-child(2){border-color:var(--orange)}.pain:nth-child(3){border-color:var(--yellow)}
@@ -187,7 +188,7 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
       .problem,.problem-body{display:block}
       .problem-question{margin-top:220px}
       .problem h2{font-size:42px;margin-top:0}
-      .problem-tangle{top:-24px;width:200px}
+      .problem-tangle{top:-24px;width:400px}
       .pain-points{grid-template-columns:1fr;gap:24px;margin-top:34px}
       .pain{border-top-width:4px;padding-top:14px}.pain h3{font-size:28px;max-width:none}
       .handoff{font-size:25px;margin-top:30px}
@@ -258,7 +259,7 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
         <div class="problem-body">
           <div class="problem-question">
             <img class="problem-tangle" src={`${base}brand/tangle.svg`} width="425" height="438" alt="" aria-hidden="true" />
-            <h2>Have you ever had to re-brief an agent on a decision another agent already made?</h2>
+            <h2>Agents need more than knowledge and facts.</h2>
           </div>
         </div>
       </section>

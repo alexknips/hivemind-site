@@ -59,11 +59,13 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
     .proposal p{font-size:2.25cqw;line-height:1.2}
     .approval{font-size:2.05cqw;line-height:1.2;font-weight:600;margin-top:1.5cqw;text-align:right}
     .approval::before{content:'';display:inline-block;width:.75cqw;height:.75cqw;border-radius:50%;background:var(--yellow);margin-right:.7cqw}
-    .problem{--tangle-width:66.875cqw;isolation:isolate;overflow:hidden}
+    .problem{--tangle-width:66.5625cqw;isolation:isolate;overflow:hidden}
     .problem .eyebrow{position:relative;z-index:1}
-    /* Match Jeffrey's 1920x1080 background.png: width 1284, black tip at (950.5, 940). */
+    .problem-copy{position:absolute;z-index:1;left:6.25cqw;top:50%;width:37.5cqw;transform:translateY(-50%);font-size:3.45cqw;text-align:left}
+    .problem-copy span{display:block}
+    /* Match the approved reference at source scale 3: black tip at (950.5, 940). */
     /* Keep the broad upper branches visible; crop only at the slide boundary. */
-    .problem-tangle{position:absolute;z-index:0;left:49.505%;top:87.037%;width:var(--tangle-width);height:auto;max-width:none;pointer-events:none;transform-origin:86.3317757% 86.8181818%;transform:translate(-86.3317757%,-86.8181818%) rotate(45deg)}
+    .problem-tangle{position:absolute;z-index:0;left:49.505%;top:87.037%;width:var(--tangle-width);height:auto;max-width:none;pointer-events:none;transform-origin:86.2676056% 86.7579909%;transform:translate(-86.2676056%,-86.7579909%) rotate(45deg)}
     .pain-points{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3cqw;margin-top:4.2cqw}
     .pain{border-top:.3cqw solid var(--blue);padding-top:1.3cqw}
     .pain:nth-child(2){border-color:var(--orange)}.pain:nth-child(3){border-color:var(--yellow)}
@@ -182,7 +184,9 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
       .proposal p{font-size:26px}
       .approval{font-size:23px;text-align:left;margin-top:24px}
       .approval::before{width:9px;height:9px;margin-right:8px}
-      .problem{--tangle-width:400px;height:320px}
+      .problem{--tangle-width:400px;height:auto;min-height:320px}
+      .problem-tangle{top:278.52px}
+      .problem-copy{position:relative;left:auto;top:auto;width:auto;transform:none;font-size:38px;margin-top:280px}
       .pain-points{grid-template-columns:1fr;gap:24px;margin-top:34px}
       .pain{border-top-width:4px;padding-top:14px}.pain h3{font-size:28px;max-width:none}
       .handoff{font-size:25px;margin-top:30px}
@@ -250,7 +254,8 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
 
       <section class="slide problem" id="slide-2" aria-label="2. The problem">
         <p class="eyebrow">The problem</p>
-        <img class="problem-tangle" src={`${base}brand/tangle.svg?v=370067ac`} width="428" height="440" alt="" aria-hidden="true" />
+        <h2 class="problem-copy"><span>Agents need more than shared knowledge.</span> <span>They need shared reasoning.</span></h2>
+        <img class="problem-tangle" src={`${base}brand/tangle.svg?v=5bbdf70e`} width="426" height="438" alt="" aria-hidden="true" />
       </section>
 
       <section class="slide architecture" id="slide-3" aria-label="3. Track reasoning, not just facts">

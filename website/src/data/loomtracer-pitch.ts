@@ -7,7 +7,7 @@ export const notes = [
     ]
   },
   {
-    "title": "The problem — tangle experiment",
+    "title": "Agents need more than shared knowledge. They need shared reasoning.",
     "timing": "11–23 seconds",
     "paragraphs": [
       "Across chats and accounts, findings get buried over time. Decisions separate from reasoning. It’s up to you to connect lost threads."

@@ -29,3 +29,5 @@ The displayed URL and QR code both target `https://www.loomtracer.ai`, a user-su
 The former product screenshots are no longer shown on slide 4. The original Claude Code capture remains in this repository with [its original provenance](README.md).
 
 Astro is unchanged. Since 2026-10-08 the site is served from the root of https://loomtracer.ai, on Vercel: a pull request gets a Vercel preview, and the site publishes after changes reach `main`.
+
+Slide 2 uses the supplied `tangle.svg` as a decorative background, rotated 45 degrees clockwise with its black strand endpoint aligned above the centered question. The original SVG geometry and colors are preserved.

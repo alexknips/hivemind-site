@@ -1,9 +1,9 @@
 export const notes = [
   {
-    "title": "Reasoning memory",
+    "title": "Shared reasoning",
     "timing": "0–11 seconds",
     "paragraphs": [
-      "I’m Jeff. My co-founder Alex and I are building Loomtracer: reasoning memory for you, your team, and your agents."
+      "I’m Jeff. My co-founder Alex and I are building Loomtracer: shared reasoning for you, your team, and your agents."
     ]
   },
   {

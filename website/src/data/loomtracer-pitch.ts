@@ -7,7 +7,7 @@ export const notes = [
     ]
   },
   {
-    "title": "Agents need more than knowledge and facts.",
+    "title": "The problem — tangle experiment",
     "timing": "11–23 seconds",
     "paragraphs": [
       "Across chats and accounts, findings get buried over time. Decisions separate from reasoning. It’s up to you to connect lost threads."

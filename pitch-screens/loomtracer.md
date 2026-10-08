@@ -30,4 +30,4 @@ The former product screenshots are no longer shown on slide 4. The original Clau
 
 Astro is unchanged. Since 2026-10-08 the site is served from the root of https://loomtracer.ai, on Vercel: a pull request gets a Vercel preview, and the site publishes after changes reach `main`.
 
-Slide 2 uses the supplied `tangle.svg` as a decorative background, rotated 45 degrees clockwise at twice the initial size with its black strand endpoint fixed above the centered headline, “Agents need more than knowledge and facts.” The top of the artwork may crop at the slide edge. The original SVG geometry and colors are preserved.
+Slide 2 is a visual experiment: the main headline is removed and the supplied `tangle.svg` remains rotated 45 degrees clockwise, with its black bottom endpoint centered just above the carousel dots. The enlarged scale keeps every upper free endpoint beyond the slide’s top crop. The SVG geometry and colors are unchanged. The prior centered-headline layout, “Agents need more than knowledge and facts.” with the 56cqw tangle, is preserved at commit `baf3f7a`; restore only the slide-2 section and its CSS/title to avoid overwriting later work.

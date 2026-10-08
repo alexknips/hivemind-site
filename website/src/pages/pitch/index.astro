@@ -12,7 +12,7 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light" />
   <title>Loomtracer — B4SF One-Minute Pitch</title>
-  <meta name="description" content="Threaded memory for you, your team, and your AI agents." />
+  <meta name="description" content="Reasoning memory for you, your team, and your agents." />
   <style is:global>
     :root {
       --ink:#332B32; --ivory:#FDF8F4; --blue:#1D90CD; --orange:#E25432; --yellow:#F3BA1E;
@@ -84,7 +84,6 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
     .flow-decision-title{font-family:var(--headline);font-size:32px;font-weight:600;fill:var(--ivory)}
     .flow-decision-note{font-size:20px;fill:var(--ivory)}
     .flow-scroll-hint{display:none}
-    .flow-review{font-size:24px;font-weight:600;text-anchor:start}
     .architecture-flow{display:grid;grid-template-columns:24cqw 13cqw 1fr;align-items:center;margin-top:4cqw}
     .agent-label{font-family:var(--headline);font-size:2.6cqw;font-weight:600;line-height:1.15}
     .agent-actions{font-size:1.85cqw;line-height:1.45;margin-top:1.3cqw}
@@ -240,11 +239,11 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
 <body>
   <div class="stage" id="stage">
     <main class="deck" id="deck" tabindex="0" aria-label="Loomtracer one-minute pitch. Use left and right arrow keys to change slides.">
-      <section class="slide cover" id="slide-1" aria-label="1. Loomtracer threaded memory">
+      <section class="slide cover" id="slide-1" aria-label="1. Loomtracer reasoning memory">
         <p class="eyebrow">B4SF Pitch Night</p>
         <div class="cover-grid">
           <img class="logo cover-logo" src={`${base}brand/loomtracer-color.svg`} width="214" height="169" alt="Loomtracer" />
-          <h1>Threaded memory for you, your team, and your AI agents.</h1>
+          <h1>Reasoning memory for you, your team, and your agents.</h1>
         </div>
       </section>
 
@@ -264,7 +263,7 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
             <desc id="flow-description">Arrows trace a decision ratified by you and your team back to three evidence artifacts, then to the options explored by Agent Red, Agent Blue, and Agent Yellow. The illustrative artifact outcomes are didn’t work, mixed results, and promising.</desc>
             <defs><marker id="flow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></marker></defs>
             <g class="flow-stages">
-              <text x="0" y="28"><tspan class="flow-step">01</tspan><tspan dx="15">Divide work</tspan></text>
+              <text x="0" y="28"><tspan class="flow-step">01</tspan><tspan dx="15">Multi-Agent</tspan></text>
               <text x="510" y="28"><tspan class="flow-step">02</tspan><tspan dx="15">Evidence</tspan></text>
               <text x="1060" y="28"><tspan class="flow-step">03</tspan><tspan dx="15">Ratify decisions</tspan></text>
             </g>
@@ -305,8 +304,6 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
               <text class="flow-decision-title" x="1084" y="266">Decision</text>
               <text class="flow-decision-note" x="1084" y="300">Ratified</text>
             </g>
-            <circle class="yellow-fill flow-review-bullet" cx="1068" cy="373" r="5" />
-            <text class="flow-review" x="1084" y="381"><tspan x="1084">You and your team</tspan><tspan x="1084" dy="29">approve the direction.</tspan></text>
           </svg>
         </figure>
         <p class="flow-scroll-hint">Scroll to follow the full flow →</p>
@@ -354,8 +351,8 @@ const base = `${import.meta.env.BASE_URL}pitch/`;
         </div>
         <div class="closing-bottom">
           <div class="founders">
-            <div><p class="founder-name">Jeff Miao</p><p class="founder-role">Co-founder · Design</p></div>
-            <div><p class="founder-name">Alex Knips</p><p class="founder-role">Co-founder · Technology</p></div>
+            <div><p class="founder-name">Jeff Miao</p><p class="founder-role">Design</p></div>
+            <div><p class="founder-name">Alex Knips</p><p class="founder-role">Engineering</p></div>
           </div>
         </div>
       </section>

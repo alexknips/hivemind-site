@@ -1,9 +1,9 @@
 export const notes = [
   {
-    "title": "Threaded memory",
+    "title": "Reasoning memory",
     "timing": "0–11 seconds",
     "paragraphs": [
-      "I’m Jeff. My co-founder Alex and I are building Loomtracer: threaded memory for you, your team, and your AI agents."
+      "I’m Jeff. My co-founder Alex and I are building Loomtracer: reasoning memory for you, your team, and your agents."
     ]
   },
   {
@@ -20,7 +20,7 @@ export const notes = [
       "Agents explore different options through MCP and record the evidence. Loomtracer connects those artifacts to a decision. You and your team approve the direction."
     ],
     "sources": [
-      "Illustrative workflow: agents explore options and produce evidence artifacts; people ratify a decision. Arrows trace the ratified decision back to its supporting artifacts and explored options. Divide work is a workflow stage, not a claim that Loomtracer automatically assigns or orchestrates agents. Artifact outcome labels are illustrative, not measured product performance."
+      "Illustrative workflow: agents explore options and produce evidence artifacts; people ratify a decision. Arrows trace the ratified decision back to its supporting artifacts and explored options. Multi-Agent describes the contributing agents, not a claim that Loomtracer automatically assigns or orchestrates them. Artifact outcome labels are illustrative, not measured product performance."
     ]
   },
   {
